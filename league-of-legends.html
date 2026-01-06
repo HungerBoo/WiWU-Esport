@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League of Legends - Wieländer Wühlmäuse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #1a1a1a;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background-color: #4a7c59;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #ffffff;
+            text-decoration: none;
+            position: absolute;
+            left: 0;
+        }
+
+        .site-title {
+            text-align: center;
+        }
+
+        .site-title a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .site-title a:hover {
+            color: #4a7c59;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            padding-top: 15px;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: #4a7c59;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        /* Game Logo */
+        .game-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .game-logo img {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Text Section */
+        .text-section {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 60px;
+        }
+
+        .text-section h2 {
+            font-size: 32px;
+            color: #4a7c59;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .text-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Team Section */
+        .team-section {
+            margin-bottom: 60px;
+        }
+
+        .team-section h2 {
+            font-size: 32px;
+            color: #4a7c59;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .slider-outer {
+            position: relative;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #4a7c59 #1a1a1a;
+        }
+
+        .slider-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .slider-wrapper::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
+        .slider-wrapper::-webkit-scrollbar-thumb {
+            background: #4a7c59;
+            border-radius: 10px;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #1a1a1a;
+            color: #4a7c59;
+            border: 2px solid #4a7c59;
+            width: 50px;
+            height: 80px;
+            cursor: pointer;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .slider-arrow:hover {
+            background-color: #4a7c59;
+            color: #ffffff;
+            border-color: #4a7c59;
+        }
+
+        .slider-arrow.left {
+            left: 0;
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+            padding-left: 5px;
+        }
+
+        .slider-arrow.right {
+            right: 0;
+            border-radius: 8px 0 0 8px;
+            border-right: none;
+            padding-right: 5px;
+        }
+
+        .player-card {
+            min-width: 250px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .player-card-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: #3a3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .player-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .player-card-info {
+            padding: 20px;
+        }
+
+        .player-card-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .player-card-info li {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #cccccc;
+        }
+
+        .player-card-info li strong {
+            color: #4a7c59;
+            margin-right: 5px;
+        }
+
+        /* Team Photo */
+        .team-photo {
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .team-photo img {
+            width: 90%;
+            max-width: 1400px;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #3a3a3a;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 2px solid #4a7c59;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #4a7c59;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-icon:hover {
+            opacity: 0.7;
+        }
+
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                position: static;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav a {
+                text-align: center;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .text-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-top">
+                <a href="index.html" class="logo"></a>
+                <img src="Wiwu_Logo.jpg" alt="Logo" class="logo">
+                <div class="site-title">
+                    <a href="index.html">Wieländer Wühlmäuse</a>
+                </div>
+            </div>
+            <nav>
+                <a href="league-of-legends.html" class="active">League of Legends</a>
+                <a href="super-smash-bros.html">Super Smash Bros.</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Game Logo -->
+        <div class="game-logo">
+            <img src="https://via.placeholder.com/400x150/4a7c59/ffffff?text=League+of+Legends" alt="League of Legends Logo">
+        </div>
+
+        <!-- Text Section -->
+        <div class="text-section">
+            <h2>Unser League Team</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
+
+        <!-- Team Section -->
+        <div class="team-section">
+            <h2>Kader</h2>
+            <div class="slider-outer">
+                <button class="slider-arrow left" onclick="scrollTeamSlider('left')">←</button>
+                <button class="slider-arrow right" onclick="scrollTeamSlider('right')">→</button>
+                <div class="slider-wrapper" id="teamSlider">
+                    <div class="player-card">
+                        <div class="player-card-image">
+                            <img src="https://via.placeholder.com/250x333/4a7c59/ffffff?text=Spieler+1" alt="Spieler 1">
+                        </div>
+                        <div class="player-card-info">
+                            <ul>
+                                <li><strong>Name:</strong> Max Mustermann</li>
+                                <li><strong>Rolle:</strong> Top Lane</li>
+                                <li><strong>Alter:</strong> 22 Jahre</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="player-card">
+                        <div class="player-card-image">
+                            <img src="https://via.placeholder.com/250x333/4a7c59/ffffff?text=Spieler+2" alt="Spieler 2">
+                        </div>
+                        <div class="player-card-info">
+                            <ul>
+                                <li><strong>Name:</strong> Anna Schmidt</li>
+                                <li><strong>Rolle:</strong> Jungle</li>
+                                <li><strong>Alter:</strong> 20 Jahre</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="player-card">
+                        <div class="player-card-image">
+                            <img src="https://via.placeholder.com/250x333/4a7c59/ffffff?text=Spieler+3" alt="Spieler 3">
+                        </div>
+                        <div class="player-card-info">
+                            <ul>
+                                <li><strong>Name:</strong> Tim Wagner</li>
+                                <li><strong>Rolle:</strong> Mid Lane</li>
+                                <li><strong>Alter:</strong> 24 Jahre</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="player-card">
+                        <div class="player-card-image">
+                            <img src="https://via.placeholder.com/250x333/4a7c59/ffffff?text=Spieler+4" alt="Spieler 4">
+                        </div>
+                        <div class="player-card-info">
+                            <ul>
+                                <li><strong>Name:</strong> Laura Becker</li>
+                                <li><strong>Rolle:</strong> ADC</li>
+                                <li><strong>Alter:</strong> 21 Jahre</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="player-card">
+                        <div class="player-card-image">
+                            <img src="https://via.placeholder.com/250x333/4a7c59/ffffff?text=Spieler+5" alt="Spieler 5">
+                        </div>
+                        <div class="player-card-info">
+                            <ul>
+                                <li><strong>Name:</strong> Felix Müller</li>
+                                <li><strong>Rolle:</strong> Support</li>
+                                <li><strong>Alter:</strong> 23 Jahre</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Photo -->
+        <div class="team-photo">
+            <img src="https://via.placeholder.com/1200x675/4a7c59/ffffff?text=Unser+Kader" alt="Unser Kader">
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="impressum.html">Impressum</a>
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/wiwu.esport" target="_blank" class="social-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                </a>
+                <a href="https://www.primeleague.gg/de/leagues/prm/3218-winter-split-202526/teams/204805-wielaender-wuehlmaeuse" target="_blank" class="social-icon">
+                    <img src="https://cdn0.gamesports.net/content_teasers2/93000/93160.jpg?1592485371" alt="Prime League">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollTeamSlider(direction) {
+            const slider = document.getElementById('teamSlider');
+            const scrollAmount = 270;
+            
+            if (direction === 'left') {
+                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
