@@ -97,7 +97,7 @@
             background-color: #4a7c59;
         }
 
-         /* Main Content */
+        /* Main Content */
         main {
             flex: 1;
             max-width: 1200px;
@@ -241,7 +241,6 @@
             background-color: #3a3a3a;
         }
 
-
         /* Footer */
         footer {
             background-color: #1a1a1a;
@@ -303,21 +302,29 @@
         /* Responsive */
         @media (max-width: 768px) {
             .header-top {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: center;
                 gap: 15px;
             }
 
             .logo {
                 position: static;
+                flex-shrink: 0;
+            }
+
+            .site-title a {
+                font-size: 24px;
             }
 
             nav {
-                flex-direction: column;
+                flex-wrap: wrap;
                 gap: 10px;
             }
 
             nav a {
                 text-align: center;
+                padding: 8px 15px;
+                font-size: 16px;
             }
 
             .content-section,
