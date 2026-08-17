@@ -1,0 +1,7 @@
+*.md
+!architecture.md
+node_modules/
+dist/
+.env
+.env.*
+!.env.example

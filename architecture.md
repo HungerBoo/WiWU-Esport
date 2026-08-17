@@ -1,0 +1,337 @@
+# WiWU Esport Website Architecture
+
+## Purpose
+
+This document is the maintainer guide for the WiWU Esport website. It describes the current repository as implemented, not an intended future design. Update this file in the same change whenever a page, asset, navigation route, external integration, content model, or shared UI pattern changes.
+
+## Project Shape
+
+- Type: static, multi-page Vite website with browser-native ES modules.
+- Language and content: German (`lang="de"`).
+- Runtime: browser only; no server-side application code yet.
+- Styling: one shared stylesheet at `src/styles/site.css`.
+- Behavior: page rendering and content are composed from ES modules under `src/`; no inline event handlers are required.
+- Build: Vite reads the four HTML entrypoints from `pages/` and generates a static `dist/` directory containing the four root-level `.html` routes and emitted assets.
+- Local verification: `npm run build` is the production-equivalent check; `npm run dev` and `npm run preview` serve the site locally.
+- Deployment: `.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages for pushes to `main` and manual runs. `CNAME` sets the custom domain to `www.wiwu-esport.de`.
+
+## File Map
+
+| File | Responsibility | Important dependencies |
+| --- | --- | --- |
+| `pages/index.html` | Homepage HTML entrypoint for the club | Mounts the shared app; Vite emits `dist/index.html` |
+| `pages/league-of-legends.html` | League of Legends HTML entrypoint | Mounts the shared app; Vite emits `dist/league-of-legends.html` |
+| `pages/super-smash-bros.html` | Super Smash Bros. HTML entrypoint | Mounts the shared app; Vite emits `dist/super-smash-bros.html` |
+| `pages/impressum.html` | Legal HTML entrypoint | Mounts the shared app; Vite emits `dist/impressum.html` |
+| `public/images/Wiwu_Logo.jpg` | Local club logo displayed in every page header | Referenced by `src/components/layout.js` |
+| `public/images/Geschichte.png` | Local history image on the homepage | Referenced by `src/pages/home.js` |
+| `public/images/League Kader.jpg` | Local League roster/team image | Referenced by `src/content/site-data.js` |
+| `public/images/players/league/` | Local League player photos | Referenced by the League roster data |
+| `public/images/players/smash/` | Local Smash player photos | Referenced by the Smash roster data |
+| `package.json` | npm scripts and Vite development dependency | Used for local development and CI |
+| `package-lock.json` | Reproducible npm dependency lockfile | Used by `npm ci` in CI |
+| `vite.config.js` | Vite configuration and explicit multi-page entrypoints | Builds all four HTML routes |
+| `src/main.js` | Chooses the page renderer from the current `.html` pathname | Imported by every HTML entrypoint |
+| `src/content/site-data.js` | Central site, social, game, roster, and news data | Imported by page renderers |
+| `src/components/layout.js` | Shared header, navigation, and footer renderer | Used by all page renderers |
+| `src/components/cards.js` | Shared news and player card renderers | Used by homepage and game pages |
+| `src/pages/home.js` | Homepage content renderer | Called by `src/main.js` |
+| `src/pages/game.js` | Reusable game/team page renderer | Called for League and Smash |
+| `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
+| `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
+| `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
+| `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes and manual dispatch |
+| `CNAME` | Custom-domain configuration marker | Used by the static hosting workflow |
+| `.gitignore` | Ignore rules | Currently empty |
+| `README.md` | Minimal project label (`WiWU-Esport`) | No setup or deployment instructions currently documented |
+
+## Navigation and Page Relationships
+
+```text
+index.html
+  -> league-of-legends.html
+  -> super-smash-bros.html
+  -> impressum.html
+  -> Instagram (external, new tab)
+  -> Prime League (external, new tab)
+
+league-of-legends.html
+  -> index.html
+  -> super-smash-bros.html
+  -> impressum.html
+  -> Instagram (external, new tab)
+  -> Prime League (external, new tab)
+
+super-smash-bros.html
+  -> index.html
+  -> league-of-legends.html
+  -> impressum.html
+  -> Instagram (external, new tab)
+  -> Prime League (external, new tab)
+
+impressum.html
+  -> index.html
+  -> league-of-legends.html
+  -> super-smash-bros.html
+  -> impressum.html
+  -> Instagram (external, new tab)
+  -> Prime League (external, new tab)
+```
+
+The game navigation marks the current page with `class="active"`; the homepage and legal page do not have an active navigation marker.
+
+## Source Architecture
+
+The files in `pages/` are source HTML entrypoints, not full page implementations. Each contains document metadata, an `#app` mount point, and a module reference to `src/main.js`. `src/main.js` selects the renderer based on the current filename. Vite flattens these entrypoints into root-level deployment routes under `dist/`, so GitHub Pages and existing links do not need `/pages/` in their URLs. Renderers use centralized data and shared components, while `src/styles/site.css` owns all visual layout and responsive behavior.
+
+This is intentionally static-first: it can be hosted on GitHub Pages today and later have its data calls replaced or extended with a separate HTTPS API without putting secrets in the browser bundle.
+
+## Shared UI Contract
+
+Every page uses the same rendered shell:
+
+1. Sticky dark header with the local logo, linked site title, and game navigation.
+2. Main content constrained to a centered responsive container.
+3. Dark footer with the Impressum link and external Instagram/Prime League icons.
+4. Green accent color (`#4a7c59`) on headings, hover states, and footer border.
+5. Mobile breakpoint at `max-width: 760px`: navigation wraps, header title and content adapt, footer stacks, and horizontal card grids become scrollable or two-column layouts.
+
+The shell is implemented once in `src/components/layout.js`; changes to header, footer, colors, typography, breakpoints, or shared markup should be made there and reflected here.
+
+## Page Details
+
+### Homepage: `index.html`
+
+- Metadata includes a description and page title in the route shell; page content is rendered by `src/pages/home.js`.
+- The "Aktuelle News" area is a horizontally scrollable card list.
+- Four cards are displayed for tournament announcement, new players, training, and tournament success.
+- The card links target `news-turnier-2025.html`, `news-neue-spieler.html`, `news-training.html`, and `news-erfolg.html`. Those files are not currently present, so these are broken routes until the pages are added or the links are changed.
+- The "Unser Verein" content is rendered as responsive text; the old placeholder image is no longer used.
+- The "Geschichte" section uses local `public/images/Geschichte.png` and currently contains brief copy.
+
+### League of Legends: `league-of-legends.html`
+
+- Displays a remote League of Legends logo.
+- Shows a game introduction driven by the League entry in `src/content/site-data.js`.
+- Roster contains five cards: Falafl (Top Lane), Zwuck (Jungle), 1Overninja1 (Mid Lane), HungerBoo (ADC), and aTrulixx (Support).
+- Player cards use local files under `public/images/players/<game>/`; a missing file falls back to the WiWU logo.
+- Team photo uses local `public/images/League Kader.jpg`.
+
+### Super Smash Bros.: `super-smash-bros.html`
+
+- Displays the Super Smash Bros. Ultimate logo from Wikimedia Commons.
+- Shows a game introduction driven by the Smash entry in `src/content/site-data.js`.
+- Roster currently contains one player: Martin, whose main is Mr. Game & Watch, age 19.
+- The player card uses `public/images/players/smash/martin.jpg`; a missing file falls back to the WiWU logo.
+- There is no local team photo section on this page.
+
+### Legal page: `impressum.html`
+
+- Uses a narrower `800px` main content area.
+- Contains club name/address, email link, responsible person, and liability disclaimer.
+- The legal text is content-sensitive: changes should be reviewed for legal accuracy, not treated as ordinary copy edits.
+
+## Data and External Resources
+
+There is no remote data layer or content API yet. Roster, news, and descriptive content is centralized in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. This is the intended replacement point for a future backend API.
+
+Remote resources currently include:
+
+- `via.placeholder.com` is no longer used for game logos or player cards.
+- Wikimedia Commons for the Instagram icon.
+- `cdn0.gamesports.net` for the Prime League icon.
+- A Wikia-hosted League of Legends logo.
+- Instagram and Prime League page URLs as external footer destinations.
+
+The site therefore depends on network availability for several images. Before replacing a remote image, preserve meaningful `alt` text and document any new external origin here.
+
+## Known Gaps and Risks
+
+- The current `news` data still links to four news routes that do not exist; these need real pages or must be changed to non-link content.
+- Player card images are local and use the WiWU logo as a fallback until real photos are added.
+- The history copy remains brief and needs editorial completion.
+- There are no automated browser checks yet for all routes, responsive layout, broken links, or external resource availability.
+- GitHub repository Pages settings must use **GitHub Actions** for `.github/workflows/deploy.yml` to control deployment. The workflow cannot change that repository setting automatically.
+
+## Proposed Future Architecture
+
+### GitHub Pages boundary
+
+GitHub Pages is suitable for the current static HTML site and for a future static frontend bundle. It is not a suitable runtime for a Riot API key, database, Redis, background worker, server-side authentication, or protected API logic. Those capabilities must run on a separate backend platform, with the frontend calling that backend over HTTPS.
+
+The repository now contains `.github/workflows/deploy.yml`, which runs on pushes to `main` and manual workflow runs. Set **Settings -> Pages -> Build and deployment -> Source -> GitHub Actions** so this workflow controls publishing. A branch-based Pages source would bypass the generated `dist/` artifact and is not the intended deployment mode.
+
+For the future system, use one of these deployment arrangements:
+
+- Keep the static frontend on GitHub Pages and deploy the API, worker, database, and Redis through separate services. This is the smallest change from today.
+- Move the frontend to a platform that supports the selected full-stack web runtime if server-rendered authenticated pages are required. Keep the existing custom domain or split a dedicated API subdomain such as `api.wiwu-esport.de`.
+
+Regardless of arrangement, configure CORS, cookie settings, redirects, and environment-specific API URLs explicitly. Never solve the Riot API requirement by putting the Riot key into a GitHub Pages JavaScript bundle.
+
+The current static site is a useful content prototype, but Riot API access and restricted content require a server-side application. The recommended target is a TypeScript monorepo with a modular monolith at first:
+
+```text
+Browser
+  -> Web app (public pages, dashboards, login UI)
+  -> API app (authentication boundary, business modules, Riot proxy)
+       -> PostgreSQL (users, teams, content, cached game data)
+       -> Redis (short-lived cache, rate limits, job coordination)
+       -> Riot API (server-side only)
+       -> Object storage (uploaded images and documents)
+  -> Background worker (Riot sync, refresh jobs, notifications)
+```
+
+This keeps the first version operationally small while enforcing boundaries between UI, business logic, external integrations, and persistence. A separate service should only be introduced later when scale or ownership justifies it; the initial design should not begin as a distributed microservice system.
+
+### Recommended technology direction
+
+- Frontend now: Vite with browser-native ES modules and static multi-page entrypoints, which is compatible with GitHub Pages. Future option: move the frontend to Next.js only if server rendering or server-side authenticated pages justify moving away from Pages.
+- API: TypeScript modular API using NestJS or Fastify. Pick one framework during implementation and keep all Riot and database access behind application modules.
+- Database: PostgreSQL with a migration tool and a typed data-access layer such as Prisma or Drizzle. Use one consistently; do not mix ORMs.
+- Cache and jobs: Redis for cache entries, API rate limiting, and a durable job queue such as BullMQ. Jobs must be retryable and idempotent.
+- Authentication: OIDC-compatible identity provider, with the web app receiving an authenticated session and the API validating short-lived tokens. Do not implement password storage unless there is a strong reason to own that security responsibility.
+- Validation: shared TypeScript schemas, for example Zod, at every API boundary. Treat Riot responses and user input as untrusted data.
+- Testing: unit tests for domain modules, API integration tests against a disposable PostgreSQL/Redis setup, and browser smoke tests for public and authenticated flows.
+- Deployment: deploy the web app and API behind HTTPS, run the worker separately, and provide managed PostgreSQL/Redis. Keep secrets in the hosting secret store, never in the repository or browser bundle.
+
+### Suggested repository structure
+
+```text
+.
+├── apps/
+│   ├── web/                         # Next.js frontend
+│   │   ├── app/                     # Routes, layouts, loading/error states
+│   │   │   ├── (public)/            # Homepage, games, news, legal pages
+│   │   │   ├── dashboard/           # Authenticated user area
+│   │   │   └── admin/               # Restricted staff area
+│   │   ├── components/              # Shared visual components
+│   │   ├── features/                # UI grouped by business capability
+│   │   │   ├── club/
+│   │   │   ├── league-of-legends/
+│   │   │   ├── smash/
+│   │   │   ├── news/
+│   │   │   └── account/
+│   │   └── lib/                     # API client, auth client, config
+│   ├── api/                         # Server-side API modular monolith
+│   │   └── src/
+│   │       ├── modules/
+│   │       │   ├── auth/
+│   │       │   ├── users/
+│   │       │   ├── authorization/
+│   │       │   ├── club/
+│   │       │   ├── games/
+│   │       │   ├── league-of-legends/
+│   │       │   ├── smash/
+│   │       │   ├── news/
+│   │       │   └── media/
+│   │       ├── integrations/
+│   │       │   └── riot/
+│   │       ├── db/
+│   │       └── config/
+│   └── worker/                      # Scheduled and queued background jobs
+│       └── src/jobs/
+│           ├── riot-sync/
+│           ├── cache-refresh/
+│           └── notifications/
+├── packages/
+│   ├── contracts/                   # Versioned API DTOs and shared schemas
+│   ├── domain/                      # Framework-independent business types/rules
+│   ├── config/                      # Shared lint, TypeScript, and environment helpers
+│   └── ui/                          # Only genuinely reusable design-system components
+├── database/
+│   ├── migrations/
+│   └── seed/
+├── tests/
+│   ├── integration/
+│   └── e2e/
+├── infra/                           # Deployment definitions and environment config
+├── pnpm-workspace.yaml
+├── turbo.json                       # Optional task orchestration
+└── README.md
+```
+
+The existing root HTML files should be migrated into `apps/web` incrementally. During migration, either keep them as a temporary legacy site or redirect each route after its replacement is verified. Do not make the browser call Riot directly and do not put API keys in `apps/web`.
+
+### Module boundaries
+
+Each API module should own its routes/controllers, input schemas, application services, domain rules, persistence ports, and tests. Modules may depend on shared contracts and domain primitives, but should not reach into another module's database tables or private services.
+
+- `auth`: session/token validation and identity-provider integration.
+- `authorization`: roles, permissions, membership checks, and resource policies.
+- `users`: profiles and external identity mapping.
+- `club`: clubs, teams, rosters, memberships, and staff-managed metadata.
+- `games`: the catalog of supported games and game-specific configuration.
+- `league-of-legends`: Riot account links, summoner profiles, match summaries, rankings, and team statistics.
+- `smash`: Smash-specific players, rosters, events, and statistics without forcing League concepts onto it.
+- `news`: public and restricted editorial content, drafts, publishing, and visibility rules.
+- `media`: upload metadata and references to object storage; binary files should not live in PostgreSQL.
+- `integrations/riot`: the only module allowed to know Riot endpoint details, headers, regional routing, retries, and response mapping.
+
+## Riot API Integration Design
+
+Riot integration must be a server-side adapter, never a frontend data fetch. Store Riot identifiers rather than relying on mutable display names: platform/region, Riot ID game name and tag where applicable, and the stable PUUID. Keep Riot API response shapes separate from internal domain models so a Riot API change does not leak through the whole application.
+
+Recommended request flow:
+
+1. The browser requests an application endpoint such as `/api/league-of-legends/players/:id`.
+2. The API checks authentication and authorization for the requested resource.
+3. The League module reads a fresh-enough normalized record from PostgreSQL/cache.
+4. A cache miss schedules or performs a rate-limited Riot adapter request; it does not expose the Riot key.
+5. The adapter maps the response into internal models and records fetch time, source, and failure state.
+6. The API returns a stable application response with loading, stale, unavailable, and not-found states.
+
+Use background jobs for match-history and statistics refreshes. Cache data with explicit TTLs, add exponential backoff for transient failures, and enforce both application-level and Riot-region rate limits. Never assume that a user's display name is unique or permanent. Document the exact Riot products, regions, consent requirements, and allowed data retention before implementation; those details are product and compliance decisions, not merely infrastructure settings.
+
+## Authentication and Restricted Content
+
+Use identity-provider authentication and application authorization as separate concerns:
+
+- Authentication answers who the user is.
+- Authorization answers what that user may read or change.
+
+Start with roles such as `public`, `member`, `coach`, `editor`, and `admin`, but implement permissions as named capabilities so roles can evolve without scattering role checks through UI code. Enforce every restriction in the API and database query layer; hiding a navigation item is only a usability feature, not a security boundary.
+
+Suggested protected resources include private team pages, internal announcements, player administration, editorial drafts, and staff tools. Store an audit record for administrative mutations, avoid logging tokens or personal data, and provide account deletion/data export paths if user data is retained.
+
+## API and Content Conventions
+
+- Version public API contracts, for example `/api/v1/...`, when the first API is released.
+- Return consistent error objects with a safe user message and a server-side correlation ID.
+- Paginate match history, news, and other growing collections.
+- Keep public content cacheable and private responses explicitly non-cacheable unless the cache is user-aware.
+- Use feature flags or configuration for optional games and integrations; adding Smash should not require changing League code.
+- Treat editorial content as records with status (`draft`, `published`, `archived`), author, timestamps, and visibility policy rather than hard-coded HTML.
+
+## Migration Path
+
+1. Move shared styling and shell markup into the new web app while preserving the current public routes and German content.
+2. Add the API skeleton, environment validation, PostgreSQL migrations, and health checks without exposing Riot functionality yet.
+3. Add the auth provider and authorization policies; protect a small test page before protecting real content.
+4. Implement the Riot adapter behind a feature flag, beginning with account lookup and one read-only statistic.
+5. Add cache and worker refresh jobs, then migrate roster and statistics pages from hard-coded content to API-backed data.
+6. Add news/content management and restricted team areas.
+7. Replace placeholders and broken news routes, then retire the legacy root HTML files after route and browser checks pass.
+
+Each migration step should preserve a working public site and update this document, route inventory, environment variable documentation, and tests in the same change.
+
+## Change Protocol
+
+For every future edit:
+
+1. Identify whether the change affects a page, shared duplicated shell, local asset, external URL, route, content area, or deployment behavior.
+2. Update the affected HTML/assets.
+3. Update this `architecture.md` in the same change with the new file map, relationship, behavior, or known-gap information.
+4. Check local links and asset paths when routes or filenames change. For this repository, a practical baseline is to inspect all `href` and `src` references and verify local targets exist.
+5. Keep this document factual and current; remove a known gap once it is actually resolved.
+
+## Preview and Release Check
+
+Install dependencies once, then use the same production check locally and in CI:
+
+```text
+npm install
+npm run build
+npm run preview
+```
+
+The `dist/` directory is generated output and must not be edited manually. A change is ready for merging only when `npm run build` succeeds and the affected route has been checked through the local Vite server. Do not commit `node_modules/` or `dist/`.
