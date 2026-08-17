@@ -15,10 +15,10 @@ export function renderLayout(content, page = '') {
   document.querySelector('#app').innerHTML = `
     <header class="site-header">
       <div class="header-inner">
-        <a href="index.html" class="brand-mark" aria-label="Zur Startseite">
+        <a href="/" class="brand-mark" aria-label="Zur Startseite">
           <img src="${logoUrl}" alt="${site.name} Logo">
         </a>
-        <a href="index.html" class="site-title">${site.name}</a>
+        <a href="/" class="site-title">${site.name}</a>
         <nav aria-label="Hauptnavigation">${nav}</nav>
       </div>
     </header>
