@@ -13,13 +13,6 @@ export const games = {
     heading: 'Unser League Team',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     logo: 'https://static.wikia.nocookie.net/leagueoflegends/images/7/77/League_of_Legends_logo.png/revision/latest/scale-to-width/360?cb=20240801215508',
-    players: [
-      { name: 'Falafl', role: 'Top Lane', age: '19 Jahre', image: '/images/players/league/falafl.jpg' },
-      { name: 'Zwuck', role: 'Jungle', age: '19 Jahre', image: '/images/players/league/zwuck.jpg' },
-      { name: '1Overninja1', role: 'Mid Lane', age: '20 Jahre', image: '/images/players/league/1overninja1.jpg' },
-      { name: 'HungerBoo', role: 'ADC', age: '19 Jahre', image: '/images/players/league/hungerboo.jpg' },
-      { name: 'aTrulixx', role: 'Support', age: '21 Jahre', image: '/images/players/league/atrulixx.jpg' }
-    ],
     teamImage: '/images/League Kader.jpg'
   },
   smash: {
@@ -27,8 +20,42 @@ export const games = {
     heading: 'Unser Smash Team',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Super_Smash_Bros._Ultimate_logo.svg',
-    players: [{ name: 'Martin', role: 'Mr. Game & Watch', age: '19 Jahre', image: '/images/players/smash/martin.jpg' }]
   }
+};
+
+export const primeLeague = {
+  teamName: 'Wieländer Wühlmäuse',
+  abbreviation: 'WIWU',
+  country: 'Deutschland',
+  founded: '05.01.2024',
+  stats: {
+    lifetime: {
+      label: 'Lifetime',
+      values: [
+        ['Matches', '44'],
+        ['Bilanz', '18 / 26'],
+        ['Saisons', '3'],
+        ['Mitglieder', '8']
+      ]
+    },
+    recentSeason: {
+      label: 'Spring Split 2025/26',
+      values: [
+        ['Gruppe', 'Gruppe 7.5'],
+        ['Platz', '6. Platz'],
+        ['Punkte', '4'],
+        ['Status', 'Gruppenphase']
+      ]
+    }
+  },
+  currentSeason: 'Spring Split 2025/26',
+  recentMatches: [
+    'PTC 2:0 WIWU',
+    'FAKE 2:1 WIWU',
+    'WIWU 1:2 4B1F',
+    'Zer 1:2 WIWU'
+  ],
+  url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
 };
 
 export const news = [

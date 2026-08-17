@@ -28,15 +28,16 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `public/images/League Kader.jpg` | Local League roster/team image | Referenced by `src/content/site-data.js` |
 | `public/images/players/league/` | Local League player photos | Referenced by the League roster data |
 | `public/images/players/smash/` | Local Smash player photos | Referenced by the Smash roster data |
+| `public/data/players.json` | Editable League and Smash roster source | Loaded by `src/pages/game.js`; age is calculated from `birthDate` |
 | `package.json` | npm scripts and Vite development dependency | Used for local development and CI |
 | `package-lock.json` | Reproducible npm dependency lockfile | Used by `npm ci` in CI |
 | `vite.config.js` | Vite configuration and explicit multi-page entrypoints | Builds all four HTML routes |
 | `src/main.js` | Chooses the page renderer from the current `.html` pathname | Imported by every HTML entrypoint |
-| `src/content/site-data.js` | Central site, social, game, roster, and news data | Imported by page renderers |
+| `src/content/site-data.js` | Central site, social, game, and news metadata | Imported by page renderers; roster data lives in JSON |
 | `src/components/layout.js` | Shared header, navigation, and footer renderer | Used by all page renderers |
 | `src/components/cards.js` | Shared news and player card renderers | Used by homepage and game pages |
-| `src/pages/home.js` | Homepage content renderer | Called by `src/main.js` |
-| `src/pages/game.js` | Reusable game/team page renderer | Called for League and Smash |
+| `src/pages/home.js` | Homepage content renderer with Prime League team overview | Called by `src/main.js` |
+| `src/pages/game.js` | Reusable game/team page renderer and roster JSON loader | Called for League and Smash |
 | `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
 | `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
 | `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
@@ -98,16 +99,20 @@ Every page uses the same rendered shell:
 
 The shell is implemented once in `src/components/layout.js`; changes to header, footer, colors, typography, breakpoints, or shared markup should be made there and reflected here.
 
+Player cards are interactive flip cards. The front shows only the player image, name, and role with a dark gradient overlay. Clicking the front reveals the back with age, available statistics, and external profile links. The back button or the Escape key returns to the front. The interaction hint is rendered below the `Kader` heading.
+
 ## Page Details
 
 ### Homepage: `index.html`
 
 - Metadata includes a description and page title in the route shell; page content is rendered by `src/pages/home.js`.
-- The "Aktuelle News" area is a horizontally scrollable card list.
-- Four cards are displayed for tournament announcement, new players, training, and tournament success.
-- The card links target `news-turnier-2025.html`, `news-neue-spieler.html`, `news-training.html`, and `news-erfolg.html`. Those files are not currently present, so these are broken routes until the pages are added or the links are changed.
-- The "Unser Verein" content is rendered as responsive text; the old placeholder image is no longer used.
-- The "Geschichte" section uses local `public/images/Geschichte.png` and currently contains brief copy.
+- The hero identifies the team as `Wieländer Wühlmäuse (WIWU)` and describes it as a German League-of-Legends team active in Prime League since 05.01.2024.
+- The Prime League overview displays 44 matches, an 18/26 record, 3 seasons, and 8 members, based on the linked team page.
+- The current-season panel displays Spring Split 2025/26, Gruppe 7.5, 6. Platz, and 4 points as reported by Prime League.
+- The stats table has a client-side toggle between `Lifetime` and `Most recent season`; both views are backed by the `primeLeague.stats` object.
+- The latest-results list is based on the recent matches shown on the Prime League team page.
+- The homepage links directly to the official Prime League team profile; it does not present the former placeholder news cards.
+- The "Geschichte" image remains local, while the accompanying team-profile text is limited to the Prime League identity facts.
 
 ### League of Legends: `league-of-legends.html`
 
@@ -115,14 +120,18 @@ The shell is implemented once in `src/components/layout.js`; changes to header, 
 - Shows a game introduction driven by the League entry in `src/content/site-data.js`.
 - Roster contains five cards: Falafl (Top Lane), Zwuck (Jungle), 1Overninja1 (Mid Lane), HungerBoo (ADC), and aTrulixx (Support).
 - Player cards use local files under `public/images/players/<game>/`; a missing file falls back to the WiWU logo.
+- League player cards link to the exact Prime League profiles. OP.GG links are included when the Prime League profile exposes a Riot game account; Elkant and Beltrin currently have no OP.GG link supplied there.
 - Team photo uses local `public/images/League Kader.jpg`.
 
 ### Super Smash Bros.: `super-smash-bros.html`
 
 - Displays the Super Smash Bros. Ultimate logo from Wikimedia Commons.
 - Shows a game introduction driven by the Smash entry in `src/content/site-data.js`.
-- Roster currently contains one player: Martin, whose main is Mr. Game & Watch, age 19.
-- The player card uses `public/images/players/smash/martin.jpg`; a missing file falls back to the WiWU logo.
+- Roster is loaded from `public/data/players.json` and currently contains Martin, FickDieDünnenDeggah, and Falafl.
+- Each Smash card links to the supplied Supermajor profile.
+- Smash cards display the available Supermajor summary statistics from `players.json`: all-time record/win rate, recent six-month record/win rate, and offline/online percentages.
+- The supplied profiles do not provide reliable birth dates or character data in the fetched content, so cards show `Alter nicht hinterlegt` and the generic role `Spieler` until those fields are supplied.
+- Missing player images fall back to the WiWU logo.
 - There is no local team photo section on this page.
 
 ### Legal page: `impressum.html`
@@ -133,7 +142,7 @@ The shell is implemented once in `src/components/layout.js`; changes to header, 
 
 ## Data and External Resources
 
-There is no remote data layer or content API yet. Roster, news, and descriptive content is centralized in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. This is the intended replacement point for a future backend API.
+There is no remote data layer or content API yet. Roster data is editable in `public/data/players.json`; Prime League team facts used on the homepage are centralized in the `primeLeague` object in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. The source for the homepage facts is the official Prime League team profile and should be rechecked when the statistics are updated. The homepage embeds the public Instagram profile through Instagram's official `embed.js`; it does not fetch or persist post data.
 
 Remote resources currently include:
 
@@ -149,6 +158,10 @@ The site therefore depends on network availability for several images. Before re
 
 - The current `news` data still links to four news routes that do not exist; these need real pages or must be changed to non-link content.
 - Player card images are local and use the WiWU logo as a fallback until real photos are added.
+- Player changes are made by editing `public/data/players.json`; use `birthDate` in `YYYY-MM-DD` format and update the `image` path when adding photos.
+- Prime League stats are currently manually maintained in `src/content/site-data.js`. The Lifetime/Most recent season toggle does not itself fetch new data.
+- Instagram content is supplied by the public profile embed. Automatic newest-post synchronization requires a Meta/Instagram API integration behind a backend, not a GitHub Pages-only frontend.
+- Prime League stats are currently manually maintained in `src/content/site-data.js`. Automatic updates are feasible through a scheduled server-side scraper or GitHub Action that writes a generated JSON snapshot before deployment, but this is not a problem-free browser integration: it requires stable selectors, rate-limit handling, failure fallbacks, and a review of Prime League's terms before activation.
 - The history copy remains brief and needs editorial completion.
 - There are no automated browser checks yet for all routes, responsive layout, broken links, or external resource availability.
 - GitHub repository Pages settings must use **GitHub Actions** for `.github/workflows/deploy.yml` to control deployment. The workflow cannot change that repository setting automatically.
