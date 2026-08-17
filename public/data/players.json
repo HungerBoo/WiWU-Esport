@@ -1,0 +1,60 @@
+{
+  "league": [
+    {
+      "name": "Falafl",
+      "role": "Top Lane",
+      "birthDate": "2006-10-25",
+      "image": "/images/players/league/falafl.jpg"
+    },
+    {
+      "name": "Zwuck",
+      "role": "Jungle",
+      "birthDate": "2006-08-21",
+      "image": "/images/players/league/zwuck.jpg"
+    },
+    {
+      "name": "1Overninja1",
+      "role": "Mid Lane",
+      "birthDate": "2005-07-16",
+      "image": "/images/players/league/1overninja1.jpg"
+    },
+    {
+      "name": "HungerBoo",
+      "role": "ADC",
+      "birthDate": "2006-06-07",
+      "image": "/images/players/league/hungerboo.jpg"
+    },
+    {
+      "name": "aTrulixx",
+      "role": "Support",
+      "birthDate": "2005-01-01",
+      "image": "/images/players/league/atrulixx.jpg"
+    },
+    {
+      "name": "LostMyAim",
+      "role": "Sub / Fill",
+      "birthDate": "2005-01-01",
+      "image": "/images/players/league/lostmyaim.jpg"
+    },
+    {
+      "name": "Beltrin",
+      "role": "Sub / ADC",
+      "birthDate": "2005-01-01",
+      "image": "/images/players/league/beltrin.jpg"
+    },
+    {
+      "name": "Elkant",
+      "role": "Sub / Top",
+      "birthDate": "2005-01-01",
+      "image": "/images/players/league/elkant.jpg"
+    }
+  ],
+  "smash": [
+    {
+      "name": "Martin",
+      "role": "Mr. Game & Watch",
+      "birthDate": "2006-05-10",
+      "image": "/images/players/smash/martin.jpg"
+    }
+  ]
+}

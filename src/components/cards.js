@@ -1,4 +1,6 @@
-export function renderPlayerCard({ name, role, age, image }) {
+export function renderPlayerCard({ name, role, birthDate, image }) {
+  const age = calculateAge(birthDate);
+
   return `
     <article class="player-card">
       <img src="${image}" alt="${name}" loading="lazy">
@@ -9,6 +11,20 @@ export function renderPlayerCard({ name, role, age, image }) {
       </div>
     </article>
   `;
+}
+
+function calculateAge(birthDate) {
+  const [year, month, day] = birthDate.split('-').map(Number);
+  const today = new Date();
+  let age = today.getFullYear() - year;
+  const birthdayHasPassed = today.getMonth() + 1 > month
+    || (today.getMonth() + 1 === month && today.getDate() >= day);
+
+  if (!birthdayHasPassed) {
+    age -= 1;
+  }
+
+  return `${age} Jahre`;
 }
 
 export function renderNewsCard([title, summary, date, href], index) {

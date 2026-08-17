@@ -28,15 +28,16 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `public/images/League Kader.jpg` | Local League roster/team image | Referenced by `src/content/site-data.js` |
 | `public/images/players/league/` | Local League player photos | Referenced by the League roster data |
 | `public/images/players/smash/` | Local Smash player photos | Referenced by the Smash roster data |
+| `public/data/players.json` | Editable League and Smash roster source | Loaded by `src/pages/game.js`; age is calculated from `birthDate` |
 | `package.json` | npm scripts and Vite development dependency | Used for local development and CI |
 | `package-lock.json` | Reproducible npm dependency lockfile | Used by `npm ci` in CI |
 | `vite.config.js` | Vite configuration and explicit multi-page entrypoints | Builds all four HTML routes |
 | `src/main.js` | Chooses the page renderer from the current `.html` pathname | Imported by every HTML entrypoint |
-| `src/content/site-data.js` | Central site, social, game, roster, and news data | Imported by page renderers |
+| `src/content/site-data.js` | Central site, social, game, and news metadata | Imported by page renderers; roster data lives in JSON |
 | `src/components/layout.js` | Shared header, navigation, and footer renderer | Used by all page renderers |
 | `src/components/cards.js` | Shared news and player card renderers | Used by homepage and game pages |
 | `src/pages/home.js` | Homepage content renderer | Called by `src/main.js` |
-| `src/pages/game.js` | Reusable game/team page renderer | Called for League and Smash |
+| `src/pages/game.js` | Reusable game/team page renderer and roster JSON loader | Called for League and Smash |
 | `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
 | `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
 | `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
@@ -133,7 +134,7 @@ The shell is implemented once in `src/components/layout.js`; changes to header, 
 
 ## Data and External Resources
 
-There is no remote data layer or content API yet. Roster, news, and descriptive content is centralized in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. This is the intended replacement point for a future backend API.
+There is no remote data layer or content API yet. Roster data is editable in `public/data/players.json`; site metadata, news, and descriptions are centralized in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. The game page fetches the JSON on load and calculates age from each player's ISO birth date. This JSON fetch is the intended replacement point for a future backend API.
 
 Remote resources currently include:
 
@@ -149,6 +150,7 @@ The site therefore depends on network availability for several images. Before re
 
 - The current `news` data still links to four news routes that do not exist; these need real pages or must be changed to non-link content.
 - Player card images are local and use the WiWU logo as a fallback until real photos are added.
+- Player changes are made by editing `public/data/players.json`; use `birthDate` in `YYYY-MM-DD` format and update the `image` path when adding photos.
 - The history copy remains brief and needs editorial completion.
 - There are no automated browser checks yet for all routes, responsive layout, broken links, or external resource availability.
 - GitHub repository Pages settings must use **GitHub Actions** for `.github/workflows/deploy.yml` to control deployment. The workflow cannot change that repository setting automatically.

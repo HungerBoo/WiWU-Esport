@@ -20,6 +20,12 @@ npm run preview
 
 `npm run build` must pass before merging. It creates the deployable `dist/` directory.
 
+## Spieler verwalten
+
+Die Kader stehen in [public/data/players.json](public/data/players.json). Für jeden Spieler kannst du `name`, `role`, `birthDate` und `image` ändern. Das Geburtsdatum muss im ISO-Format `YYYY-MM-DD` eingetragen werden. Die Website berechnet daraus bei jedem Seitenaufruf automatisch das aktuelle Alter. Die derzeit eingetragenen Daten sind Beispielwerte und sollten durch die echten Geburtsdaten ersetzt werden.
+
+Spieler hinzufügen: ein weiteres Objekt in das passende Spiel-Array eintragen. Spieler entfernen: das Objekt aus dem Array löschen. Bilder gehören in `public/images/players/league/` oder `public/images/players/smash/`; der Pfad im JSON muss exakt übereinstimmen. Fehlt ein Bild, wird automatisch das WiWU-Logo angezeigt.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages for pushes to `main` and manual workflow runs. In GitHub repository settings, set Pages to **GitHub Actions** as the source. The `CNAME` file is copied into the build output for `www.wiwu-esport.de`.
