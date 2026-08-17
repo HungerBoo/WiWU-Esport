@@ -97,6 +97,8 @@ Every page uses the same rendered shell:
 4. Green accent color (`#4a7c59`) on headings, hover states, and footer border.
 5. Mobile breakpoint at `max-width: 760px`: navigation wraps, header title and content adapt, footer stacks, and horizontal card grids become scrollable or two-column layouts.
 
+The global page background uses the logo palette with a soft green/off-white gradient and a sparse animated symbol layer. League pages use varied ping-like symbols; Smash pages use arena/fighting-game symbols. Symbol positions are randomized on each render and remain behind the content. The effect is implemented in `src/components/layout.js` and `src/styles/site.css`.
+
 The shell is implemented once in `src/components/layout.js`; changes to header, footer, colors, typography, breakpoints, or shared markup should be made there and reflected here.
 
 Player cards are interactive flip cards. The front shows only the player image, name, and role with a dark gradient overlay. Clicking the front reveals the back with age, available statistics, and external profile links. The back button or the Escape key returns to the front. The interaction hint is rendered below the `Kader` heading.

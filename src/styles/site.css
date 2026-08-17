@@ -2,8 +2,11 @@
 
 :root { --ink: #16201d; --paper: #eef0e7; --acid: #d4f34a; --muted: #66716b; --line: rgba(22, 32, 29, .18); --max: 1180px; }
 * { box-sizing: border-box; }
-html { background: var(--paper); color: var(--ink); }
-body { margin: 0; font-family: 'Space Grotesk', sans-serif; line-height: 1.5; }
+html { background: #dfe5da; color: var(--ink); }
+body { position: relative; margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Space Grotesk', sans-serif; line-height: 1.5; background: radial-gradient(circle at 18% 12%, rgba(212, 243, 74, .12), transparent 24%), linear-gradient(135deg, #dfe5da 0%, #c9d3c8 48%, #e8ece3 100%); }
+.ambient-symbols { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.ambient-symbol { position: absolute; color: rgba(22, 32, 29, .13); font-family: 'DM Mono', monospace; font-weight: 500; line-height: 1; animation: symbol-drift 14s ease-in-out infinite; }
+@keyframes symbol-drift { 0%, 100% { opacity: .45; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); } 50% { opacity: .8; transform: translate3d(18px, -24px, 0) rotate(180deg) scale(1.08); } }
 a { color: inherit; }
 .site-header { border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); }
 .header-inner { max-width: var(--max); min-height: 88px; margin: auto; padding: 18px 28px; display: flex; align-items: center; gap: 18px; }
@@ -13,7 +16,7 @@ a { color: inherit; }
 nav { display: flex; gap: 8px; }
 nav a, .site-footer a { text-decoration: none; padding: 9px 12px; font-size: 14px; }
 nav a:hover, nav a.active { background: var(--acid); }
-main { max-width: var(--max); margin: auto; padding: 0 28px 100px; }
+main { position: relative; z-index: 1; max-width: var(--max); margin: auto; padding: 0 28px 100px; }
 .hero { min-height: 570px; display: flex; flex-direction: column; justify-content: center; max-width: 850px; }
 .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; margin: 0 0 20px; color: var(--muted); }
 h1, h2, h3, p { margin-top: 0; }
@@ -90,4 +93,5 @@ em { color: #788d1d; font-style: normal; }
 .legal-page a { color: var(--ink); }
 .site-footer { max-width: var(--max); margin: auto; padding: 25px 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; }
 .social-links { display: flex; gap: 18px; }
-@media (max-width: 760px) { .header-inner { flex-wrap: wrap; } .site-title { margin-right: 0; } nav { order: 3; width: 100%; overflow-x: auto; } nav a { white-space: nowrap; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid { display: block; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { padding-top: 70px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
+@media (prefers-reduced-motion: reduce) { .ambient-symbol { animation: none; } }
+@media (max-width: 760px) { .ambient-symbol:nth-child(n + 5) { display: none; } .header-inner { flex-wrap: wrap; } .site-title { margin-right: 0; } nav { order: 3; width: 100%; overflow-x: auto; } nav a { white-space: nowrap; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid { display: block; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { padding-top: 70px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
