@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root { --ink: #16201d; --paper: #eef0e7; --acid: #d4f34a; --muted: #66716b; --line: rgba(22, 32, 29, .18); --max: 1180px; }
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); }
+body { margin: 0; font-family: 'Space Grotesk', sans-serif; line-height: 1.5; }
+a { color: inherit; }
+.site-header { border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); }
+.header-inner { max-width: var(--max); min-height: 88px; margin: auto; padding: 18px 28px; display: flex; align-items: center; gap: 18px; }
+.brand-mark { width: 48px; height: 48px; display: block; }
+.brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.site-title { font-size: 18px; font-weight: 700; text-decoration: none; margin-right: auto; }
+nav { display: flex; gap: 8px; }
+nav a, .site-footer a { text-decoration: none; padding: 9px 12px; font-size: 14px; }
+nav a:hover, nav a.active { background: var(--acid); }
+main { max-width: var(--max); margin: auto; padding: 0 28px 100px; }
+.hero { min-height: 570px; display: flex; flex-direction: column; justify-content: center; max-width: 850px; }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; margin: 0 0 20px; color: var(--muted); }
+h1, h2, h3, p { margin-top: 0; }
+h1 { font-size: clamp(48px, 8vw, 104px); line-height: .92; letter-spacing: -.04em; margin-bottom: 30px; }
+h2 { font-size: clamp(36px, 5vw, 64px); line-height: .95; letter-spacing: -.04em; margin-bottom: 28px; }
+em { color: #788d1d; font-style: normal; }
+.hero-copy { max-width: 450px; font-size: 19px; color: var(--muted); }
+.news-section, .story-grid, .history-grid, .roster-section { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 70px; }
+.section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+.news-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.news-card { min-height: 190px; border-right: 1px solid var(--line); padding: 22px; text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; transition: background .2s, transform .2s; }
+.news-card:first-child { border-left: 1px solid var(--line); }
+.news-card:hover { background: var(--acid); transform: translateY(-5px); }
+.news-card h3 { font-size: 21px; line-height: 1.05; max-width: 180px; }
+.news-card p { color: var(--muted); font-size: 14px; line-height: 1.4; margin: 10px 0; }
+.news-card time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+.news-number { font-family: 'DM Mono', monospace; font-size: 12px; }
+.story-grid, .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-bottom: 80px; }
+.story-copy { max-width: 440px; font-size: 21px; color: var(--muted); align-self: end; }
+.text-link { color: var(--ink); display: inline-block; margin-top: 30px; font-size: 15px; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--acid); }
+.text-link span { color: #788d1d; }
+.history-grid img, .team-image { width: 100%; max-height: 540px; object-fit: cover; }
+.history-grid .story-copy { font-size: 16px; }
+.game-hero { padding: 110px 0 70px; max-width: 650px; }
+.game-logo { display: block; width: min(360px, 100%); max-height: 150px; object-fit: contain; object-position: left center; margin: 35px 0; }
+.game-hero h1 { font-size: clamp(48px, 7vw, 88px); }
+.game-hero > p:last-child { color: var(--muted); font-size: 19px; }
+.roster-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.player-card { background: var(--ink); color: var(--paper); min-width: 0; }
+.player-card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+.player-info { padding: 16px; }
+.player-info h3 { font-size: 18px; margin-bottom: 8px; }
+.player-info p, .player-info small { color: #c4cabd; font-family: 'DM Mono', monospace; font-size: 11px; }
+.player-info p { margin-bottom: 4px; }
+.team-image { margin-top: 70px; }
+.legal-page { max-width: 700px; padding: 110px 0; }
+.legal-page h1 { font-size: clamp(54px, 8vw, 100px); }
+.legal-page h2 { font-size: 28px; margin-top: 52px; margin-bottom: 12px; }
+.legal-page p { color: var(--muted); }
+.legal-page a { color: var(--ink); }
+.site-footer { max-width: var(--max); margin: auto; padding: 25px 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; }
+.social-links { display: flex; gap: 18px; }
+@media (max-width: 760px) { .header-inner { flex-wrap: wrap; } .site-title { margin-right: 0; } nav { order: 3; width: 100%; overflow-x: auto; } nav a { white-space: nowrap; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid { display: block; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { padding-top: 70px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }

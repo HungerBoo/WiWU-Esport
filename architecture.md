@@ -6,25 +6,41 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 
 ## Project Shape
 
-- Type: small, static, multi-page HTML website.
+- Type: static, multi-page Vite website with browser-native ES modules.
 - Language and content: German (`lang="de"`).
-- Runtime: browser only; no server-side application code.
-- Styling: CSS is embedded in a `<style>` block inside each HTML page. There is no shared stylesheet.
-- Behavior: pages contain inline `onclick` attributes for slider controls, but no JavaScript file or inline script is currently present.
-- Dependencies: no package manager, framework, build tool, test suite, or local third-party dependency is present.
-- Deployment: the Git remote is `https://github.com/HungerBoo/WiWU-Esport.git`, `main` is the local branch, and `CNAME` sets the custom domain to `www.wiwu-esport.de`. No GitHub Actions workflow exists in this repository. Whether every push to `main` publishes is controlled by the repository's GitHub Pages source setting and must be confirmed in GitHub repository settings.
+- Runtime: browser only; no server-side application code yet.
+- Styling: one shared stylesheet at `src/styles/site.css`.
+- Behavior: page rendering and content are composed from ES modules under `src/`; no inline event handlers are required.
+- Build: Vite reads the four HTML entrypoints from `pages/` and generates a static `dist/` directory containing the four root-level `.html` routes and emitted assets.
+- Local verification: `npm run build` is the production-equivalent check; `npm run dev` and `npm run preview` serve the site locally.
+- Deployment: `.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages for pushes to `main` and manual runs. `CNAME` sets the custom domain to `www.wiwu-esport.de`.
 
 ## File Map
 
 | File | Responsibility | Important dependencies |
 | --- | --- | --- |
-| `index.html` | Homepage for the club; news carousel, club introduction, history section, global footer | `Wiwu_Logo.jpg`, `Geschichte.png`, remote placeholder/news images, Instagram and Prime League links |
-| `league-of-legends.html` | League of Legends team page; game logo, team description, five-player roster, team photo | `Wiwu_Logo.jpg`, `League Kader.jpg`, remote League logo and player placeholders, global footer links |
-| `super-smash-bros.html` | Super Smash Bros. team page; game logo, team description, one-player roster | `Wiwu_Logo.jpg`, remote placeholder logo/player image, global footer links |
-| `impressum.html` | Legal notice with address, email, responsible person, and liability text | `Wiwu_Logo.jpg`, global footer links |
-| `Wiwu_Logo.jpg` | Local club logo displayed in every page header | Referenced by all HTML pages |
-| `Geschichte.png` | Local history image on the homepage | Referenced by `index.html` |
-| `League Kader.jpg` | Local League roster/team image | Referenced by `league-of-legends.html` |
+| `pages/index.html` | Homepage HTML entrypoint for the club | Mounts the shared app; Vite emits `dist/index.html` |
+| `pages/league-of-legends.html` | League of Legends HTML entrypoint | Mounts the shared app; Vite emits `dist/league-of-legends.html` |
+| `pages/super-smash-bros.html` | Super Smash Bros. HTML entrypoint | Mounts the shared app; Vite emits `dist/super-smash-bros.html` |
+| `pages/impressum.html` | Legal HTML entrypoint | Mounts the shared app; Vite emits `dist/impressum.html` |
+| `public/images/Wiwu_Logo.jpg` | Local club logo displayed in every page header | Referenced by `src/components/layout.js` |
+| `public/images/Geschichte.png` | Local history image on the homepage | Referenced by `src/pages/home.js` |
+| `public/images/League Kader.jpg` | Local League roster/team image | Referenced by `src/content/site-data.js` |
+| `public/images/players/league/` | Local League player photos | Referenced by the League roster data |
+| `public/images/players/smash/` | Local Smash player photos | Referenced by the Smash roster data |
+| `package.json` | npm scripts and Vite development dependency | Used for local development and CI |
+| `package-lock.json` | Reproducible npm dependency lockfile | Used by `npm ci` in CI |
+| `vite.config.js` | Vite configuration and explicit multi-page entrypoints | Builds all four HTML routes |
+| `src/main.js` | Chooses the page renderer from the current `.html` pathname | Imported by every HTML entrypoint |
+| `src/content/site-data.js` | Central site, social, game, roster, and news data | Imported by page renderers |
+| `src/components/layout.js` | Shared header, navigation, and footer renderer | Used by all page renderers |
+| `src/components/cards.js` | Shared news and player card renderers | Used by homepage and game pages |
+| `src/pages/home.js` | Homepage content renderer | Called by `src/main.js` |
+| `src/pages/game.js` | Reusable game/team page renderer | Called for League and Smash |
+| `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
+| `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
+| `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
+| `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes and manual dispatch |
 | `CNAME` | Custom-domain configuration marker | Used by the static hosting workflow |
 | `.gitignore` | Ignore rules | Currently empty |
 | `README.md` | Minimal project label (`WiWU-Esport`) | No setup or deployment instructions currently documented |
@@ -64,46 +80,49 @@ impressum.html
 
 The game navigation marks the current page with `class="active"`; the homepage and legal page do not have an active navigation marker.
 
+## Source Architecture
+
+The files in `pages/` are source HTML entrypoints, not full page implementations. Each contains document metadata, an `#app` mount point, and a module reference to `src/main.js`. `src/main.js` selects the renderer based on the current filename. Vite flattens these entrypoints into root-level deployment routes under `dist/`, so GitHub Pages and existing links do not need `/pages/` in their URLs. Renderers use centralized data and shared components, while `src/styles/site.css` owns all visual layout and responsive behavior.
+
+This is intentionally static-first: it can be hosted on GitHub Pages today and later have its data calls replaced or extended with a separate HTTPS API without putting secrets in the browser bundle.
+
 ## Shared UI Contract
 
-Every page duplicates the same broad shell:
+Every page uses the same rendered shell:
 
 1. Sticky dark header with the local logo, linked site title, and game navigation.
 2. Main content constrained to a centered responsive container.
 3. Dark footer with the Impressum link and external Instagram/Prime League icons.
 4. Green accent color (`#4a7c59`) on headings, hover states, and footer border.
-5. Mobile breakpoint at `max-width: 768px`: navigation wraps, header title shrinks, footer stacks, and content padding is reduced.
+5. Mobile breakpoint at `max-width: 760px`: navigation wraps, header title and content adapt, footer stacks, and horizontal card grids become scrollable or two-column layouts.
 
-Because this shell is duplicated, a change to header, footer, colors, typography, breakpoints, or shared markup must be applied consistently to all four HTML pages and reflected here.
+The shell is implemented once in `src/components/layout.js`; changes to header, footer, colors, typography, breakpoints, or shared markup should be made there and reflected here.
 
 ## Page Details
 
 ### Homepage: `index.html`
 
-- Metadata includes a description and keywords for the club and its games.
+- Metadata includes a description and page title in the route shell; page content is rendered by `src/pages/home.js`.
 - The "Aktuelle News" area is a horizontally scrollable card list.
 - Four cards are displayed for tournament announcement, new players, training, and tournament success.
 - The card links target `news-turnier-2025.html`, `news-neue-spieler.html`, `news-training.html`, and `news-erfolg.html`. Those files are not currently present, so these are broken routes until the pages are added or the links are changed.
-- Slider arrow buttons call `scrollSlider('left'|'right')`, but the function is not defined in the current HTML and no script is loaded. Native horizontal scrolling remains available through the scrollable container.
-- The "Unser Verein" image uses a remote `via.placeholder.com` URL.
-- The "Geschichte" section uses local `Geschichte.png` and currently contains only the partial text `Die Wieländer Wühlmäuse wurde`.
+- The "Unser Verein" content is rendered as responsive text; the old placeholder image is no longer used.
+- The "Geschichte" section uses local `public/images/Geschichte.png` and currently contains brief copy.
 
 ### League of Legends: `league-of-legends.html`
 
 - Displays a remote League of Legends logo.
-- Shows a centered descriptive text panel with placeholder Lorem Ipsum content.
+- Shows a game introduction driven by the League entry in `src/content/site-data.js`.
 - Roster contains five cards: Falafl (Top Lane), Zwuck (Jungle), 1Overninja1 (Mid Lane), HungerBoo (ADC), and aTrulixx (Support).
-- Player images are remote placeholder URLs.
-- Team photo uses local `League Kader.jpg`.
-- Slider arrow buttons call `scrollTeamSlider('left'|'right')`, but this function is not defined and no script is loaded.
+- Player cards use local files under `public/images/players/<game>/`; a missing file falls back to the WiWU logo.
+- Team photo uses local `public/images/League Kader.jpg`.
 
 ### Super Smash Bros.: `super-smash-bros.html`
 
-- Displays a remote placeholder game logo.
-- Shows a centered descriptive text panel with placeholder Lorem Ipsum content.
+- Displays the Super Smash Bros. Ultimate logo from Wikimedia Commons.
+- Shows a game introduction driven by the Smash entry in `src/content/site-data.js`.
 - Roster currently contains one player: Martin, whose main is Mr. Game & Watch, age 19.
-- Player image is a remote placeholder URL.
-- Slider arrow buttons use the same undefined `scrollTeamSlider` handler as the League page.
+- The player card uses `public/images/players/smash/martin.jpg`; a missing file falls back to the WiWU logo.
 - There is no local team photo section on this page.
 
 ### Legal page: `impressum.html`
@@ -114,11 +133,11 @@ Because this shell is duplicated, a change to header, footer, colors, typography
 
 ## Data and External Resources
 
-There is no data layer or content API. All roster, news, legal, and descriptive content is hard-coded in the HTML.
+There is no remote data layer or content API yet. Roster, news, and descriptive content is centralized in `src/content/site-data.js`; legal content is rendered by `src/pages/legal.js`. This is the intended replacement point for a future backend API.
 
 Remote resources currently include:
 
-- `via.placeholder.com` for news, club, game-logo, and player placeholder images.
+- `via.placeholder.com` is no longer used for game logos or player cards.
 - Wikimedia Commons for the Instagram icon.
 - `cdn0.gamesports.net` for the Prime League icon.
 - A Wikia-hosted League of Legends logo.
@@ -128,14 +147,11 @@ The site therefore depends on network availability for several images. Before re
 
 ## Known Gaps and Risks
 
-- Shared CSS and shared header/footer markup are duplicated across pages, so drift is likely.
-- No JavaScript implementation exists for the referenced slider arrow handlers.
-- Four homepage news destinations are missing.
-- Several visible sections still use Lorem Ipsum or placeholder images.
-- The history copy is incomplete.
-- The homepage logo area contains both an empty linked `.logo` anchor and the actual logo image using the same class; this should be understood before changing header layout or accessibility.
-- There are no automated checks for broken local links, missing assets, HTML validity, or external resource availability.
-- `README.md` does not currently document how to preview or deploy the site.
+- The current `news` data still links to four news routes that do not exist; these need real pages or must be changed to non-link content.
+- Player card images are local and use the WiWU logo as a fallback until real photos are added.
+- The history copy remains brief and needs editorial completion.
+- There are no automated browser checks yet for all routes, responsive layout, broken links, or external resource availability.
+- GitHub repository Pages settings must use **GitHub Actions** for `.github/workflows/deploy.yml` to control deployment. The workflow cannot change that repository setting automatically.
 
 ## Proposed Future Architecture
 
@@ -143,7 +159,7 @@ The site therefore depends on network availability for several images. Before re
 
 GitHub Pages is suitable for the current static HTML site and for a future static frontend bundle. It is not a suitable runtime for a Riot API key, database, Redis, background worker, server-side authentication, or protected API logic. Those capabilities must run on a separate backend platform, with the frontend calling that backend over HTTPS.
 
-The likely current setup is **Settings -> Pages -> Deploy from a branch -> `main` / root**, because the repository has a `CNAME` file and no workflow. Under that setup, a push to `main` normally triggers a Pages deployment. This cannot be confirmed from the local clone; verify the Pages settings and the Deployments tab in GitHub. If Pages is configured for **GitHub Actions** instead, publishing requires a workflow, and none currently exists in this repository.
+The repository now contains `.github/workflows/deploy.yml`, which runs on pushes to `main` and manual workflow runs. Set **Settings -> Pages -> Build and deployment -> Source -> GitHub Actions** so this workflow controls publishing. A branch-based Pages source would bypass the generated `dist/` artifact and is not the intended deployment mode.
 
 For the future system, use one of these deployment arrangements:
 
@@ -169,7 +185,7 @@ This keeps the first version operationally small while enforcing boundaries betw
 
 ### Recommended technology direction
 
-- Frontend: Next.js with React and TypeScript, using server rendering for public SEO pages and client components only for interactive dashboards.
+- Frontend now: Vite with browser-native ES modules and static multi-page entrypoints, which is compatible with GitHub Pages. Future option: move the frontend to Next.js only if server rendering or server-side authenticated pages justify moving away from Pages.
 - API: TypeScript modular API using NestJS or Fastify. Pick one framework during implementation and keep all Riot and database access behind application modules.
 - Database: PostgreSQL with a migration tool and a typed data-access layer such as Prisma or Drizzle. Use one consistently; do not mix ORMs.
 - Cache and jobs: Redis for cache entries, API rate limiting, and a durable job queue such as BullMQ. Jobs must be retryable and idempotent.
@@ -308,12 +324,14 @@ For every future edit:
 4. Check local links and asset paths when routes or filenames change. For this repository, a practical baseline is to inspect all `href` and `src` references and verify local targets exist.
 5. Keep this document factual and current; remove a known gap once it is actually resolved.
 
-## Preview
+## Preview and Release Check
 
-This is a static site and can be opened directly in a browser from `index.html`. A simple local HTTP server is preferable when checking relative links and browser behavior, for example:
+Install dependencies once, then use the same production check locally and in CI:
 
 ```text
-python3 -m http.server
+npm install
+npm run build
+npm run preview
 ```
 
-No build step is required by the current repository.
+The `dist/` directory is generated output and must not be edited manually. A change is ready for merging only when `npm run build` succeeds and the affected route has been checked through the local Vite server. Do not commit `node_modules/` or `dist/`.
