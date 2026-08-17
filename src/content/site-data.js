@@ -23,6 +23,41 @@ export const games = {
   }
 };
 
+export const primeLeague = {
+  teamName: 'Wieländer Wühlmäuse',
+  abbreviation: 'WIWU',
+  country: 'Deutschland',
+  founded: '05.01.2024',
+  stats: {
+    lifetime: {
+      label: 'Lifetime',
+      values: [
+        ['Matches', '44'],
+        ['Bilanz', '18 / 26'],
+        ['Saisons', '3'],
+        ['Mitglieder', '8']
+      ]
+    },
+    recentSeason: {
+      label: 'Spring Split 2025/26',
+      values: [
+        ['Gruppe', 'Gruppe 7.5'],
+        ['Platz', '6. Platz'],
+        ['Punkte', '4'],
+        ['Status', 'Gruppenphase']
+      ]
+    }
+  },
+  currentSeason: 'Spring Split 2025/26',
+  recentMatches: [
+    'PTC 2:0 WIWU',
+    'FAKE 2:1 WIWU',
+    'WIWU 1:2 4B1F',
+    'Zer 1:2 WIWU'
+  ],
+  url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
+};
+
 export const news = [
   ['Turnier Ankündigung 2025', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', '02. Januar 2025', 'news-turnier-2025.html'],
   ['Neue Spieler im Team', 'Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.', '28. Dezember 2024', 'news-neue-spieler.html'],

@@ -4,57 +4,106 @@
       "name": "Falafl",
       "role": "Top Lane",
       "birthDate": "2006-10-25",
-      "image": "/images/players/league/falafl.jpg"
+      "image": "/images/players/league/falafl.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2163142-fal4fl",
+      "opgg": "https://www.op.gg/summoners/euw/Twisted%20Falafl-CRIT"
     },
     {
       "name": "Zwuck",
       "role": "Jungle",
       "birthDate": "2006-08-21",
-      "image": "/images/players/league/zwuck.jpg"
+      "image": "/images/players/league/zwuck.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2223685-zwuck",
+      "opgg": "https://www.op.gg/summoners/euw/Zwuck-Zwack"
     },
     {
       "name": "1Overninja1",
       "role": "Mid Lane",
       "birthDate": "2005-07-16",
-      "image": "/images/players/league/1overninja1.jpg"
+      "image": "/images/players/league/1overninja1.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2222569-overninja",
+      "opgg": "https://www.op.gg/summoners/euw/1Overninja1-2970"
     },
     {
       "name": "HungerBoo",
       "role": "ADC",
       "birthDate": "2006-06-07",
-      "image": "/images/players/league/hungerboo.jpg"
+      "image": "/images/players/league/hungerboo.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2240547-hungerboo",
+      "opgg": "https://www.op.gg/summoners/euw/HungerBoo-WIWU"
     },
     {
       "name": "aTrulixx",
       "role": "Support",
       "birthDate": "2005-01-01",
-      "image": "/images/players/league/atrulixx.jpg"
+      "image": "/images/players/league/atrulixx.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2223580-trulixx",
+      "opgg": "https://www.op.gg/summoners/euw/Nephis-WIWU"
     },
     {
       "name": "LostMyAim",
       "role": "Sub / Fill",
       "birthDate": "2005-01-01",
-      "image": "/images/players/league/lostmyaim.jpg"
+      "image": "/images/players/league/lostmyaim.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2223592-lostmyaimtwicee",
+      "opgg": "https://www.op.gg/summoners/euw/LostMyAim-WIWU"
     },
     {
       "name": "Beltrin",
       "role": "Sub / ADC",
       "birthDate": "2005-01-01",
-      "image": "/images/players/league/beltrin.jpg"
+      "image": "/images/players/league/beltrin.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2325681-beltrin",
+      "opgg": "https://op.gg/de/lol/summoners/euw/Beltrin-EUW"
     },
     {
       "name": "Elkant",
       "role": "Sub / Top",
       "birthDate": "2005-01-01",
-      "image": "/images/players/league/elkant.jpg"
+      "image": "/images/players/league/elkant.jpg",
+      "profile": "https://www.primeleague.gg/de/users/2325701-elkant",
+      "opgg": "https://op.gg/de/lol/summoners/euw/Elkant-elk"
     }
   ],
   "smash": [
     {
       "name": "Martin",
-      "role": "Mr. Game & Watch",
-      "birthDate": "2006-05-10",
-      "image": "/images/players/smash/martin.jpg"
+      "role": "Spieler",
+      "birthDate": "2006-06-15",
+      "image": "/images/players/smash/martin.jpg",
+      "profile": "https://www.supermajor.gg/ultimate/player/Martin?id=S3678798",
+      "stats": {
+        "All Time": "325-281 (54%)",
+        "Letzte 6 Monate": "71-48 (60%)",
+        "Offline": "55%",
+        "Online": "53%"
+      }
+    },
+    {
+      "name": "FickDieDünnenDeggah",
+      "role": "Spieler",
+    "birthDate": "2005-07-16",
+      "image": "/images/players/smash/fickdieduennendeggah.jpg",
+      "profile": "https://www.supermajor.gg/ultimate/player/FickDieD%C3%BCnnenDeggah?id=S4871495",
+      "stats": {
+        "All Time": "0-5 (0%)",
+        "Letzte 6 Monate": "0-3 (0%)",
+        "Offline": "0%",
+        "Online": "N/A"
+      }
+    },
+    {
+      "name": "Falafl",
+      "role": "Spieler",
+      "birthDate": "2006-10-25",
+      "image": "/images/players/smash/falafl.jpg",
+      "profile": "https://www.supermajor.gg/ultimate/player/Falafl?id=S4922057",
+      "stats": {
+        "All Time": "0-5 (0%)",
+        "Letzte 6 Monate": "0-3 (0%)",
+        "Offline": "0%",
+        "Online": "N/A"
+      }
     }
   ]
 }

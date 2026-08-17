@@ -12,7 +12,7 @@ export async function renderGame(gameKey) {
       <p>${game.description}</p>
     </section>
     <section class="roster-section" aria-labelledby="roster-heading">
-      <div class="section-heading"><h2 id="roster-heading">Kader</h2></div>
+      <div class="section-heading"><div><h2 id="roster-heading">Kader</h2><p class="roster-hint">Karte anklicken für Stats und Profile</p></div></div>
       <p class="roster-status">Kader wird geladen ...</p>
     </section>
     ${game.teamImage ? `<img class="team-image" src="${game.teamImage}" alt="Kader von ${game.title}" loading="lazy">` : ''}
@@ -27,8 +27,9 @@ export async function renderGame(gameKey) {
     const playerData = await response.json();
     const players = playerData[gameKey] || [];
     const roster = document.querySelector('.roster-section');
+    const profileLabel = gameKey === 'smash' ? 'Supermajor' : 'Prime League';
     roster.querySelector('.roster-status').outerHTML = players.length
-      ? `<div class="roster-grid">${players.map(renderPlayerCard).join('')}</div>`
+      ? `<div class="roster-grid">${players.map((player) => renderPlayerCard({ ...player, profileLabel })).join('')}</div>`
       : '<p class="roster-status">Keine Spieler eingetragen.</p>';
 
     document.querySelectorAll('.player-card img').forEach((image) => {
@@ -36,6 +37,29 @@ export async function renderGame(gameKey) {
         image.src = '/images/Wiwu_Logo.jpg';
         image.alt = 'WiWU Logo als Platzhalter';
       }, { once: true });
+    });
+
+    document.querySelectorAll('.player-card').forEach((card) => {
+      const front = card.querySelector('.player-card-front');
+      const back = card.querySelector('.player-card-back');
+
+      const setFlipped = (flipped) => {
+        card.classList.toggle('is-flipped', flipped);
+        front.setAttribute('aria-hidden', String(flipped));
+        back.setAttribute('aria-hidden', String(!flipped));
+      };
+
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('a')) return;
+        setFlipped(!card.classList.contains('is-flipped'));
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setFlipped(false);
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          setFlipped(!card.classList.contains('is-flipped'));
+        }
+      });
     });
   } catch (error) {
     document.querySelector('.roster-status').textContent = 'Die Kaderdaten konnten nicht geladen werden.';
