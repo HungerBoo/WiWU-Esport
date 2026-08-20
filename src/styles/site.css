@@ -25,6 +25,7 @@ h2 { font-size: clamp(36px, 5vw, 64px); line-height: .95; letter-spacing: -.04em
 em { color: #788d1d; font-style: normal; }
 .hero-copy { max-width: 450px; font-size: 19px; color: var(--muted); }
 .news-section, .story-grid, .history-grid, .roster-section { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 70px; }
+.roster-section { margin-top: 30px; }
 .section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
 .news-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
 .news-card { min-height: 190px; border-right: 1px solid var(--line); padding: 22px; text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; transition: background .2s, transform .2s; }
@@ -56,10 +57,18 @@ em { color: #788d1d; font-style: normal; }
 .text-link span { color: #788d1d; }
 .history-grid img, .team-image { width: 100%; max-height: 540px; object-fit: cover; }
 .history-grid .story-copy { font-size: 16px; }
-.game-hero { padding: 110px 0 70px; max-width: 650px; }
+.game-hero { padding: 110px 0 40px; max-width: 650px; }
 .game-logo { display: block; width: min(360px, 100%); max-height: 150px; object-fit: contain; object-position: left center; margin: 35px 0; }
 .game-hero h1 { font-size: clamp(48px, 7vw, 88px); }
-.game-hero > p:last-child { color: var(--muted); font-size: 19px; }
+.game-hero-description { color: var(--muted); font-size: 19px; }
+.intro-carousel { margin-top: 24px; max-width: 560px; overflow: hidden; }
+.intro-carousel-track { display: flex; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.intro-carousel-slide { flex: 0 0 100%; min-width: 0; margin: 0; padding: 20px 24px; border-left: 3px solid var(--acid); }
+.intro-carousel-slide p { color: var(--ink); font-size: 17px; }
+.intro-carousel-slide cite { display: block; margin-top: 10px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; font-style: normal; }
+.intro-carousel-dots { display: flex; gap: 8px; margin-top: 14px; padding-left: 24px; }
+.intro-carousel-dot { appearance: none; width: 8px; height: 8px; padding: 0; border: 1px solid var(--ink); border-radius: 50%; background: transparent; cursor: pointer; }
+.intro-carousel-dot.is-active { background: var(--acid); }
 .roster-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
 .roster-status { color: var(--muted); }
 .roster-hint { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; margin-top: -16px; }
