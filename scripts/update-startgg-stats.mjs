@@ -12,14 +12,27 @@ const PLAYERS_JSON_PATH = path.join(ROOT_DIR, 'public/data/players.json');
 const EVENT_CACHE_PATH = path.join(ROOT_DIR, 'data/event-cache.json');
 
 const STARTGG_ENDPOINT = 'https://api.start.gg/gql/alpha';
-const REQUEST_DELAY_MS = 300;
-const MAX_RETRIES = 5;
+const REQUEST_DELAY_MS = 800;
+const MAX_RETRIES = 6;
+const MAX_BACKOFF_MS = 60_000;
 // If more than this share of an event's set requests fail, treat the player's
 // run as unreliable and keep the previously written stats instead of overwriting them.
 const MAX_EVENT_FAILURE_RATIO = 0.3;
 
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+// start.gg's rate-limit window is longer than a few seconds, so prefer its own
+// Retry-After hint over a short fixed backoff when one is present.
+function getRetryDelayMs(response, attempt) {
+  const retryAfter = Number(response.headers.get('retry-after'));
+
+  if (Number.isFinite(retryAfter) && retryAfter > 0) {
+    return retryAfter * 1000;
+  }
+
+  return Math.min(2000 * 2 ** attempt, MAX_BACKOFF_MS);
 }
 
 async function requestStartGG(query, variables) {
@@ -44,7 +57,7 @@ async function requestStartGG(query, variables) {
         throw new Error(`start.gg HTTP-Fehler nach ${MAX_RETRIES} Versuchen: ${response.status} ${response.statusText}`);
       }
 
-      const backoffMs = 1000 * 2 ** attempt;
+      const backoffMs = getRetryDelayMs(response, attempt);
       console.warn(`start.gg antwortete mit ${response.status}, warte ${backoffMs}ms und versuche es erneut ...`);
       await sleep(backoffMs);
       continue;
@@ -120,12 +133,14 @@ async function fetchAllUserEvents(userId) {
     const connection = data.user?.events;
 
     if (!connection) {
+      console.log(`  Events-Seite ${page}: keine Verbindung von start.gg erhalten.`);
       break;
     }
 
-    events.push(...(connection.nodes ?? []));
-
     const pageInfo = connection.pageInfo;
+    const nodes = connection.nodes ?? [];
+    events.push(...nodes);
+    console.log(`  Events-Seite ${page}/${pageInfo?.totalPages ?? '?'}: ${nodes.length} Events gefunden (gesamt bisher: ${events.length}).`);
 
     if (!pageInfo || pageInfo.totalPages == null || page >= pageInfo.totalPages) {
       break;
@@ -151,6 +166,7 @@ function mergeEventIds(cachedIds, discoveredIds) {
 async function updateEventCacheForPlayer(player, eventCache) {
   const playerKey = String(player.startggPlayerId);
   const cachedIds = eventCache[playerKey] ?? [];
+  console.log(`  Bereits im Cache: ${cachedIds.length} Event-IDs.`);
 
   let user;
   try {
@@ -165,6 +181,8 @@ async function updateEventCacheForPlayer(player, eventCache) {
     return cachedIds;
   }
 
+  console.log(`  start.gg-User gefunden: id=${user.id}, slug=${user.slug ?? 'unbekannt'}.`);
+
   let discoveredEvents;
   try {
     discoveredEvents = await fetchAllUserEvents(user.id);
@@ -173,8 +191,12 @@ async function updateEventCacheForPlayer(player, eventCache) {
     return cachedIds;
   }
 
-  const ultimateEventIds = discoveredEvents.filter(isUltimateEvent).map((event) => Number(event.id));
+  const ultimateEvents = discoveredEvents.filter(isUltimateEvent);
+  const ultimateEventIds = ultimateEvents.map((event) => Number(event.id));
   const mergedIds = mergeEventIds(cachedIds, ultimateEventIds);
+  const newIds = mergedIds.filter((id) => !cachedIds.includes(id));
+
+  console.log(`  ${discoveredEvents.length} Events insgesamt entdeckt, davon ${ultimateEvents.length} Ultimate-Events; ${newIds.length} neue Event-IDs, ${mergedIds.length} Event-IDs insgesamt im Cache.`);
 
   eventCache[playerKey] = mergedIds;
   return mergedIds;
@@ -264,16 +286,23 @@ function normalizeSet(set, event, playerId) {
 async function fetchSetsForEvent(eventId, playerId) {
   const normalizedSets = [];
   let page = 1;
+  let eventName = null;
+  let rawSetCount = 0;
 
   while (true) {
     const data = await requestStartGG(PLAYER_SETS_QUERY, { eventId, playerId, page });
     const event = data.event;
 
     if (!event?.sets) {
+      console.log(`    Event ${eventId}: keine Sets-Daten von start.gg erhalten (Event existiert evtl. nicht mehr).`);
       break;
     }
 
-    for (const rawSet of event.sets.nodes ?? []) {
+    eventName ??= event.name;
+    const rawSets = event.sets.nodes ?? [];
+    rawSetCount += rawSets.length;
+
+    for (const rawSet of rawSets) {
       const normalized = normalizeSet(rawSet, event, playerId);
 
       if (normalized) {
@@ -289,6 +318,8 @@ async function fetchSetsForEvent(eventId, playerId) {
 
     page++;
   }
+
+  console.log(`    Event ${eventId} ("${eventName ?? 'unbekannt'}"): ${rawSetCount} Sets von start.gg, ${normalizedSets.length} davon zählbar.`);
 
   return normalizedSets;
 }
@@ -399,17 +430,20 @@ async function readJson(filePath, fallback) {
 
 async function updateStatsForPlayer(player, eventCache) {
   const eventIds = await updateEventCacheForPlayer(player, eventCache);
+  console.log(`  Lade Sets aus ${eventIds.length} bekannten Events ...`);
 
   const allSets = [];
   let failedEventCount = 0;
 
-  for (const eventId of eventIds) {
+  for (const [index, eventId] of eventIds.entries()) {
+    console.log(`    [${index + 1}/${eventIds.length}] Event ${eventId} wird geladen ...`);
+
     try {
       const sets = await fetchSetsForEvent(eventId, player.startggPlayerId);
       allSets.push(...sets);
     } catch (error) {
       failedEventCount++;
-      console.error(`Event ${eventId} für ${player.name} konnte nicht geladen werden:`, error.message);
+      console.error(`    Event ${eventId} für ${player.name} konnte nicht geladen werden:`, error.message);
     }
   }
 
@@ -418,7 +452,10 @@ async function updateStatsForPlayer(player, eventCache) {
     return null;
   }
 
-  return formatSiteStats(computeStats(allSets));
+  const stats = computeStats(allSets);
+  console.log(`  ${allSets.length} rohe Sets gesammelt, ${stats.countedSetCount} nach Deduplizierung; ${failedEventCount} Event(s) fehlgeschlagen.`);
+
+  return formatSiteStats(stats);
 }
 
 async function main() {
@@ -437,13 +474,14 @@ async function main() {
       continue;
     }
 
-    console.log(`Aktualisiere ${player.name} ...`);
+    console.log(`Aktualisiere ${player.name} (startggPlayerId=${player.startggPlayerId}) ...`);
 
     try {
       const stats = await updateStatsForPlayer(player, eventCache);
 
       if (stats) {
         player.stats = stats;
+        console.log(`  Neue Statistik für ${player.name}:`, stats);
       }
     } catch (error) {
       console.error(`Statistik für ${player.name} konnte nicht aktualisiert werden; bestehende Werte bleiben erhalten.`, error.message);
