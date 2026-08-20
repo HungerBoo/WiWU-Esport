@@ -1,7 +1,8 @@
 import { renderLayout } from '../components/layout.js';
 import { primeLeague } from '../content/site-data.js';
 
-const historyImage = '/images/Geschichte.png';
+const oldLogoImage = '/images/Geschichte-alt.png';
+const newLogoImage = '/images/Geschichte-neu.png';
 
 export function renderHome() {
   const seasonStats = primeLeague.stats.recentSeason.values;
@@ -30,8 +31,33 @@ export function renderHome() {
       <div class="story-copy"><ul class="match-list">${primeLeague.recentMatches.map((match) => `<li>${match}</li>`).join('')}</ul></div>
     </section>
     <section class="history-grid">
-      <img src="${historyImage}" alt="Geschichte der Wieländer Wühlmäuse" loading="lazy">
-      <div><p class="eyebrow">03 / TEAMPROFIL</p><h2>Wieländer<br><em>Wühlmäuse.</em></h2><p class="story-copy">Prime League führt das Team als deutsches League-of-Legends-Team mit dem Kürzel WIWU.</p></div>
+      <div class="history-images">
+        <img src="${oldLogoImage}" alt="Altes Branding der Wieländer Wühlmäuse" loading="lazy">
+        <img src="${newLogoImage}" alt="Neues Logo der Wieländer Wühlmäuse" loading="lazy">
+      </div>
+      <div>
+    <p class="eyebrow">03 / TEAMPROFIL</p>
+
+    <h2>Wieländer<br><em>Wühlmäuse.</em></h2>
+
+    <div class="story-copy">
+        <p>
+            Die Wieländer Wühlmäuse sind nicht nur irgendeine Orga, nein, sie sind eine Institution des deutschen elektronischen Sportes.
+            Ihre humble beginnings bestritten die Künstler der Kluft Anfang 2024 in der Prime League.
+            Nach vielen terminlichen Problemen aufgrund von falk'schen Ungereimtheiten musste die Saison jedoch frühzeitig beendet werden.
+        </p>
+
+        <p>
+            Erneut haben die Buben 2025/26 durchgestartet, mit Neuzugängen aus der Uniliga für das League-Team und dem Einstieg in die kompetitive SSBU-Szene in Madrid.
+            Unsere Helden starten ein neues Kapitel, in dem auch die Social-Media-Präsenz und das Trikot-Design nichts zu wünschen übrig lassen.
+            Mit Hilfe eines neuen, in der Wüste der arabischen Halbinsel erstellten Logos wurde ein erneutes Aufblühen des regionalen Sport-Titanen untermauert.
+        </p>
+
+        <p>
+            Heute wachsen die Wühlmäuse stetig – sowohl in Sachen Fans, Skills als auch Erfahrung.
+        </p>
+      </div>
+    </div>
     </section>
     <section class="instagram-section" aria-labelledby="instagram-heading">
       <div class="section-heading"><p class="eyebrow">04 / SOCIAL</p><h2 id="instagram-heading">Instagram</h2></div>

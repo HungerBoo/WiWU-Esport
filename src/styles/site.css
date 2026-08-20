@@ -25,7 +25,7 @@ h2 { font-size: clamp(36px, 5vw, 64px); line-height: .95; letter-spacing: -.04em
 em { color: #788d1d; font-style: normal; }
 .hero-copy { max-width: 450px; font-size: 19px; color: var(--muted); }
 .news-section, .story-grid, .history-grid, .roster-section { border-top: 1px solid var(--line); padding-top: 28px; margin-top: 70px; }
-.roster-section { margin-top: 30px; }
+.news-section, .roster-section { margin-top: 30px; }
 .section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
 .news-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
 .news-card { min-height: 190px; border-right: 1px solid var(--line); padding: 22px; text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; transition: background .2s, transform .2s; }
@@ -56,6 +56,8 @@ em { color: #788d1d; font-style: normal; }
 .text-link { color: var(--ink); display: inline-block; margin-top: 30px; font-size: 15px; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--acid); }
 .text-link span { color: #788d1d; }
 .history-grid img, .team-image { width: 100%; max-height: 540px; object-fit: cover; }
+.history-images { display: flex; flex-direction: column; gap: 16px; }
+.history-images img { width: 100%; max-width: 375px; aspect-ratio: 1 / 1; margin: 0 auto; }
 .history-grid .story-copy { font-size: 16px; }
 .game-hero { padding: 110px 0 40px; max-width: 650px; }
 .game-logo { display: block; width: min(360px, 100%); max-height: 150px; object-fit: contain; object-position: left center; margin: 35px 0; }
