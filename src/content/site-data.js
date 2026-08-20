@@ -18,7 +18,7 @@ export const games = {
   smash: {
     title: 'Super Smash Bros.',
     heading: 'Unser Smash Team',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+    description: 'Unser Super-Smash-Bros.-Team legt größten Wert auf Integrität, regelmäßiges Training und internationale Dominanz. In der Blüte seiner kompetitiven Karriere konnte Falafl einen Franzosen, der extra nach Feuerbach gereist war, mit seinem geheimen, aber doch übermächtigen Hauptspielcharakter Dr. „The Doc“ Mario sehr stark einschüchtern. Martin glänzt mit guten Showings, sowohl offline als auch online. Wenn hart auf hart kommt, gibt er alles und choked wie ein Trundle, der an seiner Eiskäule lutscht. FickDieDuennenDeggah, auch bekannt als DeDeDe one and only S.W.H. Ofen-Ninja K., bietet viel Theoriewissen und studiert die Meta und Spielpraxis härter als ein Kirby beim Down-B. Beim Thema Präzision der praktischen Ausführung des gewonnenen Wissens liefert er sich jedoch einen knappen Kampf mit TimGiOhs Hit-% in Fortnite.',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Super_Smash_Bros._Ultimate_logo.svg',
   }
 };
