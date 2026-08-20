@@ -72,6 +72,7 @@
       "birthDate": "2006-06-15",
       "image": "/images/players/smash/martin.jpg",
       "profile": "https://www.supermajor.gg/ultimate/player/Martin?id=S3678798",
+      "startggPlayerId": 3678798,
       "stats": {
         "All Time": "325-281 (54%)",
         "Letzte 6 Monate": "71-48 (60%)",
@@ -85,6 +86,7 @@
     "birthDate": "2005-07-16",
       "image": "/images/players/smash/fickdieduennendeggah.jpg",
       "profile": "https://www.supermajor.gg/ultimate/player/FickDieD%C3%BCnnenDeggah?id=S4871495",
+      "startggPlayerId": 4871495,
       "stats": {
         "All Time": "0-5 (0%)",
         "Letzte 6 Monate": "0-3 (0%)",
@@ -98,6 +100,7 @@
       "birthDate": "2006-10-25",
       "image": "/images/players/smash/falafl.jpg",
       "profile": "https://www.supermajor.gg/ultimate/player/Falafl?id=S4922057",
+      "startggPlayerId": 4922057,
       "stats": {
         "All Time": "0-5 (0%)",
         "Letzte 6 Monate": "0-3 (0%)",
