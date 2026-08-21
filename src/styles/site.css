@@ -117,11 +117,17 @@ a.tile:active { transform: scale(.97); }
   .morph-logo { display: none; }
   .tile-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 118px; height: auto; padding: 24px 20px 0; }
   .tile--brand { grid-column: span 2; grid-row: span 1; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; padding: 14px 16px; }
-  .tile--league, .tile--smash, .tile--matches, .tile--social-mini { grid-column: span 1; grid-row: auto; }
-  .tile--roster { grid-column: span 2; grid-row: span 2; }
+  .tile--league, .tile--smash, .tile--matches, .tile--social-mini { grid-column: 1; grid-row: auto; }
+  .tile--roster { grid-column: 2; grid-row: 2 / span 6; }
   .tile--social-instagram, .tile--social-twitch, .tile--social-prime, .tile--smash-cumulative, .tile--league-balance, .tile--stat-seasons, .tile--stat-members, .tile--stat-founded { grid-column: span 1; grid-row: auto; }
   .tile--league, .tile--smash { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .tile--matches, .tile--social-mini, .tile--stat { display: none; }
+  .tile--matches, .tile--stat { display: none; }
+  .tile--league { grid-row: 2; }
+  .tile--smash { grid-row: 3; }
+  .tile--social-instagram { grid-column: 1; grid-row: 4; }
+  .tile--social-twitch { grid-column: 1; grid-row: 5; }
+  .tile--social-prime { grid-column: 1; grid-row: 6; }
+  .tile--smash-cumulative { grid-column: 1; grid-row: 7; }
   .news-section, .history-grid { display: none; }
   .tile--league .tile-game-logo { height: 34px; }
   .intro-logo-slot { flex: 0 0 32%; width: auto; max-width: 112px; margin: 0; }
