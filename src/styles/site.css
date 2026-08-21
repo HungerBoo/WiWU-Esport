@@ -12,6 +12,8 @@ a { color: inherit; }
 .site-header--intro { background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
 .site-header--intro nav { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
 .site-header--intro.is-visible { background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); border-bottom-color: var(--line); box-shadow: 0 12px 30px rgba(22, 32, 29, .08); }
+.site-header--intro.is-visible .brand-mark.is-morph-target { visibility: visible; }
+.site-header--intro.is-visible .site-title.is-morph-target { opacity: 1; transform: translateX(0); }
 .site-header--intro.is-visible nav { opacity: 1; pointer-events: auto; }
 .header-inner { max-width: var(--max); min-height: 88px; margin: auto; padding: 18px 28px; display: flex; align-items: center; gap: 18px; }
 .brand-mark { width: 48px; height: 48px; display: block; }
@@ -108,7 +110,7 @@ a.tile:active { transform: scale(.97); }
 @media (max-width: 760px) {
   .intro-splash-wrapper { height: auto; }
   .intro-splash { position: relative; height: auto; min-height: 0; padding-bottom: 24px; }
-  .site-header--intro { background: rgba(238, 240, 231, .94); border-bottom-color: var(--line); backdrop-filter: blur(12px); transform: translateY(-102%); opacity: 0; pointer-events: none; transition: transform .35s ease, opacity .35s ease; }
+  .site-header--intro { background: var(--logo-bg); color: var(--paper); border-bottom-color: var(--logo-bg-line); backdrop-filter: blur(12px); transform: translateY(-102%); opacity: 0; pointer-events: none; transition: transform .35s ease, opacity .35s ease; }
   .site-header--intro.is-visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .site-header--intro .header-inner { min-height: 64px; padding: 10px 14px; gap: 12px; }
   .site-header--intro .brand-mark { width: 40px; height: 40px; }
