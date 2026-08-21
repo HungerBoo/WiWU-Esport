@@ -7,9 +7,13 @@ export async function renderGame(gameKey) {
 
   renderLayout(`
     <section class="game-hero">
-      <img class="game-logo" src="${game.logo}" alt="${game.title} Logo">
-      <h1>${game.heading}</h1>
-      <p class="game-hero-description">${game.description}</p>
+      <div class="game-hero-heading">
+        <h1>${game.heading.replace(' ', '<br>')}</h1>
+        <img class="game-logo" src="${game.logo}" alt="${game.title} Logo">
+      </div>
+      <div class="game-hero-copy">
+        <p class="game-hero-description">${game.description}</p>
+      </div>
       ${renderStatementsCarousel(game.statements)}
     </section>
     <section class="roster-section" aria-labelledby="roster-heading">
@@ -106,11 +110,30 @@ function setupStatementsCarousel() {
 
   let index = 0;
   let timer = null;
+  let dragStartX = null;
+  let dragDeltaX = 0;
+  let isDragging = false;
+  let dragged = false;
 
   const goTo = (nextIndex) => {
     index = (nextIndex + slides.length) % slides.length;
     track.style.transform = `translateX(-${index * 100}%)`;
     dots.forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === index));
+  };
+
+  const finishDrag = () => {
+    if (!isDragging) return;
+    const threshold = Math.max(40, carousel.clientWidth * 0.12);
+    if (Math.abs(dragDeltaX) >= threshold) {
+      goTo(index + (dragDeltaX < 0 ? 1 : -1));
+    } else {
+      goTo(index);
+    }
+    dragStartX = null;
+    dragDeltaX = 0;
+    isDragging = false;
+    carousel.classList.remove('is-dragging');
+    window.setTimeout(() => { dragged = false; }, 0);
   };
 
   const stopAutoplay = () => {
@@ -124,6 +147,41 @@ function setupStatementsCarousel() {
   };
 
   dots.forEach((dot, dotIndex) => dot.addEventListener('click', () => { goTo(dotIndex); startAutoplay(); }));
+
+  carousel.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (event.target.closest('.intro-carousel-dot')) return;
+    dragStartX = event.clientX;
+    dragDeltaX = 0;
+    isDragging = true;
+    dragged = false;
+    carousel.setPointerCapture?.(event.pointerId);
+    carousel.classList.add('is-dragging');
+    stopAutoplay();
+  });
+
+  carousel.addEventListener('pointermove', (event) => {
+    if (!isDragging || dragStartX === null) return;
+    dragDeltaX = event.clientX - dragStartX;
+    if (Math.abs(dragDeltaX) > 6) dragged = true;
+    track.style.transform = `translateX(calc(-${index * 100}% + ${dragDeltaX}px))`;
+  });
+
+  carousel.addEventListener('pointerup', (event) => {
+    finishDrag();
+    carousel.releasePointerCapture?.(event.pointerId);
+    startAutoplay();
+  });
+  carousel.addEventListener('pointercancel', () => {
+    finishDrag();
+    startAutoplay();
+  });
+  carousel.addEventListener('click', (event) => {
+    if (dragged) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
 
   carousel.addEventListener('mouseenter', stopAutoplay);
   carousel.addEventListener('mouseleave', startAutoplay);

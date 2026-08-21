@@ -40,7 +40,7 @@ export const games = {
   smash: {
     title: 'Super Smash Bros.',
     heading: 'Unser Smash Team',
-    description: 'Wir legen größten Wert auf Integrität, regelmäßiges Training und internationale Dominanz.',
+    description: 'Wir legen größten Wert auf Integrität, regelmäßiges Training und internationale Dominanz. Zwischen präzisen Inputs, fragwürdigen Stage-Picks und millimetergenau geplanten Mindgames arbeitet das Team daran, jeden Gegner so lange zu verwirren, bis selbst ein scheinbar verlorener Stock plötzlich nach einer taktischen Meisterleistung aussieht. Ob online, offline oder irgendwo dazwischen: Hauptsache, der Controller ist geladen und niemand fragt zu früh nach dem nächsten Satz.',
     statements: [
       {
         name: 'Falafl',
