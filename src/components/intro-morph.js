@@ -1,7 +1,6 @@
 export function setupIntroMorph() {
   const wrapper = document.querySelector('.intro-splash-wrapper');
   const splash = document.querySelector('.intro-splash');
-  const introLeft = document.querySelector('.tile-brand-text');
   const heroSlot = document.querySelector('.intro-logo-slot');
   const header = document.querySelector('.site-header');
   const headerSlot = document.getElementById('header-logo-slot');
@@ -17,12 +16,11 @@ export function setupIntroMorph() {
 
   // Header stays hidden until the logo has (almost) landed in its slot.
   const HEADER_REVEAL_THRESHOLD = 0.85;
+  const LOGO_SCROLL_SHARE = 0.48;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Mobile drops the scroll-pinned metro grid for a simple static layout (see site.css).
-  const isCompact = window.matchMedia('(max-width: 760px)').matches;
 
-  if (reduceMotion || isCompact) {
+  if (reduceMotion) {
     placeLogoStatically();
     header?.classList.add('is-visible');
     return;
@@ -32,6 +30,7 @@ export function setupIntroMorph() {
   let headerRect;
   let wrapperTop;
   let pinDistance;
+  let logoTravelDistance;
   let ticking = false;
 
   function measure() {
@@ -44,6 +43,7 @@ export function setupIntroMorph() {
     const wrapRect = wrapper.getBoundingClientRect();
     wrapperTop = wrapRect.top + window.scrollY;
     pinDistance = wrapper.offsetHeight - window.innerHeight;
+    logoTravelDistance = Math.max(1, pinDistance * LOGO_SCROLL_SHARE);
   }
 
   function lerp(a, b, t) {
@@ -57,27 +57,21 @@ export function setupIntroMorph() {
   function update() {
     ticking = false;
     const scrollY = window.scrollY || window.pageYOffset;
-    // Linear mapping keeps the logo tracking the scroll 1:1 instead of lagging behind at the start.
-    const progress = clamp01(pinDistance > 0 ? (scrollY - wrapperTop) / pinDistance : 1);
+    const splashProgress = clamp01(pinDistance > 0 ? (scrollY - wrapperTop) / pinDistance : 1);
+    // The logo should travel its real viewport distance, rather than the full splash height.
+    const logoProgress = clamp01((scrollY - wrapperTop) / logoTravelDistance);
 
-    const currentTop = lerp(heroRect.top, headerRect.top, progress);
-    const currentLeft = lerp(heroRect.left, headerRect.left, progress);
-    const currentSize = lerp(heroRect.width, headerRect.width, progress);
+    const currentTop = lerp(heroRect.top, headerRect.top, logoProgress);
+    const currentLeft = lerp(heroRect.left, headerRect.left, logoProgress);
+    const currentSize = lerp(heroRect.width, headerRect.width, logoProgress);
     morphLogo.style.transform = `translate(${currentLeft}px, ${currentTop}px)`;
     morphLogo.style.width = `${currentSize}px`;
     morphLogo.style.height = `${currentSize}px`;
-    siteTitle?.classList.toggle('is-visible', progress > 0.85);
-    header?.classList.toggle('is-visible', progress > HEADER_REVEAL_THRESHOLD);
-
-    if (introLeft) {
-      const textProgress = clamp01(progress * 1.4);
-      introLeft.style.opacity = String(1 - textProgress);
-      introLeft.style.transform = `translateY(${-textProgress * 26}px)`;
-    }
+    siteTitle?.classList.toggle('is-visible', logoProgress > 0.85);
+    header?.classList.toggle('is-visible', logoProgress > HEADER_REVEAL_THRESHOLD);
 
     tiles.forEach((tile, index) => {
-      const start = index * 0.08;
-      const tileProgress = clamp01((progress - start) / (1 - start));
+      const tileProgress = splashProgress;
       const direction = index % 2 === 0 ? -1 : 1;
       tile.style.opacity = String(1 - tileProgress);
       // Skip the rotate/scale transform on the roster tile: it fights with its 3D cube rotation and glitches while scrolling.
@@ -89,10 +83,10 @@ export function setupIntroMorph() {
     });
 
     if (scrollIndicator) {
-      scrollIndicator.style.opacity = progress > 0.04 ? '0' : '1';
+      scrollIndicator.style.opacity = splashProgress > 0.04 ? '0' : '1';
     }
 
-    splash.style.pointerEvents = progress >= 1 ? 'none' : 'auto';
+    splash.style.pointerEvents = splashProgress >= 1 ? 'none' : 'auto';
   }
 
   function onScroll() {
