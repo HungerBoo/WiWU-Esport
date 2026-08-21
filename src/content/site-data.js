@@ -93,10 +93,3 @@ export const primeLeague = {
   ],
   url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
 };
-
-export const news = [
-  ['Turnier Ankündigung 2025', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', '02. Januar 2025', 'news-turnier-2025.html'],
-  ['Neue Spieler im Team', 'Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.', '28. Dezember 2024', 'news-neue-spieler.html'],
-  ['Training Session', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.', '20. Dezember 2024', 'news-training.html'],
-  ['Großer Erfolg beim Turnier', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem.', '15. Dezember 2024', 'news-erfolg.html']
-];

@@ -1,23 +1,106 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-:root { --ink: #16201d; --paper: #eef0e7; --acid: #d4f34a; --muted: #66716b; --line: rgba(22, 32, 29, .18); --max: 1180px; }
+:root { --ink: #16201d; --paper: #eef0e7; --acid: #d4f34a; --muted: #66716b; --line: rgba(22, 32, 29, .18); --max: 1180px; --logo-bg: #013b13; --logo-bg-line: rgba(238, 240, 231, .14); --logo-bg-muted: #9aa39c; }
 * { box-sizing: border-box; }
 html { background: #dfe5da; color: var(--ink); }
-body { position: relative; margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Space Grotesk', sans-serif; line-height: 1.5; background: radial-gradient(circle at 18% 12%, rgba(212, 243, 74, .12), transparent 24%), linear-gradient(135deg, #dfe5da 0%, #c9d3c8 48%, #e8ece3 100%); }
+body { position: relative; margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Space Grotesk', sans-serif; line-height: 1.5; background: #dfe5da; }
 .ambient-symbols { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .ambient-symbol { position: absolute; color: rgba(22, 32, 29, .13); font-family: 'DM Mono', monospace; font-weight: 500; line-height: 1; animation: symbol-drift 14s ease-in-out infinite; }
 @keyframes symbol-drift { 0%, 100% { opacity: .45; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); } 50% { opacity: .8; transform: translate3d(18px, -24px, 0) rotate(180deg) scale(1.08); } }
 a { color: inherit; }
-.site-header { border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); }
+.site-header { border-bottom: 1px solid var(--line); position: fixed; top: 0; left: 0; right: 0; z-index: 15; background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); transition: background .4s ease, border-color .4s ease, box-shadow .4s ease; }
+.site-header--intro { background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
+.site-header--intro nav { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+.site-header--intro.is-visible { background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); border-bottom-color: var(--line); box-shadow: 0 12px 30px rgba(22, 32, 29, .08); }
+.site-header--intro.is-visible nav { opacity: 1; pointer-events: auto; }
 .header-inner { max-width: var(--max); min-height: 88px; margin: auto; padding: 18px 28px; display: flex; align-items: center; gap: 18px; }
 .brand-mark { width: 48px; height: 48px; display: block; }
 .brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.brand-mark.is-morph-target { visibility: hidden; }
 .site-title { font-size: 18px; font-weight: 700; text-decoration: none; margin-right: auto; }
+.site-title.is-morph-target { opacity: 0; transform: translateX(-6px); transition: opacity .35s ease, transform .35s ease; }
+.site-title.is-morph-target.is-visible { opacity: 1; transform: translateX(0); }
+.morph-logo { position: fixed; top: 0; left: 0; z-index: 20; border-radius: 50%; overflow: hidden; will-change: transform, width, height; background: var(--logo-bg); transform-origin: top left; }
+.morph-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 nav { display: flex; gap: 8px; }
 nav a, .site-footer a { text-decoration: none; padding: 9px 12px; font-size: 14px; }
 nav a:hover, nav a.active { background: var(--acid); }
 main { position: relative; z-index: 1; max-width: var(--max); margin: auto; padding: 0 28px 100px; }
+main.has-fixed-header { padding-top: 89px; }
 .hero { min-height: 570px; display: flex; flex-direction: column; justify-content: center; max-width: 850px; }
+.intro-splash-wrapper { position: relative; height: 190vh; width: 100vw; margin-left: calc(50% - 50vw); }
+.intro-splash { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.tile-grid { position: relative; z-index: 1; max-width: var(--max); margin: auto; padding: 110px 28px 40px; height: 100%; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(4, 1fr); gap: 6px; }
+.tile { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; padding: 16px 18px; overflow: hidden; text-decoration: none; color: var(--paper); background: #1c2a1f; border: 1px solid var(--logo-bg-line); cursor: pointer; transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease; opacity: 0; transform: scale(.92) translateY(10px); animation: tile-enter .5s cubic-bezier(.16, 1, .3, 1) forwards; animation-delay: calc(var(--tile-i, 0) * 70ms + .1s); }
+@keyframes tile-enter { to { opacity: 1; transform: scale(1) translateY(0); } }
+a.tile:hover, a.tile:focus-visible, .tile--roster:hover { transform: scale(1.03); box-shadow: 0 16px 34px rgba(0, 0, 0, .35); z-index: 2; outline: none; }
+a.tile:active { transform: scale(.97); }
+.tile-icon { font-size: 26px; line-height: 1; opacity: .85; }
+.tile-game-logo { height: 34px; width: auto; max-width: 70%; object-fit: contain; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .3)); }
+.tile-label { font-weight: 700; font-size: 15px; letter-spacing: -.01em; position: relative; z-index: 1; }
+.tile-sub { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--logo-bg-muted); position: relative; z-index: 1; }
+.tile--brand { grid-column: span 2; grid-row: span 2; background: var(--logo-bg); justify-content: space-between; align-items: flex-start; gap: 0; cursor: default; opacity: 1; transform: none; animation: none; }
+.tile--league {
+  grid-column: span 4; color: var(--ink); flex-direction: row; align-items: center; gap: 18px;
+  background: linear-gradient(135deg, #e9ff85 0%, var(--acid) 55%, #b9d93f 100%);
+  box-shadow: inset 0 0 0 1px rgba(22, 32, 29, .1);
+}
+.tile--league .tile-game-logo { height: 52px; max-width: 170px; margin-bottom: 0; filter: drop-shadow(0 3px 8px rgba(22, 32, 29, .25)); }
+.tile--league .tile-label { font-size: 17px; }
+.tile--league .tile-sub { color: rgba(22, 32, 29, .65); }
+.tile--smash {
+  grid-column: span 2; flex-direction: row; align-items: center; gap: 14px;
+  background: radial-gradient(circle at 80% 18%, rgba(255, 133, 66, .3), transparent 55%), linear-gradient(155deg, #24361d 0%, #172a14 100%);
+  border-color: rgba(255, 159, 100, .2);
+}
+.tile--smash .tile-game-logo { height: 40px; margin-bottom: 0; }
+.tile--matches { grid-column: span 2; background: #2a3a22; }
+.tile--roster { grid-column: span 2; grid-row: span 2; padding: 0; justify-content: flex-end; background: #12190f; }
+.tile--social { grid-column: span 2; grid-row: span 2; background: var(--ink); justify-content: center; }
+.tile--social .tile-icon { color: var(--acid); font-size: 30px; }
+.tile--stat { background: #1c2a1f; justify-content: center; cursor: default; }
+.tile--stat strong { font-size: 26px; line-height: 1; color: var(--acid); }
+.tile--stat span { display: block; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--logo-bg-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; }
+.tile-rotator { position: absolute; inset: 0; overflow: hidden; }
+.tile-rotator-slide { position: absolute; inset: 0; opacity: 0; animation: tile-fade var(--cycle, 45s) linear infinite; animation-delay: var(--delay, 0s); }
+.tile-rotator-slide img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.tile-rotator-slide::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0, 0, 0, .88), rgba(0, 0, 0, .05) 60%); }
+.tile-rotator-name { position: absolute; z-index: 2; left: 14px; bottom: 14px; }
+@keyframes tile-fade {
+  0% { opacity: 0; transform: scale(1.04); }
+  2% { opacity: 1; transform: scale(1); }
+  9% { opacity: 1; transform: scale(1); }
+  11% { opacity: 0; transform: scale(1.02); }
+  100% { opacity: 0; }
+}
+.tile-rotator-shade { display: none; }
+.tile--roster > .tile-label { position: relative; z-index: 1; padding: 0 18px 14px; }
+.tile--roster .tile-rotator-name { position: absolute; z-index: 3; left: 14px; bottom: 14px; padding: 0; }
+.intro-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--logo-bg-muted); margin: 0 0 14px; text-transform: uppercase; }
+.intro-logo-slot { width: calc(100% - 28px); max-width: 250px; aspect-ratio: 1 / 1; position: relative; margin: 14px auto 0 auto; }
+.tile-brand-text { padding: 0 18px 20px; will-change: transform, opacity; }
+.intro-name { font-size: clamp(30px, 4vw, 52px); line-height: .9; font-weight: 700; letter-spacing: -.045em; margin: 0; color: var(--paper); text-wrap: balance; }
+@media (prefers-reduced-motion: reduce) { .tile { opacity: 1; transform: none; animation: none; } .tile-rotator-slide { animation: none; opacity: 0; } .tile-rotator-slide:first-child { opacity: 1; } }
+.intro-scroll-indicator { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--logo-bg-muted); text-align: center; transition: opacity .3s ease; }
+.intro-scroll-indicator span { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.intro-scroll-chevrons { width: 18px; height: 26px; position: relative; }
+.intro-scroll-chevrons i { position: absolute; left: 50%; width: 12px; height: 12px; border-right: 2px solid var(--acid); border-bottom: 2px solid var(--acid); transform: translateX(-50%) rotate(45deg); animation: intro-chevron-fall 1.6s ease-in-out infinite; opacity: 0; }
+.intro-scroll-chevrons i:nth-child(1) { top: -4px; animation-delay: 0s; }
+.intro-scroll-chevrons i:nth-child(2) { top: 4px; animation-delay: .25s; }
+@keyframes intro-chevron-fall { 0% { opacity: 0; top: -6px; } 40% { opacity: 1; } 80% { opacity: 0; top: 14px; } 100% { opacity: 0; top: 14px; } }
+@media (prefers-reduced-motion: reduce) { .intro-splash-wrapper { height: auto; } .intro-splash { position: relative; height: auto; min-height: 100vh; } .intro-scroll-chevrons i { animation: none; opacity: .6; } }
+@media (max-width: 760px) {
+  .intro-splash-wrapper { height: auto; }
+  .intro-splash { position: relative; height: auto; min-height: 100vh; padding-bottom: 40px; }
+  .tile-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 110px; height: auto; padding: 110px 20px 30px; }
+  .tile--brand { grid-column: span 2; grid-row: span 1; }
+  .tile--league, .tile--smash, .tile--matches, .tile--social { grid-column: span 1; }
+  .tile--roster { grid-column: span 1; grid-row: span 2; }
+  .tile--league, .tile--smash { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .tile--league .tile-game-logo { height: 34px; }
+  .intro-logo-slot { width: calc(100% - 16px); max-width: 170px; margin: 8px auto 0 auto; }
+  .intro-scroll-indicator { bottom: 18px; }
+}
 .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; margin: 0 0 20px; color: var(--muted); }
 h1, h2, h3, p { margin-top: 0; }
 h1 { font-size: clamp(48px, 8vw, 104px); line-height: .92; letter-spacing: -.04em; margin-bottom: 30px; }

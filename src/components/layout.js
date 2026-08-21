@@ -13,23 +13,28 @@ const ambientSymbols = {
   default: ['✦', '◇', '?', '✚']
 };
 
-export function renderLayout(content, page = '') {
+export function renderLayout(content, page = '', { introSplash = false } = {}) {
   const nav = navigation.map(([label, href, key]) => `
     <a href="${href}" class="${page === key ? 'active' : ''}">${label}</a>
   `).join('');
 
   document.querySelector('#app').innerHTML = `
     <div class="ambient-symbols" aria-hidden="true"></div>
-    <header class="site-header">
+    <header class="site-header${introSplash ? ' site-header--intro' : ''}">
       <div class="header-inner">
-        <a href="/" class="brand-mark" aria-label="Zur Startseite">
+        <a href="/" class="brand-mark${introSplash ? ' is-morph-target' : ''}" id="header-logo-slot" aria-label="Zur Startseite">
           <img src="${logoUrl}" alt="${site.name} Logo">
         </a>
-        <a href="/" class="site-title">${site.name}</a>
+        <a href="/" class="site-title${introSplash ? ' is-morph-target' : ''}" id="site-title">${site.name}</a>
         <nav aria-label="Hauptnavigation">${nav}</nav>
       </div>
     </header>
-    <main>${content}</main>
+    ${introSplash ? `
+      <div class="morph-logo" id="morph-logo" aria-hidden="true">
+        <img src="${logoUrl}" alt="">
+      </div>
+    ` : ''}
+    <main${introSplash ? '' : ' class="has-fixed-header"'}>${content}</main>
     <footer class="site-footer">
       <a href="impressum.html">Impressum</a>
       <div class="social-links">
