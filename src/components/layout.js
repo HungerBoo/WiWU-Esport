@@ -20,7 +20,7 @@ export function renderLayout(content, page = '', { introSplash = false } = {}) {
 
   document.querySelector('#app').innerHTML = `
     <div class="ambient-symbols" aria-hidden="true"></div>
-    <header class="site-header${introSplash ? ' site-header--intro' : ''}">
+    <header class="site-header${introSplash ? ' site-header--intro' : ''}${page ? ` site-header--${page}` : ''}">
       <div class="header-inner">
         <a href="/" class="brand-mark${introSplash ? ' is-morph-target' : ''}" id="header-logo-slot" aria-label="Zur Startseite">
           <img src="${logoUrl}" alt="${site.name} Logo">

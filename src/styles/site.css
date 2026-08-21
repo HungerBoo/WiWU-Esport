@@ -11,7 +11,19 @@ a { color: inherit; }
 .site-header { border-bottom: 1px solid var(--line); position: fixed; top: 0; left: 0; right: 0; z-index: 15; background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); transition: background .4s ease, border-color .4s ease, box-shadow .4s ease; }
 .site-header--intro { background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
 .site-header--intro nav { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
-.site-header--intro.is-visible { background: rgba(238, 240, 231, .94); backdrop-filter: blur(12px); border-bottom-color: var(--line); box-shadow: 0 12px 30px rgba(22, 32, 29, .08); }
+.site-header--intro.is-visible { background: var(--logo-bg); color: var(--paper); backdrop-filter: blur(12px); border-bottom-color: var(--logo-bg-line); box-shadow: 0 12px 30px rgba(22, 32, 29, .18); }
+.site-header--intro.is-visible .site-title,
+.site-header--intro.is-visible nav a { color: var(--paper); }
+.site-header--league,
+.site-header--smash { background: var(--logo-bg); color: var(--paper); border-bottom-color: var(--logo-bg-line); }
+.site-header--league nav a,
+.site-header--smash nav a { color: var(--paper); }
+.site-header--league nav a:hover,
+.site-header--league nav a.active,
+.site-header--smash nav a:hover,
+.site-header--smash nav a.active,
+.site-header--intro.is-visible nav a:hover,
+.site-header--intro.is-visible nav a.active { color: var(--ink); background: var(--acid); }
 .site-header--intro.is-visible .brand-mark.is-morph-target { visibility: visible; }
 .site-header--intro.is-visible .site-title.is-morph-target { opacity: 1; transform: translateX(0); }
 .site-header--intro.is-visible nav { opacity: 1; pointer-events: auto; }
