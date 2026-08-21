@@ -33,7 +33,7 @@ export function renderHome() {
       <section class="intro-splash">
         <div class="tile-grid">
           <div class="tile tile--brand" style="--tile-i:0">
-            <div class="intro-logo-slot" aria-hidden="true"></div>
+            <div class="intro-logo-slot" aria-hidden="true"><img src="/images/Wiwu_Logo.jpg" alt=""></div>
             <div class="tile-brand-text">
               <p class="intro-eyebrow">Esport Verein aus Siegen</p>
               <p class="intro-name">Wieländer<br>Wühlmäuse</p>

@@ -17,6 +17,17 @@ export function setupIntroMorph() {
   // Header stays hidden until the logo has (almost) landed in its slot.
   const HEADER_REVEAL_THRESHOLD = 0.85;
   const LOGO_SCROLL_SHARE = 0.48;
+  const isCompact = window.matchMedia('(max-width: 760px)').matches;
+
+  if (isCompact) {
+    const updateMobileHeader = () => {
+      header?.classList.toggle('is-visible', window.scrollY > 24);
+    };
+
+    updateMobileHeader();
+    window.addEventListener('scroll', updateMobileHeader, { passive: true });
+    return;
+  }
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

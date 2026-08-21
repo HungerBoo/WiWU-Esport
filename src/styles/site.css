@@ -93,6 +93,7 @@ a.tile:active { transform: scale(.97); }
 .tile--roster .tile-rotator-name { position: absolute; z-index: 3; left: 14px; bottom: 14px; padding: 0; }
 .intro-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--logo-bg-muted); margin: 0 0 14px; text-transform: uppercase; }
 .intro-logo-slot { width: calc(100% - 28px); max-width: 250px; aspect-ratio: 1 / 1; position: relative; margin: 14px auto 0 auto; }
+.intro-logo-slot img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 50%; visibility: hidden; }
 .tile-brand-text { padding: 0 18px 20px; will-change: transform, opacity; }
 .intro-name { font-size: clamp(30px, 4vw, 52px); line-height: .9; font-weight: 700; letter-spacing: -.045em; margin: 0; color: var(--paper); text-wrap: balance; }
 @media (prefers-reduced-motion: reduce) { .tile { opacity: 1; transform: none; animation: none; } .tile-rotator-slide { animation: none; opacity: 0; } .tile-rotator-slide:first-child { opacity: 1; } }
@@ -106,25 +107,29 @@ a.tile:active { transform: scale(.97); }
 @media (prefers-reduced-motion: reduce) { .intro-splash-wrapper { height: auto; } .intro-splash { position: relative; height: auto; min-height: 100vh; } .intro-scroll-chevrons i { animation: none; opacity: .6; } }
 @media (max-width: 760px) {
   .intro-splash-wrapper { height: auto; }
-  .intro-splash { position: relative; height: auto; min-height: 100vh; padding-bottom: 40px; }
+  .intro-splash { position: relative; height: auto; min-height: 0; padding-bottom: 24px; }
   .site-header--intro { background: rgba(238, 240, 231, .94); border-bottom-color: var(--line); backdrop-filter: blur(12px); transform: translateY(-102%); opacity: 0; pointer-events: none; transition: transform .35s ease, opacity .35s ease; }
   .site-header--intro.is-visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .site-header--intro .header-inner { min-height: 64px; padding: 10px 14px; gap: 12px; }
   .site-header--intro .brand-mark { width: 40px; height: 40px; }
   .site-header--intro .site-title { font-size: 15px; }
   .site-header--intro nav { display: none; }
-  .tile-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 110px; height: auto; padding: 110px 20px 30px; }
+  .morph-logo { display: none; }
+  .tile-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 118px; height: auto; padding: 24px 20px 0; }
   .tile--brand { grid-column: span 2; grid-row: span 1; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; padding: 14px 16px; }
   .tile--league, .tile--smash, .tile--matches, .tile--social-mini { grid-column: span 1; grid-row: auto; }
-  .tile--roster { grid-column: span 1; grid-row: span 2; }
+  .tile--roster { grid-column: span 2; grid-row: span 2; }
   .tile--social-instagram, .tile--social-twitch, .tile--social-prime, .tile--smash-cumulative, .tile--league-balance, .tile--stat-seasons, .tile--stat-members, .tile--stat-founded { grid-column: span 1; grid-row: auto; }
   .tile--league, .tile--smash { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .tile--matches, .tile--social-mini, .tile--stat { display: none; }
+  .news-section, .history-grid { display: none; }
   .tile--league .tile-game-logo { height: 34px; }
   .intro-logo-slot { flex: 0 0 32%; width: auto; max-width: 112px; margin: 0; }
+  .intro-logo-slot img { visibility: visible; }
   .tile-brand-text { min-width: 0; padding: 0; }
   .tile-brand-text .intro-eyebrow { margin-bottom: 6px; font-size: 9px; }
   .tile-brand-text .intro-name { font-size: clamp(22px, 7vw, 32px); }
-  .intro-scroll-indicator { bottom: 18px; }
+  .intro-scroll-indicator { display: none; }
 }
 .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; margin: 0 0 20px; color: var(--muted); }
 h1, h2, h3, p { margin-top: 0; }
@@ -218,3 +223,11 @@ em { color: #788d1d; font-style: normal; }
 .social-links { display: flex; gap: 18px; }
 @media (prefers-reduced-motion: reduce) { .ambient-symbol { animation: none; } }
 @media (max-width: 760px) { .ambient-symbol:nth-child(n + 5) { display: none; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid { display: block; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { display: block; padding-top: 70px; } .game-hero-heading { display: flex; align-items: center; gap: 18px; } .game-hero h1 { flex: 1; font-size: clamp(42px, 12vw, 64px); } .game-hero-heading .game-logo { flex: 0 0 35%; width: auto; height: 100px; } .intro-carousel { margin-top: 24px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
+@media (max-width: 760px) {
+  .intro-splash .tile--matches,
+  .intro-splash .tile--stat,
+  .intro-splash .tile--league-balance,
+  .intro-splash .tile--stat-seasons,
+  .intro-splash .tile--stat-members,
+  .intro-splash .tile--stat-founded { display: none !important; }
+}
