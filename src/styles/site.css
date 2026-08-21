@@ -115,7 +115,9 @@ a.tile:active { transform: scale(.97); }
   .site-header--intro .header-inner { min-height: 64px; padding: 10px 14px; gap: 12px; }
   .site-header--intro .brand-mark { width: 40px; height: 40px; }
   .site-header--intro .site-title { font-size: 15px; }
-  .site-header--intro nav { display: none; }
+  .site-header--intro nav { display: flex; margin-left: auto; gap: 2px; }
+  .site-header--intro nav a { padding: 7px 6px; color: var(--paper); font-size: 10px; line-height: 1.1; text-align: center; }
+  .site-header--intro nav a:hover, .site-header--intro nav a.active { color: var(--ink); background: var(--acid); }
   .morph-logo { display: none; }
   .tile-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 118px; height: auto; padding: 24px 20px 0; }
   .tile--brand { grid-column: span 2; grid-row: span 1; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; padding: 14px 16px; }
