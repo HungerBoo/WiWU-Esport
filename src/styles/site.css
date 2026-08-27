@@ -273,6 +273,21 @@ em { color: #788d1d; font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .ambient-symbol { animation: none; } }
 @media (max-width: 760px) { .ambient-symbol:nth-child(n + 5) { display: none; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid { display: block; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { display: block; padding-top: 70px; } .game-hero-heading { display: flex; align-items: center; gap: 18px; } .game-hero h1 { flex: 1; font-size: clamp(42px, 12vw, 64px); } .game-hero-heading .game-logo { flex: 0 0 35%; width: auto; height: 100px; } .game-hero-feature.has-team-image { grid-template-columns: 1fr; gap: 30px; } .game-feature-gallery { width: min(100% - 20px, 420px); justify-self: start; min-height: 220px; transform: rotate(.8deg); } .intro-carousel { margin-top: 24px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
 @media (max-width: 760px) {
+  .home-hero { min-height: calc(100svh - 64px); align-items: flex-end; padding: 48px 20px 30px; }
+  .home-hero::before { background: linear-gradient(to bottom, rgba(1, 59, 19, .08) 0%, rgba(1, 59, 19, .5) 44%, rgba(1, 59, 19, .96) 78%, var(--logo-bg) 100%); }
+  .home-hero::after { display: none; }
+  .home-hero-media { inset: 0; }
+  .home-hero-media img { object-position: center top; }
+  .home-hero-content { width: 100%; }
+  .home-hero-mark { width: 58px; height: 58px; margin-bottom: 20px; }
+  .home-hero-kicker { margin-bottom: 10px; font-size: 10px; }
+  .home-hero h1 { font-size: clamp(54px, 16vw, 78px); }
+  .home-hero-copy { margin: 22px 0 26px; font-size: 16px; }
+  .home-game-links { display: grid; grid-template-columns: 1fr; }
+  .home-game-links a { min-width: 0; padding: 15px 16px; }
+  .home-hero-social { position: static; width: fit-content; margin-top: 22px; font-size: 10px; }
+}
+@media (max-width: 760px) {
   .intro-splash .tile--matches,
   .intro-splash .tile--stat,
   .intro-splash .tile--league-balance,
