@@ -46,8 +46,8 @@ nav a:hover, nav a.active { background: var(--acid); }
 main { position: relative; z-index: 1; max-width: var(--max); margin: auto; padding: 0 28px 100px; }
 main.has-fixed-header { padding-top: 89px; }
 .hero { min-height: 570px; display: flex; flex-direction: column; justify-content: center; max-width: 850px; }
-.home-hero { position: relative; isolation: isolate; min-height: calc(100svh - 88px); width: 100vw; margin-left: calc(50% - 50vw); overflow: hidden; display: flex; align-items: center; padding: clamp(48px, 8vw, 120px) max(28px, calc((100vw - var(--max)) / 2)); color: var(--paper); background: linear-gradient(to bottom, var(--logo-bg) 0%, var(--logo-bg) 70%, #dfe5da 100%); }
-.home-hero::before { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(to bottom, rgba(223, 229, 218, 0) 66%, #dfe5da 100%), linear-gradient(90deg, rgba(1, 59, 19, 1) 0%, rgba(1, 59, 19, .94) 39%, rgba(1, 59, 19, .35) 68%, rgba(1, 59, 19, .08) 100%); }
+.home-hero { position: relative; isolation: isolate; min-height: calc(100svh - 88px); width: 100vw; margin-left: calc(50% - 50vw); overflow: hidden; display: flex; align-items: center; padding: clamp(48px, 8vw, 120px) max(28px, calc((100vw - var(--max)) / 2)); color: var(--paper); background: var(--logo-bg); }
+.home-hero::before { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(1, 59, 19, 1) 0%, rgba(1, 59, 19, .94) 39%, rgba(1, 59, 19, .35) 68%, rgba(1, 59, 19, .08) 100%); }
 .home-hero::after { content: 'WIWU / 2026'; position: absolute; z-index: 1; right: max(28px, calc((100vw - var(--max)) / 2)); bottom: 30px; font: 500 10px 'DM Mono', monospace; letter-spacing: .14em; color: rgba(238, 240, 231, .72); writing-mode: vertical-rl; }
 .home-hero-media { position: absolute; z-index: -2; inset: 0 0 0 34%; }
 .home-hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: saturate(.78) contrast(1.08); }
@@ -208,12 +208,14 @@ em { color: #788d1d; font-style: normal; }
 .instagram-embed .instagram-media { margin: 0 !important; min-width: 280px !important; width: 100% !important; }
 .instagram-section > .text-link { display: block; width: max-content; margin: 30px auto 0; }
 .story-grid, .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-bottom: 80px; }
+.history-grid { align-items: stretch; }
 .story-copy { max-width: 440px; font-size: 21px; color: var(--muted); align-self: end; }
 .text-link { color: var(--ink); display: inline-block; margin-top: 30px; font-size: 15px; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--acid); }
 .text-link span { color: #788d1d; }
 .history-grid img, .team-image { width: 100%; max-height: 540px; object-fit: cover; }
-.history-images { display: flex; flex-direction: column; gap: 16px; }
-.history-images img { width: 100%; max-width: 375px; aspect-ratio: 1 / 1; margin: 0 auto; }
+.history-images { display: flex; flex-direction: column; align-self: stretch; gap: 30px; padding: 8px; }
+.history-images img { flex: 1 1 0; min-height: 0; width: 100%; max-width: 375px; margin: 0 auto; padding: 8px 11px 14px 7px; background: var(--paper); outline: 1px solid rgba(22, 32, 29, .2); outline-offset: 5px; box-shadow: 9px 11px 0 rgba(22, 32, 29, .12); transform: rotate(-1deg); }
+.history-images img:nth-child(even) { transform: rotate(1.2deg); }
 .history-grid .story-copy { font-size: 16px; }
 .game-hero { padding: 110px 0 40px; max-width: none; display: grid; row-gap: 28px; }
 .game-hero-heading { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr); column-gap: clamp(40px, 8vw, 120px); align-items: center; }
