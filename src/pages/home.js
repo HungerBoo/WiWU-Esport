@@ -14,7 +14,7 @@ export function renderHome() {
       <div class="home-hero-content">
         <p class="home-hero-kicker">Esport Verein aus Siegen</p>
         <h1>Wieländer<br>Wühlmäuse</h1>
-        <p class="home-hero-copy">Wir sind ein Konglomerat der Speerspitze des E-Sports des Siegerlandes. Kein </p>
+        <p class="home-hero-copy">Wir sind ein Konglomerat der Speerspitze des E-Sports des Siegerlandes. Wir kennen Keine Hämmung, egal in welchem Spiel spontanen Durchfall zu bekommen und so geschmeidig wie ein Buttergolem ins lower Bracket zu droppen. </p>
         <div class="home-game-links">
           <a href="league-of-legends.html">League of Legends <span>↗</span></a>
           <a href="super-smash-bros.html">Super Smash Bros. <span>↗</span></a>

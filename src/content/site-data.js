@@ -34,7 +34,10 @@ export const games = {
         text: 'Falafl komplettiert die Mannschaft mit einer Rollenflexibilität, die statistisch nur schwer zu erfassen ist. Mehr Roleswaps als Caps Haare und mindestens genauso unvorhersehbar. Wo gerade eine Position frei wird, ist Falafl bereits auf dem Weg dorthin.'
       }
     ],
-    logo: 'https://static.wikia.nocookie.net/leagueoflegends/images/7/77/League_of_Legends_logo.png/revision/latest/scale-to-width/360?cb=20240801215508'
+    logo: 'https://static.wikia.nocookie.net/leagueoflegends/images/7/77/League_of_Legends_logo.png/revision/latest/scale-to-width/360?cb=20240801215508',
+    teamImages: [
+      '/images/League/League Kader.jpg'
+    ]
   },
   smash: {
     title: 'Super Smash Bros.',
