@@ -55,6 +55,11 @@ export const games = {
       }
     ],
     logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Super_Smash_Bros._Ultimate_logo.svg',
+    teamImages: [
+      '/images/Smash/Mast.jpeg',
+      '/images/Smash/Madrid.jpeg',
+      '/images/Smash/Spanier.jpeg'
+    ]
   }
 };
 

@@ -14,16 +14,19 @@ export async function renderGame(gameKey) {
       <div class="game-hero-copy">
         <p class="game-hero-description">${game.description}</p>
       </div>
-      ${renderStatementsCarousel(game.statements)}
+      <div class="game-hero-feature${game.teamImages?.length ? ' has-team-image' : ''}">
+        ${renderStatementsCarousel(game.statements)}
+        ${game.teamImages?.length ? renderGameImageGallery(game.teamImages, game.title) : ''}
+      </div>
     </section>
     <section class="roster-section" aria-labelledby="roster-heading">
       <div class="section-heading"><div><h2 id="roster-heading">Kader</h2><p class="roster-hint">Karte anklicken für Stats und Profile</p></div></div>
       <p class="roster-status">Kader wird geladen ...</p>
     </section>
-    ${game.teamImage ? `<img class="team-image" src="${game.teamImage}" alt="Kader von ${game.title}" loading="lazy">` : ''}
   `, gameKey);
 
   setupStatementsCarousel();
+  setupGameImageGallery();
 
   try {
     const response = await fetch('/data/players.json');
@@ -72,6 +75,29 @@ export async function renderGame(gameKey) {
     document.querySelector('.roster-status').textContent = 'Die Kaderdaten konnten nicht geladen werden.';
     console.error(error);
   }
+}
+
+function renderGameImageGallery(images, title) {
+  return `
+    <div class="game-feature-gallery" aria-label="Impressionen von ${title}">
+      ${images.map((src, index) => `
+        <img class="${index === 0 ? 'is-active' : ''}" src="${src}" alt="${title} Impression ${index + 1}" loading="lazy">
+      `).join('')}
+    </div>
+  `;
+}
+
+function setupGameImageGallery() {
+  const gallery = document.querySelector('.game-feature-gallery');
+  const images = gallery ? [...gallery.querySelectorAll('img')] : [];
+  if (images.length <= 1) return;
+
+  let index = 0;
+  window.setInterval(() => {
+    images[index].classList.remove('is-active');
+    index = (index + 1) % images.length;
+    images[index].classList.add('is-active');
+  }, 5000);
 }
 
 function renderStatementsCarousel(statements) {
