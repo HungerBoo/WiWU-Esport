@@ -7,6 +7,7 @@ let cachedPlayerData = null;
 export async function renderPlayerPage(playerSlug) {
   const profileStatic = getProfile(playerSlug);
   let livePlayer = profileStatic;
+  let smashData = null;
 
   try {
     if (!cachedPlayerData) {
@@ -17,10 +18,28 @@ export async function renderPlayerPage(playerSlug) {
     }
 
     if (cachedPlayerData) {
-      const allLive = [...(cachedPlayerData.league || []), ...(cachedPlayerData.smash || [])];
-      const match = allLive.find(p => (p.slug || '').toLowerCase() === (playerSlug || '').toLowerCase() || p.name.toLowerCase() === profileStatic.name.toLowerCase());
-      if (match) {
-        livePlayer = { ...profileStatic, ...match };
+      const leagueList = cachedPlayerData.league || [];
+      const smashList = cachedPlayerData.smash || [];
+
+      const leagueMatch = leagueList.find(p => 
+        (p.slug || '').toLowerCase() === (playerSlug || '').toLowerCase() || 
+        p.name.toLowerCase() === profileStatic.name.toLowerCase()
+      );
+
+      const smashMatch = smashList.find(p => 
+        (p.slug || '').toLowerCase() === (playerSlug || '').toLowerCase() || 
+        p.name.toLowerCase() === profileStatic.name.toLowerCase() ||
+        (profileStatic.alias && p.name.toLowerCase() === profileStatic.alias.toLowerCase())
+      );
+
+      if (leagueMatch) {
+        livePlayer = { ...profileStatic, ...leagueMatch };
+      } else if (smashMatch) {
+        livePlayer = { ...profileStatic, ...smashMatch };
+      }
+
+      if (smashMatch) {
+        smashData = smashMatch;
       }
     }
   } catch (error) {
@@ -28,7 +47,8 @@ export async function renderPlayerPage(playerSlug) {
   }
 
   const age = calculateAge(livePlayer.birthDate);
-  const isLeague = Boolean(livePlayer.rank || livePlayer.lpHistory || livePlayer.opgg);
+  const hasLeague = Boolean(livePlayer.rank || livePlayer.lpHistory || livePlayer.opgg);
+  const hasSmash = Boolean(smashData || profileStatic.slug === 'martin' || profileStatic.slug === 'falafl' || profileStatic.slug === '1overninja1');
 
   renderLayout(`
     <div class="player-profile-page" data-player-slug="${livePlayer.slug}">
@@ -69,7 +89,8 @@ export async function renderPlayerPage(playerSlug) {
         </div>
       </section>
 
-      ${isLeague ? renderRankAndLpSection(livePlayer) : renderSmashStatsSection(livePlayer)}
+      ${hasLeague ? renderRankAndLpSection(livePlayer) : ''}
+      ${hasSmash ? renderSmashStatsSection(livePlayer, smashData, hasLeague ? '02' : '01') : ''}
 
       <section class="player-steckbrief-section" aria-labelledby="steckbrief-heading">
         <div class="steckbrief-section-header">
@@ -270,26 +291,32 @@ function renderRankAndLpSection(player) {
   `;
 }
 
-function renderSmashStatsSection(player) {
-  const stats = player.stats || {
+function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
+  const data = smashData || player;
+  const stats = data.stats || {
     'All Time': 'N/A',
     'Letzte 6 Monate': 'N/A',
     Offline: 'N/A',
     Online: 'N/A'
   };
 
+  const displayName = data.name || player.name;
+  const isDedicatedSmash = !player.rank && !player.lpHistory;
+
   return `
-    <section class="player-rank-section" aria-labelledby="smash-section-heading">
+    <section class="player-rank-section player-rank-section--smash" aria-labelledby="smash-section-heading">
       <div class="section-heading rank-section-header">
         <div>
-          <p class="eyebrow">01 / SUPERMAJOR & START.GG STATS</p>
-          <h2 id="smash-section-heading">Turnier-Bilanz <em>& Match Record.</em></h2>
+          <p class="eyebrow">${sectionNumber} / SUPERMAJOR & START.GG STATS</p>
+          <h2 id="smash-section-heading">Super Smash Bros. <em>Bilanz.</em></h2>
         </div>
-        <div class="rank-header-actions">
-          <button type="button" class="rank-refresh-btn" data-rank-refresh-btn aria-label="Statistiken aktualisieren">
-            <span class="refresh-text">Stats aktualisieren</span>
-          </button>
-        </div>
+        ${isDedicatedSmash ? `
+          <div class="rank-header-actions">
+            <button type="button" class="rank-refresh-btn" data-rank-refresh-btn aria-label="Statistiken aktualisieren">
+              <span class="refresh-text">Stats aktualisieren</span>
+            </button>
+          </div>
+        ` : ''}
       </div>
 
       <div class="rank-metrics-grid">
@@ -298,9 +325,9 @@ function renderSmashStatsSection(player) {
             <span class="tier-emblem-text">SSB</span>
           </div>
           <div class="rank-tier-info">
-            <span class="metric-label">All-Time Winrate</span>
+            <span class="metric-label">All-Time Winrate (${displayName})</span>
             <strong class="rank-tier-title">${stats['All Time'] || 'N/A'}</strong>
-            <span class="rank-lp-sub">Supermajor & Turnierspiele</span>
+            <span class="rank-lp-sub">Supermajor & Turnier-Sets</span>
           </div>
         </div>
 
@@ -413,8 +440,62 @@ function drawLpChart(rawHistory, days) {
   const container = document.querySelector('[data-lp-chart-container]');
   if (!container || !rawHistory?.length) return;
 
-  // Filter history to selected timeframe
-  const history = rawHistory.slice(-days);
+  const now = new Date();
+  const startTime = new Date(now.getTime() - days * 24 * 60 * 60 * 1000).getTime();
+  const endTime = now.getTime();
+
+  // Sort history chronologically
+  const sortedHistory = [...rawHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Find points within the selected timeframe
+  const pointsInWindow = sortedHistory.filter(h => new Date(h.date).getTime() >= startTime);
+
+  // Find the last known point before the window start (to anchor the start of the timeframe)
+  const pointsBeforeWindow = sortedHistory.filter(h => new Date(h.date).getTime() < startTime);
+  const baselinePoint = pointsBeforeWindow.length > 0 
+    ? pointsBeforeWindow[pointsBeforeWindow.length - 1] 
+    : (pointsInWindow[0] || sortedHistory[0]);
+
+  // Construct chart timeline: start anchor (at window start) + real points + end point (today)
+  const history = [];
+
+  // Start anchor at the exact beginning of timeframe
+  const startDateStr = new Date(startTime).toISOString().split('T')[0];
+  history.push({
+    ...baselinePoint,
+    date: startDateStr,
+    timestamp: startTime,
+    isAnchor: true
+  });
+
+  // Add all real points within the timeframe
+  const todayDateStr = now.toISOString().split('T')[0];
+  for (const pt of pointsInWindow) {
+    const ptTime = new Date(pt.date).getTime();
+    if (pt.date !== startDateStr && pt.date !== todayDateStr) {
+      history.push({
+        ...pt,
+        timestamp: ptTime,
+        isAnchor: false
+      });
+    }
+  }
+
+  // End anchor at today
+  const todayPoint = sortedHistory[sortedHistory.length - 1];
+  history.push({
+    ...todayPoint,
+    date: now.toISOString().split('T')[0],
+    timestamp: endTime,
+    isAnchor: false
+  });
+
+  // Deduplicate any exact timestamp overlaps
+  const uniqueHistory = [];
+  const seenDates = new Set();
+  for (const item of history) {
+    uniqueHistory.push(item);
+  }
 
   const width = 840;
   const height = 260;
@@ -426,7 +507,7 @@ function drawLpChart(rawHistory, days) {
   const plotW = width - padLeft - padRight;
   const plotH = height - padTop - padBottom;
 
-  const lps = history.map(h => h.totalLp || 0);
+  const lps = uniqueHistory.map(h => h.totalLp || 0);
   const rawMin = Math.min(...lps);
   const rawMax = Math.max(...lps);
   const paddingLp = Math.max(25, Math.round((rawMax - rawMin) * 0.15));
@@ -435,8 +516,8 @@ function drawLpChart(rawHistory, days) {
   const lpRange = maxLp - minLp || 1;
 
   // Calculate Trend stats for UI
-  const firstLp = history[0].totalLp;
-  const lastLp = history[history.length - 1].totalLp;
+  const firstLp = baselinePoint.totalLp;
+  const lastLp = todayPoint.totalLp;
   const diffLp = lastLp - firstLp;
   const trendValEl = document.querySelector('[data-trend-lp-val]');
   const trendFootEl = document.querySelector('[data-trend-foot-text]');
@@ -446,34 +527,17 @@ function drawLpChart(rawHistory, days) {
     trendValEl.style.color = diffLp >= 0 ? '#16201d' : '#8b2020';
   }
   if (trendFootEl) {
-    const peakHistory = history.reduce((max, h) => h.totalLp > max.totalLp ? h : max, history[0]);
+    const peakHistory = uniqueHistory.reduce((max, h) => h.totalLp > max.totalLp ? h : max, uniqueHistory[0]);
     trendFootEl.textContent = `Peak: ${peakHistory.tier || ''} ${peakHistory.rank || ''} (${peakHistory.leaguePoints} LP)`;
   }
 
-  // Handle single data point gracefully
-  if (history.length === 1) {
-    const pX = padLeft + plotW / 2;
-    const pY = padTop + plotH / 2;
-    const item = history[0];
+  const totalTimeSpan = endTime - startTime || 1;
 
-    const svgHtml = `
-      <svg viewBox="0 0 ${width} ${height}" class="lp-chart-svg" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="${padLeft}" y1="${pY.toFixed(1)}" x2="${width - padRight}" y2="${pY.toFixed(1)}" stroke="rgba(22,32,29,0.12)" stroke-dasharray="3,3" />
-        <text x="${padLeft - 10}" y="${(pY + 4).toFixed(1)}" text-anchor="end" class="chart-y-label">${getTierDivisionFromTotalLp(item.totalLp)}</text>
-        <line x1="${padLeft}" y1="${padTop + plotH}" x2="${width - padRight}" y2="${padTop + plotH}" stroke="rgba(22,32,29,0.2)" />
-        <circle class="chart-point" cx="${pX.toFixed(1)}" cy="${pY.toFixed(1)}" r="6" data-date="${item.date}" data-tier="${item.tier || ''}" data-rank="${item.rank || ''}" data-lp="${item.leaguePoints}" data-totallp="${item.totalLp}" />
-        <text x="${pX.toFixed(1)}" y="${padTop + plotH + 20}" text-anchor="middle" class="chart-x-label">Heute (${formatDate(item.date)})</text>
-      </svg>
-      <div class="chart-tooltip" data-chart-tooltip aria-hidden="true"></div>
-    `;
-    container.innerHTML = svgHtml;
-    attachTooltipEvents(container);
-    return;
-  }
-
-  // Coordinates
-  const points = history.map((item, index) => {
-    const x = padLeft + (index / (history.length - 1)) * plotW;
+  // Coordinates mapped strictly proportional to actual time
+  const points = uniqueHistory.map((item) => {
+    const itemTime = Math.max(startTime, Math.min(endTime, new Date(item.date).getTime()));
+    const timeProgress = (itemTime - startTime) / totalTimeSpan;
+    const x = padLeft + timeProgress * plotW;
     const y = padTop + plotH - ((item.totalLp - minLp) / lpRange) * plotH;
     return { x, y, item };
   });
@@ -493,15 +557,16 @@ function drawLpChart(rawHistory, days) {
     gridLines.push({ y, lpVal, approxTier });
   }
 
-  // X Date Labels (up to 5 ticks)
-  const xTicksCount = Math.min(5, history.length);
+  // X Date Labels (5 evenly spaced time intervals across the full chosen timeframe)
+  const xTicksCount = 5;
   const xTicks = [];
   for (let i = 0; i < xTicksCount; i++) {
-    const idx = Math.round((i / (xTicksCount - 1)) * (history.length - 1));
-    const p = points[idx];
-    const d = new Date(p.item.date);
+    const frac = i / (xTicksCount - 1);
+    const t = startTime + frac * totalTimeSpan;
+    const x = padLeft + frac * plotW;
+    const d = new Date(t);
     const dateFormatted = `${d.getDate()}.${d.getMonth() + 1}.`;
-    xTicks.push({ x: p.x, label: dateFormatted });
+    xTicks.push({ x, label: dateFormatted });
   }
 
   const svgHtml = `
@@ -533,8 +598,8 @@ function drawLpChart(rawHistory, days) {
       `).join('')}
 
       <!-- Interactive Data Dots -->
-      ${points.map((p, idx) => `
-        <circle class="chart-point" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${idx === points.length - 1 ? '5' : '3.5'}" data-date="${p.item.date}" data-tier="${p.item.tier || ''}" data-rank="${p.item.rank || ''}" data-lp="${p.item.leaguePoints}" data-totallp="${p.item.totalLp}" />
+      ${points.map((p) => `
+        <circle class="chart-point" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" data-date="${p.item.date}" data-tier="${p.item.tier || ''}" data-rank="${p.item.rank || ''}" data-lp="${p.item.leaguePoints}" data-totallp="${p.item.totalLp}" />
       `).join('')}
     </svg>
     <div class="chart-tooltip" data-chart-tooltip aria-hidden="true"></div>

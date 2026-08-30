@@ -184,16 +184,15 @@ export async function updateRiotStats() {
           losses
         };
 
-        const filledHistory = fillHistoryGaps(playerHistory, todayStr, todaySnapshot);
+        const updatedHistory = recordLpChange(playerHistory, todaySnapshot);
 
-        // Sort by date ascending and keep up to 180 days of real history
-        filledHistory.sort((a, b) => a.date.localeCompare(b.date));
-        if (filledHistory.length > 180) {
-          filledHistory.splice(0, filledHistory.length - 180);
+        // Keep up to 100 historical change points
+        if (updatedHistory.length > 100) {
+          updatedHistory.splice(0, updatedHistory.length - 100);
         }
 
-        riotCache[player.slug].history = filledHistory;
-        player.lpHistory = filledHistory;
+        riotCache[player.slug].history = updatedHistory;
+        player.lpHistory = updatedHistory;
 
         console.log(`  ✓ ${player.name}: ${player.rank.tierDisplay} (${player.rank.lpDisplay}) - ${winrate}% WR (${wins}W/${losses}L)`);
       } else {
@@ -211,47 +210,29 @@ export async function updateRiotStats() {
   console.log('Riot-Statistiken wurden erfolgreich aktualisiert.');
 }
 
-function fillHistoryGaps(history, todayStr, todaySnapshot) {
+function recordLpChange(history, todaySnapshot) {
   if (!history || history.length === 0) {
     return [todaySnapshot];
   }
 
-  const map = new Map();
-  for (const item of history) {
-    if (item?.date) map.set(item.date, item);
+  const result = [...history].sort((a, b) => a.date.localeCompare(b.date));
+  const lastIndex = result.length - 1;
+  const lastItem = result[lastIndex];
+
+  // If there is already an entry for today, update it
+  if (lastItem.date === todaySnapshot.date) {
+    result[lastIndex] = todaySnapshot;
+    return result;
   }
 
-  // Find start and end date
-  const sortedDates = [...map.keys()].sort();
-  const startDate = new Date(sortedDates[0]);
-  const endDate = new Date(todayStr);
-
-  const filled = [];
-  let lastKnown = history[0];
-
-  for (let d = new Date(startDate); d <= endDate; d.setUTCDate(d.getUTCDate() + 1)) {
-    const dStr = d.toISOString().split('T')[0];
-    if (dStr === todayStr) {
-      filled.push(todaySnapshot);
-      lastKnown = todaySnapshot;
-    } else if (map.has(dStr)) {
-      lastKnown = map.get(dStr);
-      filled.push(lastKnown);
-    } else {
-      // Forward-fill same LP and rank if no game was played
-      filled.push({
-        ...lastKnown,
-        date: dStr
-      });
-    }
+  // If LP hasn't changed compared to previous recorded point, don't add duplicate
+  if (lastItem.totalLp === todaySnapshot.totalLp) {
+    return result;
   }
 
-  // Ensure today is always present as the last element
-  if (!filled.some((item) => item.date === todayStr)) {
-    filled.push(todaySnapshot);
-  }
-
-  return filled;
+  // LP has changed on a new date -> add new data point
+  result.push(todaySnapshot);
+  return result;
 }
 
 function parseRiotIdFromOpgg(opggUrl) {
