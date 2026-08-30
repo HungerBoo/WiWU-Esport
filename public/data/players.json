@@ -1075,7 +1075,39 @@
         "Letzte 6 Monate": "75-51 (60%)",
         "Offline": "54%",
         "Online": "56%"
-      }
+      },
+      "recentTournaments": [
+        {
+          "tournamentName": "Homie Stock #1",
+          "eventName": "SSBU Singles 1v1",
+          "isOnline": false,
+          "placement": 21,
+          "totalEntrants": 32,
+          "date": "2026-08-29",
+          "url": "https://www.start.gg/tournament/homie-stock-1-7",
+          "resultDisplay": "21. Platz / 32"
+        },
+        {
+          "tournamentName": "DSDT - Deutschland sucht den Top Spieler #173",
+          "eventName": "Turnier",
+          "isOnline": true,
+          "placement": 17,
+          "totalEntrants": 115,
+          "date": "2026-08-17",
+          "url": "https://www.start.gg/tournament/dsdt-deutschland-sucht-den-top-spieler-173",
+          "resultDisplay": "17. Platz / 115"
+        },
+        {
+          "tournamentName": "DSDT - Deutschland sucht den Top Spieler #172",
+          "eventName": "Turnier",
+          "isOnline": true,
+          "placement": 25,
+          "totalEntrants": 127,
+          "date": "2026-08-10",
+          "url": "https://www.start.gg/tournament/dsdt-deutschland-sucht-den-top-spieler-172",
+          "resultDisplay": "25. Platz / 127"
+        }
+      ]
     },
     {
       "slug": "1overninja1",
@@ -1090,7 +1122,39 @@
         "Letzte 6 Monate": "0-0 (N/A)",
         "Offline": "18%",
         "Online": "N/A"
-      }
+      },
+      "recentTournaments": [
+        {
+          "tournamentName": "CLUTCH UNITED MAYHEM IX",
+          "eventName": "Evening Doubles",
+          "isOnline": false,
+          "placement": 7,
+          "totalEntrants": 10,
+          "date": "2026-02-27",
+          "url": "https://www.start.gg/tournament/clutch-united-mayhem-ix",
+          "resultDisplay": "7. Platz / 10"
+        },
+        {
+          "tournamentName": "CLUTCH UNITED MAYHEM IX",
+          "eventName": "Ultimate Singles",
+          "isOnline": false,
+          "placement": 65,
+          "totalEntrants": 77,
+          "date": "2026-02-27",
+          "url": "https://www.start.gg/tournament/clutch-united-mayhem-ix",
+          "resultDisplay": "65. Platz / 77"
+        },
+        {
+          "tournamentName": "Thunderdome #6",
+          "eventName": "Teams 2 vs 2",
+          "isOnline": false,
+          "placement": 33,
+          "totalEntrants": 66,
+          "date": "2025-08-30",
+          "url": "https://www.start.gg/tournament/thunderdome-6-1",
+          "resultDisplay": "33. Platz / 66"
+        }
+      ]
     },
     {
       "slug": "falafl",
@@ -1105,7 +1169,39 @@
         "Letzte 6 Monate": "0-0 (N/A)",
         "Offline": "0%",
         "Online": "N/A"
-      }
+      },
+      "recentTournaments": [
+        {
+          "tournamentName": "CLUTCH UNITED MAYHEM IX",
+          "eventName": "Evening Doubles",
+          "isOnline": false,
+          "placement": 9,
+          "totalEntrants": 10,
+          "date": "2026-02-27",
+          "url": "https://www.start.gg/tournament/clutch-united-mayhem-ix",
+          "resultDisplay": "9. Platz / 10"
+        },
+        {
+          "tournamentName": "CLUTCH UNITED MAYHEM IX",
+          "eventName": "Ultimate Singles",
+          "isOnline": false,
+          "placement": 65,
+          "totalEntrants": 77,
+          "date": "2026-02-27",
+          "url": "https://www.start.gg/tournament/clutch-united-mayhem-ix",
+          "resultDisplay": "65. Platz / 77"
+        },
+        {
+          "tournamentName": "Thunderdome #6",
+          "eventName": "Singles 1 vs 1",
+          "isOnline": false,
+          "placement": 193,
+          "totalEntrants": 243,
+          "date": "2025-08-30",
+          "url": "https://www.start.gg/tournament/thunderdome-6-1",
+          "resultDisplay": "193. Platz / 243"
+        }
+      ]
     }
   ]
 }

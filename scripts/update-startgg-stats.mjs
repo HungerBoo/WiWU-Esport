@@ -458,6 +458,65 @@ async function updateStatsForPlayer(player, eventCache) {
   return formatSiteStats(stats);
 }
 
+const RECENT_TOURNAMENTS_QUERY = `
+  query RecentTournaments($userId: ID!) {
+    user(id: $userId) {
+      events(query: { perPage: 12, page: 1 }) {
+        nodes {
+          id
+          name
+          startAt
+          numEntrants
+          videogame {
+            name
+          }
+          tournament {
+            name
+            slug
+            isOnline
+          }
+          userEntrant(userId: $userId) {
+            standing {
+              placement
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+async function fetchRecentTournaments(userId) {
+  if (!userId) return [];
+  try {
+    const data = await requestStartGG(RECENT_TOURNAMENTS_QUERY, { userId });
+    const nodes = data.user?.events?.nodes || [];
+    const ultimateEvents = nodes.filter(isUltimateEvent);
+
+    return ultimateEvents.slice(0, 3).map((e) => {
+      const placement = e.userEntrant?.standing?.placement ?? null;
+      const totalEntrants = e.numEntrants ?? null;
+      const dateStr = e.startAt ? new Date(e.startAt * 1000).toISOString().split('T')[0] : null;
+      const slug = e.tournament?.slug;
+      const url = slug ? `https://www.start.gg/${slug}` : null;
+
+      return {
+        tournamentName: e.tournament?.name || 'Turnier',
+        eventName: e.name || 'Singles',
+        isOnline: Boolean(e.tournament?.isOnline),
+        placement,
+        totalEntrants,
+        date: dateStr,
+        url,
+        resultDisplay: placement ? `${placement}. Platz${totalEntrants ? ` / ${totalEntrants}` : ''}` : 'Teilgenommen'
+      };
+    });
+  } catch (error) {
+    console.warn('Konnte letzte Turniere nicht laden:', error.message);
+    return [];
+  }
+}
+
 async function main() {
   const playerData = await readJson(PLAYERS_JSON_PATH, null);
 
@@ -477,6 +536,16 @@ async function main() {
     console.log(`Aktualisiere ${player.name} (startggPlayerId=${player.startggPlayerId}) ...`);
 
     try {
+      const user = await fetchUserForPlayer(player.startggPlayerId);
+      if (user?.id) {
+        player.userId = user.id;
+        const recentTournaments = await fetchRecentTournaments(user.id);
+        if (recentTournaments.length > 0) {
+          player.recentTournaments = recentTournaments;
+          console.log(`  ${recentTournaments.length} letzte Turniere für ${player.name} geladen.`);
+        }
+      }
+
       const stats = await updateStatsForPlayer(player, eventCache);
 
       if (stats) {

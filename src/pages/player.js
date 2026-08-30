@@ -89,12 +89,9 @@ export async function renderPlayerPage(playerSlug) {
         </div>
       </section>
 
-      ${hasLeague ? renderRankAndLpSection(livePlayer) : ''}
-      ${hasSmash ? renderSmashStatsSection(livePlayer, smashData, hasLeague ? '02' : '01') : ''}
-
       <section class="player-steckbrief-section" aria-labelledby="steckbrief-heading">
         <div class="steckbrief-section-header">
-          <p class="eyebrow">PERSÖNLICHER STECKBRIEF</p>
+          <p class="eyebrow">01 / PERSÖNLICHER STECKBRIEF</p>
           <h2 id="steckbrief-heading">Steckbrief <em>& Infos.</em></h2>
         </div>
 
@@ -179,6 +176,9 @@ export async function renderPlayerPage(playerSlug) {
         </div>
       </section>
 
+      ${hasLeague ? renderRankAndLpSection(livePlayer, '02') : ''}
+      ${hasSmash ? renderSmashStatsSection(livePlayer, smashData, hasLeague ? '03' : '02') : ''}
+
       <!-- Teammates Switcher -->
       <section class="teammates-nav-section" aria-labelledby="teammates-heading">
         <div class="section-heading">
@@ -205,7 +205,7 @@ export async function renderPlayerPage(playerSlug) {
   setupPlayerInteractions(livePlayer);
 }
 
-function renderRankAndLpSection(player) {
+function renderRankAndLpSection(player, sectionNumber = '02') {
   const rank = player.rank || {
     tierDisplay: 'Emerald III',
     lpDisplay: '20 LP',
@@ -228,7 +228,7 @@ function renderRankAndLpSection(player) {
     <section class="player-rank-section" aria-labelledby="rank-section-heading">
       <div class="section-heading rank-section-header">
         <div>
-          <p class="eyebrow">01 / LIVE RIOT API STATS</p>
+          <p class="eyebrow">${sectionNumber} / LIVE RIOT API STATS</p>
           <h2 id="rank-section-heading">Aktueller Rang <em>& LP Verlauf.</em></h2>
         </div>
         <div class="rank-header-actions">
@@ -302,6 +302,7 @@ function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
 
   const displayName = data.name || player.name;
   const isDedicatedSmash = !player.rank && !player.lpHistory;
+  const recentTournaments = data.recentTournaments || [];
 
   return `
     <section class="player-rank-section player-rank-section--smash" aria-labelledby="smash-section-heading">
@@ -343,6 +344,35 @@ function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
           <span class="metric-foot-text">Online-Bilanz: ${stats['Online'] || 'N/A'}</span>
         </div>
       </div>
+
+      ${recentTournaments.length > 0 ? `
+        <div class="smash-tournaments-box">
+          <div class="smash-tournaments-header">
+            <strong>Letzte gespielte Turniere (start.gg)</strong>
+            <span class="smash-tournaments-subtitle">Ergebnisse der letzten Auftritte</span>
+          </div>
+          <div class="smash-tournaments-grid">
+            ${recentTournaments.map(t => `
+              <div class="smash-tournament-card">
+                <div class="smash-tournament-top">
+                  <span class="smash-tournament-mode">${t.isOnline ? 'Online' : 'Offline'} • ${t.eventName}</span>
+                  <time class="smash-tournament-date">${formatDate(t.date)}</time>
+                </div>
+                ${t.url 
+                  ? `<a href="${t.url}" class="smash-tournament-link" target="_blank" rel="noreferrer" title="${t.tournamentName} auf start.gg ansehen">
+                      <h4 class="smash-tournament-name">${t.tournamentName} <span>↗</span></h4>
+                    </a>`
+                  : `<h4 class="smash-tournament-name">${t.tournamentName}</h4>`
+                }
+                <div class="smash-tournament-result">
+                  <span class="result-label">Ergebnis:</span>
+                  <strong class="result-badge">${t.resultDisplay}</strong>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
     </section>
   `;
 }
