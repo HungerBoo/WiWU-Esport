@@ -20,8 +20,8 @@ export function renderHome() {
       </div>
       <a class="home-hero-social" href="${siteInstagramUrl()}" target="_blank" rel="noreferrer">Instagram <span>@wiwu.esport ↗</span></a>
     </section>
-    ${renderPaulanergarten(paulanergartenNews)}
     ${renderMeetTheTeam(teamShowcase)}
+    ${renderPaulanergarten(paulanergartenNews)}
     <section class="history-grid">
       <div class="history-images">
         <img src="${oldLogoImage}" alt="Altes Branding der Wieländer Wühlmäuse" loading="lazy">
