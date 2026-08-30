@@ -155,6 +155,7 @@ export const teamShowcase = {
   ],
   photos: [
     {
+      slug: 'falafl',
       src: '/images/players/league/falafl.jpg',
       alt: 'Falafl - Top Lane & Smash Doc',
       name: 'Falafl',
@@ -163,14 +164,16 @@ export const teamShowcase = {
       quote: 'Mehr Roleswaps als Caps Haare – auf jedem Spielfeld zuhause.'
     },
     {
+      slug: 'zwuck',
       src: '/images/players/league/zwuck.jpg',
       alt: 'Zwuck - Jungle',
       name: 'Zwuck',
       role: 'Jungle',
       team: 'League of Legends',
-      quote: 'Ein Invade geht noch, ewig golden in des Gegners Jungle.'
+      quote: 'Die Ekko.'
     },
     {
+      slug: '1overninja1',
       src: '/images/players/league/1overninja1.jpg',
       alt: '1Overninja1 (FickDieDünnenDeggah) - Mid Lane & Smash King Dedede',
       name: '1Overninja1',
@@ -180,6 +183,7 @@ export const teamShowcase = {
       quote: '404 Map-Awareness in der Kluft und tiefgründige Down-B Meta-Studien mit King Dedede.'
     },
     {
+      slug: 'hungerboo',
       src: '/images/players/league/hungerboo.jpg',
       alt: 'HungerBoo - ADC',
       name: 'HungerBoo',
@@ -188,6 +192,7 @@ export const teamShowcase = {
       quote: 'Nur Eisen schärft Eisen. Mentalität aus Kruppstahl.'
     },
     {
+      slug: 'atrulixx',
       src: '/images/players/league/atrulixx.jpg',
       alt: 'aTrulixx - Support',
       name: 'aTrulixx',
@@ -196,6 +201,7 @@ export const teamShowcase = {
       quote: 'Leben ist Leiden. Weiterspielen bis zum Nexus-Fall.'
     },
     {
+      slug: 'martin',
       src: '/images/players/smash/martin.jpg',
       alt: 'Martin - Smash Main Game & Watch',
       name: 'Martin',
@@ -204,6 +210,7 @@ export const teamShowcase = {
       quote: 'Offline & Online Dominanz mit chirurgischen Inputs.'
     },
     {
+      slug: 'lostmyaim',
       src: '/images/players/league/lostmyaim.jpg',
       alt: 'LostMyAim - Sub / Fill',
       name: 'LostMyAim',
@@ -212,6 +219,7 @@ export const teamShowcase = {
       quote: 'Stets bereit für den spontanen Clutch-Einsatz.'
     },
     {
+      slug: 'beltrin',
       src: '/images/players/league/beltrin.jpg',
       alt: 'Beltrin - Sub / ADC',
       name: 'Beltrin',
@@ -220,12 +228,13 @@ export const teamShowcase = {
       quote: 'Zusätzliche Feuerkraft für das Botlane-Gemetzel.'
     },
     {
+      slug: 'elkant',
       src: '/images/players/league/elkant.jpg',
       alt: 'Elkant - Sub / Top',
       name: 'Elkant',
       role: 'Sub / Top',
       team: 'League of Legends',
-      quote: 'Solide Felswand auf der oberen Kartenhälfte.'
+      quote: 'Oantheon ist ein easy Champion.'
     }
   ]
 };

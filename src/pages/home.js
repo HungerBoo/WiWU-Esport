@@ -119,7 +119,9 @@ function renderMeetTheTeam(showcase) {
               </div>
               <div class="team-photo-frame-caption">
                 <div class="team-photo-meta">
-                  <strong data-carousel-caption-title>${initialPlayer.name}${initialPlayer.alias ? ` (${initialPlayer.alias})` : ''}</strong>
+                  <a href="spielerprofil.html?player=${initialPlayer.slug || 'falafl'}" class="carousel-player-link" data-carousel-caption-link>
+                    <strong data-carousel-caption-title>${initialPlayer.name}${initialPlayer.alias ? ` (${initialPlayer.alias})` : ''}</strong>
+                  </a>
                   <span data-carousel-caption-tag>${initialPlayer.role}</span>
                 </div>
                 <div class="team-carousel-counter" data-carousel-counter>
@@ -159,6 +161,9 @@ function renderMeetTheTeam(showcase) {
             </div>
             <p class="spotlight-role" data-spotlight-role>${initialPlayer.role}</p>
             <p class="spotlight-quote" data-spotlight-quote>„${initialPlayer.quote}“</p>
+            <a href="spielerprofil.html?player=${initialPlayer.slug || 'falafl'}" class="spotlight-profile-link" data-spotlight-profile-link>
+              Steckbrief & Spielerprofil <span>↗</span>
+            </a>
           </div>
 
           <div class="team-quick-facts">
@@ -203,6 +208,8 @@ function setupTeamPhotoCarousel(photos) {
   const spotlightTeamEl = document.querySelector('[data-spotlight-team]');
   const spotlightRoleEl = document.querySelector('[data-spotlight-role]');
   const spotlightQuoteEl = document.querySelector('[data-spotlight-quote]');
+  const spotlightLinkEl = document.querySelector('[data-spotlight-profile-link]');
+  const captionLinkEl = carouselWrapper.querySelector('[data-carousel-caption-link]');
 
   let currentIndex = 0;
   let autoplayTimer = null;
@@ -229,12 +236,15 @@ function setupTeamPhotoCarousel(photos) {
     });
 
     if (player) {
+      const playerUrl = `spielerprofil.html?player=${player.slug || 'falafl'}`;
       if (captionTitleEl) captionTitleEl.textContent = player.alias ? `${player.name} (${player.alias})` : player.name;
       if (captionTagEl) captionTagEl.textContent = player.role;
+      if (captionLinkEl) captionLinkEl.href = playerUrl;
       if (spotlightNameEl) spotlightNameEl.innerHTML = player.alias ? `${player.name} <span class="spotlight-alias">(${player.alias})</span>` : player.name;
       if (spotlightTeamEl) spotlightTeamEl.textContent = player.team;
       if (spotlightRoleEl) spotlightRoleEl.textContent = player.role;
       if (spotlightQuoteEl) spotlightQuoteEl.textContent = `„${player.quote}“`;
+      if (spotlightLinkEl) spotlightLinkEl.href = playerUrl;
     }
 
     if (counterCurrent) {

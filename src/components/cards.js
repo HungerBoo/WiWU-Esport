@@ -1,5 +1,6 @@
-export function renderPlayerCard({ name, role, birthDate, image, profile, profileLabel = 'Prime League', opgg, stats }) {
+export function renderPlayerCard({ slug, name, role, birthDate, image, profile, profileLabel = 'Prime League', opgg, stats }) {
   const age = calculateAge(birthDate);
+  const playerSlug = slug || name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   return `
     <article class="player-card" tabindex="0" aria-label="${name}: Karte umdrehen für Details">
@@ -18,6 +19,7 @@ export function renderPlayerCard({ name, role, birthDate, image, profile, profil
             <small>${age}</small>
             ${renderPlayerStats(stats)}
             <div class="player-links">
+              <a class="player-profile player-profile--internal" href="spielerprofil.html?player=${playerSlug}">Steckbrief & Profil ↗</a>
               ${profile ? `<a class="player-profile" href="${profile}" target="_blank" rel="noreferrer">${profileLabel} ↗</a>` : ''}
               ${opgg ? `<a class="player-profile" href="${opgg}" target="_blank" rel="noreferrer">OP.GG ↗</a>` : ''}
             </div>
