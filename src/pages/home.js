@@ -1,5 +1,6 @@
 import { renderLayout } from '../components/layout.js';
 import { paulanergartenNews, site, teamShowcase, teamTimeline } from '../content/site-data.js';
+import { generateNewsFeed } from '../content/news-generator.js';
 
 const oldLogoImage = '/images/Geschichte-alt.png';
 const newLogoImage = '/images/Geschichte-neu.png';
@@ -69,43 +70,133 @@ export function renderHome() {
 
   setupTeamPhotoCarousel(teamShowcase.photos);
   loadInstagramEmbed();
+  setupPaulanergarten();
 }
 
 function renderPaulanergarten(newsItems) {
+  const initialItems = newsItems && newsItems.length > 0 ? newsItems.slice(0, 3) : [];
   return `
     <section class="paulaner-section" aria-labelledby="paulaner-heading">
       <div class="section-heading">
         <div>
           <div class="paulaner-eyebrow-row">
             <p class="eyebrow">01 / LATEST NEWS & FEEDS</p>
-            <span class="paulaner-wip-badge">WIP • nur Bullshit for now</span>
           </div>
           <h2 id="paulaner-heading">Neues ausm<br><em>Paulanergarten.</em></h2>
         </div>
-        <p class="paulaner-lead">Frische Updates von der Kluft bis zum Smash-Bracket – Live-Feeds, Rank-Ups und Spieltags-Berichte. <small class="paulaner-wip-note">(Hier entsteht die automatische Riot-, Prime League- & Start.gg-Anbindung)</small></p>
+        <p class="paulaner-lead">Live-Updates von der Kluft bis zum Smash-Bracket – automatische Rank-Ups, Turnierplatzierungen und Spieltagsberichte aus erster Hand.</p>
       </div>
 
-      <div class="paulaner-grid">
-        ${newsItems.map((item) => `
-          <article class="paulaner-card" data-category="${item.category}">
-            <div class="paulaner-card-header">
-              <span class="paulaner-badge">${item.badge}</span>
-              <time class="paulaner-date">${item.date}</time>
-            </div>
-            <div class="paulaner-card-body">
-              <span class="paulaner-tag">${item.tag}</span>
-              <h3>${item.title}</h3>
-              <p>${item.description}</p>
-            </div>
-            <div class="paulaner-card-footer">
-              <span class="paulaner-meta">${item.meta}</span>
-              <span class="paulaner-icon">↗</span>
-            </div>
-          </article>
-        `).join('')}
+      <div class="paulaner-filters" role="tablist" aria-label="News Kategorien">
+        <button type="button" class="paulaner-filter-btn is-active" data-news-filter="all" role="tab" aria-selected="true">Alle</button>
+        <button type="button" class="paulaner-filter-btn" data-news-filter="lol" role="tab" aria-selected="false">League of Legends</button>
+        <button type="button" class="paulaner-filter-btn" data-news-filter="smash" role="tab" aria-selected="false">Super Smash Bros.</button>
+        <button type="button" class="paulaner-filter-btn" data-news-filter="prime" role="tab" aria-selected="false">Prime League</button>
+      </div>
+
+      <div class="paulaner-feed">
+        <div class="paulaner-grid" data-paulaner-grid aria-live="polite">
+          ${initialItems.map(renderPaulanercard).join('')}
+        </div>
+        <div class="paulaner-pagination" aria-label="Weitere News anzeigen">
+          <button type="button" class="paulaner-page-btn" data-news-prev aria-label="Vorherige drei News">←</button>
+          <span class="paulaner-page-count" data-news-page-count>01 / 01</span>
+          <button type="button" class="paulaner-page-btn" data-news-next aria-label="Nächste drei News">→</button>
+        </div>
       </div>
     </section>
   `;
+}
+
+function renderPaulanercard(item) {
+  const targetAttr = item.link && item.link.startsWith('http') ? ' target="_blank" rel="noreferrer"' : '';
+  return `
+    <a class="paulaner-card" href="${item.link || '#'}" data-category="${item.category}"${targetAttr}>
+      <div class="paulaner-card-header">
+        <span class="paulaner-badge" data-type="${item.badge}">${item.badge}</span>
+        <time class="paulaner-date">${item.date}</time>
+      </div>
+      <div class="paulaner-card-body">
+        <span class="paulaner-tag">${item.tag}</span>
+        <h3>${item.title}</h3>
+        <p>${item.description}</p>
+      </div>
+      <div class="paulaner-card-footer">
+        <span class="paulaner-meta">${item.meta}</span>
+        <span class="paulaner-icon" aria-hidden="true">↗</span>
+      </div>
+    </a>
+  `;
+}
+
+async function setupPaulanergarten() {
+  const grid = document.querySelector('[data-paulaner-grid]');
+  const filterButtons = document.querySelectorAll('[data-news-filter]');
+  const previousButton = document.querySelector('[data-news-prev]');
+  const nextButton = document.querySelector('[data-news-next]');
+  const pageCount = document.querySelector('[data-news-page-count]');
+  if (!grid) return;
+
+  let allNews = [];
+
+  try {
+    const res = await fetch('/data/news.json', { cache: 'no-store' });
+    if (res.ok) {
+      allNews = await res.json();
+    }
+  } catch (err) {
+    console.warn('Could not load /data/news.json, keeping fallback news', err);
+  }
+
+  if (!allNews || allNews.length === 0) {
+    allNews = paulanergartenNews;
+  }
+
+  let activeFilter = 'all';
+  let page = 0;
+
+  function renderPage() {
+    const filtered = activeFilter === 'all'
+      ? allNews
+      : allNews.filter((item) => item.category === activeFilter);
+    const pageTotal = Math.max(1, Math.ceil(filtered.length / 3));
+    page = Math.min(page, pageTotal - 1);
+
+    grid.innerHTML = filtered.slice(page * 3, page * 3 + 3).map(renderPaulanercard).join('');
+    if (pageCount) pageCount.textContent = `${String(page + 1).padStart(2, '0')} / ${String(pageTotal).padStart(2, '0')}`;
+    if (previousButton) previousButton.disabled = page === 0;
+    if (nextButton) nextButton.disabled = page === pageTotal - 1;
+  }
+
+  function applyFilter(filter) {
+    activeFilter = filter;
+    page = 0;
+    filterButtons.forEach((btn) => {
+      const isActive = btn.dataset.newsFilter === filter;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-selected', String(isActive));
+    });
+    renderPage();
+  }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      applyFilter(btn.dataset.newsFilter);
+    });
+  });
+
+  previousButton?.addEventListener('click', () => {
+    page -= 1;
+    renderPage();
+  });
+
+  nextButton?.addEventListener('click', () => {
+    page += 1;
+    renderPage();
+  });
+
+  // Render fresh items initially
+  applyFilter('all');
 }
 
 function renderMeetTheTeam(showcase) {
