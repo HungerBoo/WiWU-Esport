@@ -7,7 +7,36 @@
       "birthDate": "2006-10-25",
       "image": "/images/players/league/falafl.jpg",
       "profile": "https://www.primeleague.gg/de/users/2163142-fal4fl",
-      "opgg": "https://www.op.gg/summoners/euw/Twisted%20Falafl-CRIT"
+      "opgg": "https://www.op.gg/summoners/euw/Twisted%20Falafl-CRIT",
+      "riotId": {
+        "gameName": "Twisted Falafl",
+        "tagLine": "CRIT"
+      },
+      "puuid": "gtVN2n87Ss0G0WSune3UTviYREOiP78MtG7QiRyOcY9lBQjTXLsmGubwYrGYNuFKsBvpaunqegXzyQ",
+      "rank": {
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 20,
+        "wins": 37,
+        "losses": 21,
+        "winrate": 64,
+        "hotStreak": true,
+        "tierDisplay": "Emerald III",
+        "lpDisplay": "20 LP",
+        "totalLp": 2120,
+        "lastUpdated": "2026-08-30T10:49:21.202Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 20,
+          "totalLp": 2120,
+          "wins": 37,
+          "losses": 21
+        }
+      ]
     },
     {
       "slug": "zwuck",
@@ -16,7 +45,36 @@
       "birthDate": "2006-08-21",
       "image": "/images/players/league/zwuck.jpg",
       "profile": "https://www.primeleague.gg/de/users/2223685-zwuck",
-      "opgg": "https://www.op.gg/summoners/euw/Zwuck-Zwack"
+      "opgg": "https://www.op.gg/summoners/euw/Zwuck-Zwack",
+      "riotId": {
+        "gameName": "Zwuck",
+        "tagLine": "Zwack"
+      },
+      "puuid": "LxgVya_GvYFl6urm_h7uJLHFNcIh_bfstHB0rR2z3LvIzBnnaHYFeR6VmU0Sh6cMzPmo5RJwv03Y5w",
+      "rank": {
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 56,
+        "wins": 134,
+        "losses": 144,
+        "winrate": 48,
+        "hotStreak": true,
+        "tierDisplay": "Platinum IV",
+        "lpDisplay": "56 LP",
+        "totalLp": 1656,
+        "lastUpdated": "2026-08-30T10:49:21.779Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 56,
+          "totalLp": 1656,
+          "wins": 134,
+          "losses": 144
+        }
+      ]
     },
     {
       "slug": "1overninja1",
@@ -25,7 +83,36 @@
       "birthDate": "2005-07-16",
       "image": "/images/players/league/1overninja1.jpg",
       "profile": "https://www.primeleague.gg/de/users/2222569-overninja",
-      "opgg": "https://www.op.gg/summoners/euw/1Overninja1-2970"
+      "opgg": "https://www.op.gg/summoners/euw/1Overninja1-2970",
+      "riotId": {
+        "gameName": "1Overninja1",
+        "tagLine": "2970"
+      },
+      "puuid": "QpiI5gXOJUPQgPIV2A59KcsCMna5fAc45jylkihKOaYS_3Ms2Q4OP4utcbcfOeZQCKQMTh-YeZ9M4Q",
+      "rank": {
+        "tier": "GOLD",
+        "rank": "III",
+        "leaguePoints": 55,
+        "wins": 12,
+        "losses": 9,
+        "winrate": 57,
+        "hotStreak": false,
+        "tierDisplay": "Gold III",
+        "lpDisplay": "55 LP",
+        "totalLp": 1355,
+        "lastUpdated": "2026-08-30T10:49:22.338Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "GOLD",
+          "rank": "III",
+          "leaguePoints": 55,
+          "totalLp": 1355,
+          "wins": 12,
+          "losses": 9
+        }
+      ]
     },
     {
       "slug": "hungerboo",
@@ -34,7 +121,36 @@
       "birthDate": "2006-06-07",
       "image": "/images/players/league/hungerboo.jpg",
       "profile": "https://www.primeleague.gg/de/users/2240547-hungerboo",
-      "opgg": "https://www.op.gg/summoners/euw/HungerBoo-WIWU"
+      "opgg": "https://www.op.gg/summoners/euw/HungerBoo-WIWU",
+      "riotId": {
+        "gameName": "HungerBoo",
+        "tagLine": "WIWU"
+      },
+      "puuid": "nkO7La48fUnav8ExqOVe6MGhMbNG8MqrxuZ1QQ6JFw_JPrDJkyFvJ3WUeDux2_6Gn1-cksft-lpJzQ",
+      "rank": {
+        "tier": "GOLD",
+        "rank": "II",
+        "leaguePoints": 30,
+        "wins": 103,
+        "losses": 97,
+        "winrate": 52,
+        "hotStreak": false,
+        "tierDisplay": "Gold II",
+        "lpDisplay": "30 LP",
+        "totalLp": 1430,
+        "lastUpdated": "2026-08-30T10:49:22.908Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "GOLD",
+          "rank": "II",
+          "leaguePoints": 30,
+          "totalLp": 1430,
+          "wins": 103,
+          "losses": 97
+        }
+      ]
     },
     {
       "slug": "atrulixx",
@@ -43,7 +159,36 @@
       "birthDate": "2005-01-01",
       "image": "/images/players/league/atrulixx.jpg",
       "profile": "https://www.primeleague.gg/de/users/2223580-trulixx",
-      "opgg": "https://www.op.gg/summoners/euw/Nephis-WIWU"
+      "opgg": "https://www.op.gg/summoners/euw/Nephis-WIWU",
+      "riotId": {
+        "gameName": "Nephis",
+        "tagLine": "WIWU"
+      },
+      "puuid": "e7zPyr3OfGOLRdWo1Y1pOdhqq5pdh5qbYdtedO06Rw7rAJh0f3u853wh44dkMv2A5Wf7x40alrXY4A",
+      "rank": {
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 54,
+        "wins": 146,
+        "losses": 151,
+        "winrate": 49,
+        "hotStreak": false,
+        "tierDisplay": "Platinum IV",
+        "lpDisplay": "54 LP",
+        "totalLp": 1654,
+        "lastUpdated": "2026-08-30T10:49:23.473Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 54,
+          "totalLp": 1654,
+          "wins": 146,
+          "losses": 151
+        }
+      ]
     },
     {
       "slug": "lostmyaim",
@@ -52,7 +197,36 @@
       "birthDate": "2005-01-01",
       "image": "/images/players/league/lostmyaim.jpg",
       "profile": "https://www.primeleague.gg/de/users/2223592-lostmyaimtwicee",
-      "opgg": "https://www.op.gg/summoners/euw/LostMyAim-WIWU"
+      "opgg": "https://www.op.gg/summoners/euw/LostMyAim-WIWU",
+      "riotId": {
+        "gameName": "LostMyAim",
+        "tagLine": "WIWU"
+      },
+      "puuid": "8-igGpQhYRepJsBMILWjDm_DGxvk8SKNY4U7RRummMA4ldLUTa78TEWDn-U_On2QODl1drJ8D9qVBw",
+      "rank": {
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 0,
+        "wins": 57,
+        "losses": 47,
+        "winrate": 55,
+        "hotStreak": false,
+        "tierDisplay": "Emerald IV",
+        "lpDisplay": "0 LP",
+        "totalLp": 2000,
+        "lastUpdated": "2026-08-30T10:49:24.023Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 2000,
+          "wins": 57,
+          "losses": 47
+        }
+      ]
     },
     {
       "slug": "beltrin",
@@ -61,7 +235,36 @@
       "birthDate": "2005-01-01",
       "image": "/images/players/league/beltrin.jpg",
       "profile": "https://www.primeleague.gg/de/users/2325681-beltrin",
-      "opgg": "https://op.gg/de/lol/summoners/euw/Beltrin-EUW"
+      "opgg": "https://op.gg/de/lol/summoners/euw/Beltrin-EUW",
+      "riotId": {
+        "gameName": "Beltrin",
+        "tagLine": "EUW"
+      },
+      "puuid": "jy0m9r0-1MEhFa7fduvQ8owzBraPien4ku53W_8kORbs4ZJNzSTAHtzAEc_7Zd2JwFuCDomjEQYbKA",
+      "rank": {
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 20,
+        "wins": 78,
+        "losses": 70,
+        "winrate": 53,
+        "hotStreak": false,
+        "tierDisplay": "Emerald IV",
+        "lpDisplay": "20 LP",
+        "totalLp": 2020,
+        "lastUpdated": "2026-08-30T10:49:24.585Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 20,
+          "totalLp": 2020,
+          "wins": 78,
+          "losses": 70
+        }
+      ]
     },
     {
       "slug": "elkant",
@@ -70,7 +273,36 @@
       "birthDate": "2005-01-01",
       "image": "/images/players/league/elkant.jpg",
       "profile": "https://www.primeleague.gg/de/users/2325701-elkant",
-      "opgg": "https://op.gg/de/lol/summoners/euw/Elkant-elk"
+      "opgg": "https://op.gg/de/lol/summoners/euw/Elkant-elk",
+      "riotId": {
+        "gameName": "Elkant",
+        "tagLine": "elk"
+      },
+      "puuid": "vXCKVuo7cWv30ABWDB5KCMk19mcvgXxlgGEIcs-Kci5CbB6iaYQKO0crFxda9bsgSEqrwwCNor0Dfg",
+      "rank": {
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 19,
+        "wins": 113,
+        "losses": 109,
+        "winrate": 51,
+        "hotStreak": false,
+        "tierDisplay": "Emerald III",
+        "lpDisplay": "19 LP",
+        "totalLp": 2119,
+        "lastUpdated": "2026-08-30T10:49:25.147Z"
+      },
+      "lpHistory": [
+        {
+          "date": "2026-08-30",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 19,
+          "totalLp": 2119,
+          "wins": 113,
+          "losses": 109
+        }
+      ]
     }
   ],
   "smash": [

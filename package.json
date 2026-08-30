@@ -8,8 +8,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "npm run build",
-    "update-stats": "node scripts/update-startgg-stats.mjs",
-    "update-stats:local": "node --env-file=.env scripts/update-startgg-stats.mjs"
+    "update-stats": "node scripts/update-startgg-stats.mjs && node scripts/update-riot-stats.mjs",
+    "update-stats:local": "node --env-file=.env scripts/update-startgg-stats.mjs && node --env-file=.env scripts/update-riot-stats.mjs",
+    "update-riot-stats": "node scripts/update-riot-stats.mjs",
+    "update-riot-stats:local": "node --env-file=.env scripts/update-riot-stats.mjs",
+    "update-startgg-stats": "node scripts/update-startgg-stats.mjs",
+    "update-startgg-stats:local": "node --env-file=.env scripts/update-startgg-stats.mjs"
   },
   "engines": {
     "node": ">=20"

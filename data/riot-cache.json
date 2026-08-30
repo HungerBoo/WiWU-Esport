@@ -1,0 +1,114 @@
+{
+  "falafl": {
+    "puuid": "gtVN2n87Ss0G0WSune3UTviYREOiP78MtG7QiRyOcY9lBQjTXLsmGubwYrGYNuFKsBvpaunqegXzyQ",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 20,
+        "totalLp": 2120,
+        "wins": 37,
+        "losses": 21
+      }
+    ]
+  },
+  "zwuck": {
+    "puuid": "LxgVya_GvYFl6urm_h7uJLHFNcIh_bfstHB0rR2z3LvIzBnnaHYFeR6VmU0Sh6cMzPmo5RJwv03Y5w",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 56,
+        "totalLp": 1656,
+        "wins": 134,
+        "losses": 144
+      }
+    ]
+  },
+  "1overninja1": {
+    "puuid": "QpiI5gXOJUPQgPIV2A59KcsCMna5fAc45jylkihKOaYS_3Ms2Q4OP4utcbcfOeZQCKQMTh-YeZ9M4Q",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "GOLD",
+        "rank": "III",
+        "leaguePoints": 55,
+        "totalLp": 1355,
+        "wins": 12,
+        "losses": 9
+      }
+    ]
+  },
+  "hungerboo": {
+    "puuid": "nkO7La48fUnav8ExqOVe6MGhMbNG8MqrxuZ1QQ6JFw_JPrDJkyFvJ3WUeDux2_6Gn1-cksft-lpJzQ",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "GOLD",
+        "rank": "II",
+        "leaguePoints": 30,
+        "totalLp": 1430,
+        "wins": 103,
+        "losses": 97
+      }
+    ]
+  },
+  "atrulixx": {
+    "puuid": "e7zPyr3OfGOLRdWo1Y1pOdhqq5pdh5qbYdtedO06Rw7rAJh0f3u853wh44dkMv2A5Wf7x40alrXY4A",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 54,
+        "totalLp": 1654,
+        "wins": 146,
+        "losses": 151
+      }
+    ]
+  },
+  "lostmyaim": {
+    "puuid": "8-igGpQhYRepJsBMILWjDm_DGxvk8SKNY4U7RRummMA4ldLUTa78TEWDn-U_On2QODl1drJ8D9qVBw",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 0,
+        "totalLp": 2000,
+        "wins": 57,
+        "losses": 47
+      }
+    ]
+  },
+  "beltrin": {
+    "puuid": "jy0m9r0-1MEhFa7fduvQ8owzBraPien4ku53W_8kORbs4ZJNzSTAHtzAEc_7Zd2JwFuCDomjEQYbKA",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 20,
+        "totalLp": 2020,
+        "wins": 78,
+        "losses": 70
+      }
+    ]
+  },
+  "elkant": {
+    "puuid": "vXCKVuo7cWv30ABWDB5KCMk19mcvgXxlgGEIcs-Kci5CbB6iaYQKO0crFxda9bsgSEqrwwCNor0Dfg",
+    "history": [
+      {
+        "date": "2026-08-30",
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 19,
+        "totalLp": 2119,
+        "wins": 113,
+        "losses": 109
+      }
+    ]
+  }
+}

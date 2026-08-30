@@ -16,7 +16,7 @@ export const profile = {
   details: {
     signaturePicks: ['Ornn', 'Malphite', 'Sion'],
     playstyle: 'Unüberwindbarer Frontline-Tank mit diszipliniertem Laning.',
-    quote: 'Oantheon ist ein easy Champion.'
+    quote: 'Pantheon ist ein easy Champion.'
   },
   links: [
     { label: 'Prime League', url: 'https://www.primeleague.gg/de/users/2325701-elkant' },
