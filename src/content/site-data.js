@@ -137,7 +137,7 @@ export const teamShowcase = {
   subtitle: 'Kader & Athleten.',
   description: 'Ob in der Kluft von Summoner\'s Rift oder auf den europäischen Turnier-Bühnen: Hinter den Wieländer Wühlmäusen stehen engagierte Spieler, Taktiker und Siegener Esport-Größen. Lerne das gesamte Line-up kennen.',
   quickFacts: [
-    { label: 'Aktive Athleten', value: '10 Spieler' },
+    { label: 'Aktive Athleten', value: '9 Spieler' },
     { label: 'Disziplinen', value: 'LoL & SSBU' },
     { label: 'Herkunft', value: 'Siegerland' }
   ],
@@ -172,11 +172,12 @@ export const teamShowcase = {
     },
     {
       src: '/images/players/league/1overninja1.jpg',
-      alt: '1Overninja1 - Mid Lane',
+      alt: '1Overninja1 (FickDieDünnenDeggah) - Mid Lane & Smash King Dedede',
       name: '1Overninja1',
-      role: 'Mid Lane',
-      team: 'League of Legends',
-      quote: '404 Map-Awareness – Hauptsache die Midlane wird belagert.'
+      alias: 'FickDieDünnenDeggah',
+      role: 'Mid Lane & Smash King Dedede',
+      team: 'LoL & SSBU',
+      quote: '404 Map-Awareness in der Kluft und tiefgründige Down-B Meta-Studien mit King Dedede.'
     },
     {
       src: '/images/players/league/hungerboo.jpg',
@@ -201,14 +202,6 @@ export const teamShowcase = {
       role: 'Mr. Game & Watch',
       team: 'Super Smash Bros.',
       quote: 'Offline & Online Dominanz mit chirurgischen Inputs.'
-    },
-    {
-      src: '/images/players/smash/fickdieduennendeggah.jpg',
-      alt: 'FickDieDünnenDeggah - Smash Main King Dedede',
-      name: 'FickDieDünnenDeggah',
-      role: 'King Dedede',
-      team: 'Super Smash Bros.',
-      quote: 'Down-B Mindgames & tiefgründige Meta-Studien.'
     },
     {
       src: '/images/players/league/lostmyaim.jpg',

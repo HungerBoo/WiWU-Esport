@@ -119,7 +119,7 @@ function renderMeetTheTeam(showcase) {
               </div>
               <div class="team-photo-frame-caption">
                 <div class="team-photo-meta">
-                  <strong data-carousel-caption-title>${initialPlayer.name}</strong>
+                  <strong data-carousel-caption-title>${initialPlayer.name}${initialPlayer.alias ? ` (${initialPlayer.alias})` : ''}</strong>
                   <span data-carousel-caption-tag>${initialPlayer.role}</span>
                 </div>
                 <div class="team-carousel-counter" data-carousel-counter>
@@ -134,7 +134,7 @@ function renderMeetTheTeam(showcase) {
               </button>
               <div class="team-carousel-dots" role="tablist" aria-label="Spielerauswahl">
                 ${photos.map((photo, index) => `
-                  <button type="button" class="team-carousel-dot${index === 0 ? ' is-active' : ''}" role="tab" aria-selected="${index === 0}" aria-label="${photo.name} anzeigen" data-slide-target="${index}"></button>
+                  <button type="button" class="team-carousel-dot${index === 0 ? ' is-active' : ''}" role="tab" aria-selected="${index === 0}" aria-label="${photo.name}${photo.alias ? ` (${photo.alias})` : ''} anzeigen" data-slide-target="${index}"></button>
                 `).join('')}
               </div>
               <button type="button" class="team-carousel-btn next" data-carousel-next aria-label="Nächster Spieler">
@@ -154,7 +154,7 @@ function renderMeetTheTeam(showcase) {
 
           <div class="active-player-spotlight" aria-live="polite">
             <div class="spotlight-header">
-              <h3 class="spotlight-name" data-spotlight-name>${initialPlayer.name}</h3>
+              <h3 class="spotlight-name" data-spotlight-name>${initialPlayer.name}${initialPlayer.alias ? ` <span class="spotlight-alias">(${initialPlayer.alias})</span>` : ''}</h3>
               <span class="spotlight-badge" data-spotlight-team>${initialPlayer.team}</span>
             </div>
             <p class="spotlight-role" data-spotlight-role>${initialPlayer.role}</p>
@@ -229,9 +229,9 @@ function setupTeamPhotoCarousel(photos) {
     });
 
     if (player) {
-      if (captionTitleEl) captionTitleEl.textContent = player.name;
+      if (captionTitleEl) captionTitleEl.textContent = player.alias ? `${player.name} (${player.alias})` : player.name;
       if (captionTagEl) captionTagEl.textContent = player.role;
-      if (spotlightNameEl) spotlightNameEl.textContent = player.name;
+      if (spotlightNameEl) spotlightNameEl.innerHTML = player.alias ? `${player.name} <span class="spotlight-alias">(${player.alias})</span>` : player.name;
       if (spotlightTeamEl) spotlightTeamEl.textContent = player.team;
       if (spotlightRoleEl) spotlightRoleEl.textContent = player.role;
       if (spotlightQuoteEl) spotlightQuoteEl.textContent = `„${player.quote}“`;
