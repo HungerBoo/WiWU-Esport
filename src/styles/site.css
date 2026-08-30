@@ -221,6 +221,22 @@ em { color: #788d1d; font-style: normal; }
 .paulaner-card-footer .paulaner-meta { color: var(--ink); font-weight: 500; }
 .paulaner-card-footer .paulaner-icon { color: var(--acid); background: var(--ink); width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; transition: transform .2s ease, background .2s ease, color .2s ease; }
 
+.smash-leaderboard-section { border-top: 1px solid var(--line); margin-top: 48px; padding-top: 24px; }
+.smash-leaderboard-section .section-heading { margin-bottom: 24px; }
+.smash-leaderboard { border: 1px solid var(--line); background: var(--paper); }
+.smash-leaderboard-head, .smash-leaderboard-row { display: grid; grid-template-columns: 1.35fr 1fr .7fr 1.35fr; gap: 16px; align-items: center; }
+.smash-leaderboard-head { border-bottom: 1px solid var(--line); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .05em; padding: 12px 18px; text-transform: uppercase; }
+.smash-leaderboard-row { color: var(--ink); min-height: 82px; padding: 12px 18px; text-decoration: none; transition: background .16s ease; }
+.smash-leaderboard-row + .smash-leaderboard-row { border-top: 1px solid var(--line); }
+.smash-leaderboard-row:hover { background: #fbfcf8; }
+.smash-player-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.smash-placement { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; }
+.smash-player-cell img { width: 48px; height: 48px; object-fit: cover; border: 1px solid var(--line); }
+.smash-player-cell strong, .smash-stat-cell strong, .smash-event-cell strong { display: block; font-size: 14px; }
+.smash-player-cell span:not(.smash-placement), .smash-stat-cell span, .smash-event-cell span { color: var(--muted); display: block; font-family: 'DM Mono', monospace; font-size: 10px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.smash-stat-cell strong { color: #013b13; }
+.smash-event-cell { min-width: 0; }
+
 .news-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
 .news-card { min-height: 190px; border-right: 1px solid var(--line); padding: 22px; text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; transition: background .2s, transform .2s; }
 .news-card:first-child { border-left: 1px solid var(--line); }
@@ -1187,6 +1203,9 @@ em { color: #788d1d; font-style: normal; }
   .section-heading, .story-grid, .history-grid, .meet-the-team-grid { display: block; }
   .paulaner-grid { grid-template-columns: 1fr; }
   .leaderboard-grid { grid-template-columns: 1fr; }
+  .smash-leaderboard-head { display: none; }
+  .smash-leaderboard-row { grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
+  .smash-player-cell, .smash-event-cell { grid-column: 1 / -1; }
   .leaderboard-graph-wrapper { padding: 16px 12px; }
   .leaderboard-header-row, .leaderboard-row { grid-template-columns: 1.4fr 1.1fr 0.8fr; padding: 8px 10px; }
   .meet-the-team-carousel-col { margin-bottom: 40px; }

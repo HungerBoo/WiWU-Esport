@@ -48,6 +48,8 @@ export async function renderGame(gameKey) {
       <p class="roster-status">Kader wird geladen ...</p>
     </section>
 
+    ${!isLeague ? renderSmashLeaderboard() : ''}
+
     ${isLeague ? `
       <section class="league-leaderboard-section" aria-labelledby="leaderboard-heading">
         <div class="section-heading">
@@ -133,6 +135,8 @@ export async function renderGame(gameKey) {
 
     if (isLeague) {
       setupLeaderboardAndGraph(players);
+    } else {
+      setupSmashLeaderboard(players);
     }
 
     document.querySelectorAll('.player-card img').forEach((image) => {
@@ -168,6 +172,63 @@ export async function renderGame(gameKey) {
     document.querySelector('.roster-status').textContent = 'Die Kaderdaten konnten nicht geladen werden.';
     console.error(error);
   }
+}
+
+function renderSmashLeaderboard() {
+  return `
+    <section class="smash-leaderboard-section" aria-labelledby="smash-leaderboard-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">02 / START.GG RANKING</p>
+          <h2 id="smash-leaderboard-heading">Smash Tournament<br><em>Leaderboard.</em></h2>
+        </div>
+        <p class="roster-hint">Live aus start.gg Turnierdaten</p>
+      </div>
+      <div class="smash-leaderboard" data-smash-leaderboard>
+        <p class="roster-status">Lade Turnierdaten ...</p>
+      </div>
+    </section>
+  `;
+}
+
+function setupSmashLeaderboard(players) {
+  const leaderboard = document.querySelector('[data-smash-leaderboard]');
+  if (!leaderboard) return;
+
+  const rankedPlayers = [...players]
+    .map((player) => ({ ...player, recentTournament: player.recentTournaments?.[0] }))
+    .sort((first, second) => parseWinrate(second.stats?.['Letzte 6 Monate']) - parseWinrate(first.stats?.['Letzte 6 Monate']));
+
+  leaderboard.innerHTML = `
+    <div class="smash-leaderboard-head" aria-hidden="true">
+      <span>Platz & Spieler</span><span>Letzte 6 Monate</span><span>Offline WR</span><span>Letztes Offline-Event</span>
+    </div>
+    <div class="smash-leaderboard-list">
+      ${rankedPlayers.map((player, index) => {
+        const tournament = player.recentTournament;
+        const eventResult = tournament?.tournamentName
+          ? `<strong>${tournament.resultDisplay || 'Teilgenommen'}</strong><span>${tournament.tournamentName}</span>`
+          : '<strong>Keine Daten</strong><span>Kein Offline-Event</span>';
+
+        return `
+          <a class="smash-leaderboard-row" href="${player.profile || '#'}" target="_blank" rel="noreferrer">
+            <div class="smash-player-cell">
+              <span class="smash-placement">#${String(index + 1).padStart(2, '0')}</span>
+              <img src="${player.image}" alt="${player.name}" loading="lazy" onerror="this.src='/images/Wiwu_Logo.jpg'">
+              <div><strong>${player.name}</strong><span>${player.role}</span></div>
+            </div>
+            <div class="smash-stat-cell"><strong>${player.stats?.['Letzte 6 Monate'] || 'N/A'}</strong><span>Satzbilanz</span></div>
+            <div class="smash-stat-cell"><strong>${player.stats?.Offline || 'N/A'}</strong><span>Winrate</span></div>
+            <div class="smash-event-cell">${eventResult}</div>
+          </a>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function parseWinrate(record = '') {
+  return Number(record.match(/\((\d+)%\)/)?.[1]) || 0;
 }
 
 function setupLeaderboardAndGraph(leaguePlayers) {
