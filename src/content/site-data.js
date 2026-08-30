@@ -100,3 +100,109 @@ export const primeLeague = {
   ],
   url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
 };
+
+export const teamShowcase = {
+  eyebrow: '03 / MEET THE TEAM',
+  title: 'Wühlmäuse',
+  subtitle: 'Kader & Athleten.',
+  description: 'Ob in der Kluft von Summoner\'s Rift oder auf den europäischen Turnier-Bühnen: Hinter den Wieländer Wühlmäusen stehen engagierte Spieler, Taktiker und Siegener Esport-Größen. Lerne das gesamte Line-up kennen.',
+  quickFacts: [
+    { label: 'Aktive Athleten', value: '10 Spieler' },
+    { label: 'Disziplinen', value: 'LoL & SSBU' },
+    { label: 'Herkunft', value: 'Siegerland' }
+  ],
+  divisions: [
+    {
+      name: 'League of Legends',
+      subtitle: 'Prime League Div 7.5',
+      href: 'league-of-legends.html'
+    },
+    {
+      name: 'Super Smash Bros.',
+      subtitle: 'Majors & Locals',
+      href: 'super-smash-bros.html'
+    }
+  ],
+  photos: [
+    {
+      src: '/images/players/league/falafl.jpg',
+      alt: 'Falafl - Top Lane & Smash Doc',
+      name: 'Falafl',
+      role: 'Top Lane & Smash Doc',
+      team: 'LoL & SSBU',
+      quote: 'Mehr Roleswaps als Caps Haare – auf jedem Spielfeld zuhause.'
+    },
+    {
+      src: '/images/players/league/zwuck.jpg',
+      alt: 'Zwuck - Jungle',
+      name: 'Zwuck',
+      role: 'Jungle',
+      team: 'League of Legends',
+      quote: 'Ein Invade geht noch, ewig golden in des Gegners Jungle.'
+    },
+    {
+      src: '/images/players/league/1overninja1.jpg',
+      alt: '1Overninja1 - Mid Lane',
+      name: '1Overninja1',
+      role: 'Mid Lane',
+      team: 'League of Legends',
+      quote: '404 Map-Awareness – Hauptsache die Midlane wird belagert.'
+    },
+    {
+      src: '/images/players/league/hungerboo.jpg',
+      alt: 'HungerBoo - ADC',
+      name: 'HungerBoo',
+      role: 'ADC',
+      team: 'League of Legends',
+      quote: 'Nur Eisen schärft Eisen. Mentalität aus Kruppstahl.'
+    },
+    {
+      src: '/images/players/league/atrulixx.jpg',
+      alt: 'aTrulixx - Support',
+      name: 'aTrulixx',
+      role: 'Support',
+      team: 'League of Legends',
+      quote: 'Leben ist Leiden. Weiterspielen bis zum Nexus-Fall.'
+    },
+    {
+      src: '/images/players/smash/martin.jpg',
+      alt: 'Martin - Smash Main Game & Watch',
+      name: 'Martin',
+      role: 'Mr. Game & Watch',
+      team: 'Super Smash Bros.',
+      quote: 'Offline & Online Dominanz mit chirurgischen Inputs.'
+    },
+    {
+      src: '/images/players/smash/fickdieduennendeggah.jpg',
+      alt: 'FickDieDünnenDeggah - Smash Main King Dedede',
+      name: 'FickDieDünnenDeggah',
+      role: 'King Dedede',
+      team: 'Super Smash Bros.',
+      quote: 'Down-B Mindgames & tiefgründige Meta-Studien.'
+    },
+    {
+      src: '/images/players/league/lostmyaim.jpg',
+      alt: 'LostMyAim - Sub / Fill',
+      name: 'LostMyAim',
+      role: 'Sub / Fill',
+      team: 'League of Legends',
+      quote: 'Stets bereit für den spontanen Clutch-Einsatz.'
+    },
+    {
+      src: '/images/players/league/beltrin.jpg',
+      alt: 'Beltrin - Sub / ADC',
+      name: 'Beltrin',
+      role: 'Sub / ADC',
+      team: 'League of Legends',
+      quote: 'Zusätzliche Feuerkraft für das Botlane-Gemetzel.'
+    },
+    {
+      src: '/images/players/league/elkant.jpg',
+      alt: 'Elkant - Sub / Top',
+      name: 'Elkant',
+      role: 'Sub / Top',
+      team: 'League of Legends',
+      quote: 'Solide Felswand auf der oberen Kartenhälfte.'
+    }
+  ]
+};
