@@ -6,17 +6,22 @@ export function renderPlayerCard({ slug, name, role, birthDate, image, profile, 
     <article class="player-card" tabindex="0" aria-label="${name}: Karte umdrehen für Details">
       <div class="player-card-inner">
         <button class="player-card-front" type="button" aria-label="Details zu ${name} anzeigen">
-          <img src="${image}" alt="${name}" loading="lazy">
+          <div class="player-card-img-wrap">
+            <img src="${image}" alt="${name}" loading="lazy">
+          </div>
           <span class="player-card-overlay">
-            <strong>${name}</strong>
-            <span>${role}</span>
+            <span class="player-card-role-tag">${role}</span>
+            <strong class="player-card-name">${name}</strong>
+            <span class="player-card-hint">Karte wenden <span>⟲</span></span>
           </span>
         </button>
         <div class="player-card-back" aria-hidden="true">
           <div class="player-info">
-            <h3>${name}</h3>
-            <p>${role}</p>
-            <small>${age}</small>
+            <div class="player-back-header">
+              <h3>${name}</h3>
+              <span class="player-back-role">${role}</span>
+            </div>
+            <p class="player-back-age">${age}</p>
             ${renderPlayerStats(stats)}
             <div class="player-links">
               <a class="player-profile player-profile--internal" href="spielerprofil.html?player=${playerSlug}">Steckbrief & Profil ↗</a>
