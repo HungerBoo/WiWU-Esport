@@ -101,6 +101,44 @@ export const primeLeague = {
   url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
 };
 
+export const teamTimeline = [
+  {
+    year: 'Jan 2024',
+    tag: 'Gründung',
+    title: 'Humble Beginnings',
+    description: 'Geburtsstunde der Wieländer Wühlmäuse im Siegerland und erste Gehversuche in der Prime League.',
+    badge: 'Origin'
+  },
+  {
+    year: 'Mitte 2024',
+    tag: 'Pause',
+    title: 'Die Falk\'schen Ungereimtheiten',
+    description: 'Terminliche Herausforderungen zwingen zur vorzeitigen Saisonpause – die Buben nutzen die Zeit zur mentalen Stählung.',
+    badge: 'Hiatus'
+  },
+  {
+    year: 'Herbst 2025',
+    tag: 'Rebranding',
+    title: 'Wüsten-Logo & Neuer Glanz',
+    description: 'In der Wüste der arabischen Halbinsel entsteht das neue Wappen. Trikot-Design und Social-Media-Präsenz blühen auf.',
+    badge: 'New Era'
+  },
+  {
+    year: 'Winter 2025/26',
+    tag: 'Smash Expansion',
+    title: 'Madrid Major Auftritt',
+    description: 'Einstieg in die internationale SSBU-Szene mit Auftritten auf europäischen Majors und lokalen Turnieren.',
+    badge: 'International'
+  },
+  {
+    year: '2026',
+    tag: 'Prime League',
+    title: 'Uniliga-Zuwachs & Div 7.5',
+    description: 'Neuzugänge aus der Uniliga komplettieren das LoL-Team. Voller Fokus auf die Prime League und SoloQ-Grind.',
+    badge: 'Active'
+  }
+];
+
 export const paulanergartenNews = [
   {
     tag: 'Riot API / Rankup',

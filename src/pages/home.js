@@ -1,5 +1,5 @@
 import { renderLayout } from '../components/layout.js';
-import { paulanergartenNews, site, teamShowcase } from '../content/site-data.js';
+import { paulanergartenNews, site, teamShowcase, teamTimeline } from '../content/site-data.js';
 
 const oldLogoImage = '/images/Geschichte-alt.png';
 const newLogoImage = '/images/Geschichte-neu.png';
@@ -26,29 +26,37 @@ export function renderHome() {
         <img src="${oldLogoImage}" alt="Altes Branding der Wieländer Wühlmäuse" loading="lazy">
         <img src="${newLogoImage}" alt="Neues Logo der Wieländer Wühlmäuse" loading="lazy">
       </div>
-      <div>
-    <p class="eyebrow">03 / TEAMPROFIL</p>
+      <div class="history-content">
+        <p class="eyebrow">03 / TEAMPROFIL & HISTORIE</p>
+        <h2>Wieländer<br><em>Wühlmäuse.</em></h2>
 
-    <h2>Wieländer<br><em>Wühlmäuse.</em></h2>
-
-    <div class="story-copy">
-        <p>
+        <div class="story-copy">
+          <p>
             Die Wieländer Wühlmäuse sind nicht nur irgendeine Orga, nein, sie sind eine Institution des deutschen elektronischen Sportes.
-            Ihre humble beginnings bestritten die Künstler der Kluft Anfang 2024 in der Prime League.
-            Nach vielen terminlichen Problemen aufgrund von falk'schen Ungereimtheiten musste die Saison jedoch frühzeitig beendet werden.
-        </p>
+            Von den ersten Gehversuchen in der Prime League über die Madrid-Reise bis zum aktuellen Relaunch.
+          </p>
+        </div>
 
-        <p>
-            Erneut haben die Buben 2025/26 durchgestartet, mit Neuzugängen aus der Uniliga für das League-Team und dem Einstieg in die kompetitive SSBU-Szene in Madrid.
-            Unsere Helden starten ein neues Kapitel, in dem auch die Social-Media-Präsenz und das Trikot-Design nichts zu wünschen übrig lassen.
-            Mit Hilfe eines neuen, in der Wüste der arabischen Halbinsel erstellten Logos wurde ein erneutes Aufblühen des regionalen Sport-Titanen untermauert.
-        </p>
-
-        <p>
-            Heute wachsen die Wühlmäuse stetig – sowohl in Sachen Fans, Skills als auch Erfahrung.
-        </p>
+        <!-- Interactive Zeitstrahl -->
+        <div class="team-timeline" aria-label="Geschichte und Meilensteine der Wieländer Wühlmäuse">
+          ${teamTimeline.map((item, idx) => `
+            <div class="timeline-item" data-timeline-index="${idx}">
+              <div class="timeline-marker">
+                <span class="timeline-dot"></span>
+                <span class="timeline-line"></span>
+              </div>
+              <div class="timeline-body">
+                <div class="timeline-header">
+                  <span class="timeline-year">${item.year}</span>
+                  <span class="timeline-tag">${item.tag}</span>
+                </div>
+                <h4 class="timeline-title">${item.title}</h4>
+                <p class="timeline-desc">${item.description}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
       </div>
-    </div>
     </section>
     <section class="instagram-section" aria-labelledby="instagram-heading">
       <div class="section-heading"><p class="eyebrow">04 / SOCIAL</p><h2 id="instagram-heading">Instagram</h2></div>
