@@ -664,10 +664,18 @@ em { color: #788d1d; font-style: normal; }
   color: var(--muted);
 }
 .notebook-notes-content {
-  background: rgba(238, 240, 231, .35);
+  position: relative;
+  background: rgba(238, 240, 231, .4);
   border-left: 3px solid #ced8b8;
   padding: 14px 18px;
   border-radius: 0 4px 4px 0;
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), background .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.notebook-notes-content:hover {
+  transform: translateX(4px) translateY(-1px);
+  background: rgba(212, 243, 74, .12);
+  border-left-color: #013b13;
+  box-shadow: -2px 4px 12px rgba(22, 32, 29, .06);
 }
 .notebook-notes-content p {
   margin: 0;
