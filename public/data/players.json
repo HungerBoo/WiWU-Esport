@@ -1088,24 +1088,24 @@
           "resultDisplay": "21. Platz / 32"
         },
         {
-          "tournamentName": "DSDT - Deutschland sucht den Top Spieler #173",
-          "eventName": "Turnier",
-          "isOnline": true,
-          "placement": 17,
-          "totalEntrants": 115,
-          "date": "2026-08-17",
-          "url": "https://www.start.gg/tournament/dsdt-deutschland-sucht-den-top-spieler-173",
-          "resultDisplay": "17. Platz / 115"
+          "tournamentName": "DOWNTOWN SMASH #8",
+          "eventName": "SINGLES 1v1 - Main",
+          "isOnline": false,
+          "placement": 33,
+          "totalEntrants": 96,
+          "date": "2026-07-04",
+          "url": "https://www.start.gg/tournament/downtown-smash-8",
+          "resultDisplay": "33. Platz / 96"
         },
         {
-          "tournamentName": "DSDT - Deutschland sucht den Top Spieler #172",
-          "eventName": "Turnier",
-          "isOnline": true,
+          "tournamentName": "TGM Mini",
+          "eventName": "Singles",
+          "isOnline": false,
           "placement": 25,
-          "totalEntrants": 127,
-          "date": "2026-08-10",
-          "url": "https://www.start.gg/tournament/dsdt-deutschland-sucht-den-top-spieler-172",
-          "resultDisplay": "25. Platz / 127"
+          "totalEntrants": 64,
+          "date": "2026-05-09",
+          "url": "https://www.start.gg/tournament/tgm-mini",
+          "resultDisplay": "25. Platz / 64"
         }
       ]
     },

@@ -21,6 +21,8 @@ export const profile = {
   links: [
     { label: 'Prime League', url: 'https://www.primeleague.gg/de/users/2163142-fal4fl' },
     { label: 'OP.GG', url: 'https://www.op.gg/summoners/euw/Twisted%20Falafl-CRIT' },
-    { label: 'Supermajor', url: 'https://www.supermajor.gg/ultimate/player/Falafl?id=S4922057' }
+    { label: 'Supermajor', url: 'https://www.supermajor.gg/ultimate/player/Falafl?id=S4922057' },
+    { label: 'Twitch', url: 'https://www.twitch.tv/fal4fl' },
+    { label: 'Insta', url: 'https://www.instagram.com/miot_falafl/' }
   ]
 };

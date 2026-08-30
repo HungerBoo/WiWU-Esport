@@ -461,7 +461,7 @@ async function updateStatsForPlayer(player, eventCache) {
 const RECENT_TOURNAMENTS_QUERY = `
   query RecentTournaments($userId: ID!) {
     user(id: $userId) {
-      events(query: { perPage: 12, page: 1 }) {
+      events(query: { perPage: 25, page: 1 }) {
         nodes {
           id
           name
@@ -491,9 +491,10 @@ async function fetchRecentTournaments(userId) {
   try {
     const data = await requestStartGG(RECENT_TOURNAMENTS_QUERY, { userId });
     const nodes = data.user?.events?.nodes || [];
-    const ultimateEvents = nodes.filter(isUltimateEvent);
+    // Only include offline/local Super Smash Bros. Ultimate tournaments
+    const offlineUltimateEvents = nodes.filter(e => isUltimateEvent(e) && !e.tournament?.isOnline);
 
-    return ultimateEvents.slice(0, 3).map((e) => {
+    return offlineUltimateEvents.slice(0, 3).map((e) => {
       const placement = e.userEntrant?.standing?.placement ?? null;
       const totalEntrants = e.numEntrants ?? null;
       const dateStr = e.startAt ? new Date(e.startAt * 1000).toISOString().split('T')[0] : null;
@@ -503,7 +504,7 @@ async function fetchRecentTournaments(userId) {
       return {
         tournamentName: e.tournament?.name || 'Turnier',
         eventName: e.name || 'Singles',
-        isOnline: Boolean(e.tournament?.isOnline),
+        isOnline: false,
         placement,
         totalEntrants,
         date: dateStr,

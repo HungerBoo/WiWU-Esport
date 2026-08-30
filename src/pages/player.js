@@ -348,14 +348,14 @@ function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
       ${recentTournaments.length > 0 ? `
         <div class="smash-tournaments-box">
           <div class="smash-tournaments-header">
-            <strong>Letzte gespielte Turniere (start.gg)</strong>
-            <span class="smash-tournaments-subtitle">Ergebnisse der letzten Auftritte</span>
+            <strong>Letzte gespielte Offline-Turniere (start.gg)</strong>
+            <span class="smash-tournaments-subtitle">Ergebnisse der letzten Offline-Auftritte</span>
           </div>
           <div class="smash-tournaments-grid">
             ${recentTournaments.map(t => `
               <div class="smash-tournament-card">
                 <div class="smash-tournament-top">
-                  <span class="smash-tournament-mode">${t.isOnline ? 'Online' : 'Offline'} • ${t.eventName}</span>
+                  <span class="smash-tournament-mode">Offline • ${t.eventName}</span>
                   <time class="smash-tournament-date">${formatDate(t.date)}</time>
                 </div>
                 ${t.url 

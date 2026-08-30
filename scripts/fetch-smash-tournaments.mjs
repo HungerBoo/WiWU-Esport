@@ -23,7 +23,7 @@ function isUltimateEvent(event) {
 const RECENT_TOURNAMENTS_QUERY = `
   query RecentTournaments($userId: ID!) {
     user(id: $userId) {
-      events(query: { perPage: 12, page: 1 }) {
+      events(query: { perPage: 25, page: 1 }) {
         nodes {
           id
           name
@@ -59,7 +59,7 @@ for (const player of playerData.smash || []) {
     body: JSON.stringify({ query: RECENT_TOURNAMENTS_QUERY, variables: { userId: String(userId) } })
   });
   const tData = await tRes.json();
-  const nodes = (tData.data?.user?.events?.nodes || []).filter(isUltimateEvent);
+  const nodes = (tData.data?.user?.events?.nodes || []).filter(e => isUltimateEvent(e) && !e.tournament?.isOnline);
 
   player.recentTournaments = nodes.slice(0, 3).map(e => {
     const slug = e.tournament?.slug;
@@ -67,7 +67,7 @@ for (const player of playerData.smash || []) {
     return {
       tournamentName: e.tournament?.name || 'Turnier',
       eventName: e.name || 'Singles',
-      isOnline: Boolean(e.tournament?.isOnline),
+      isOnline: false,
       placement: e.userEntrant?.standing?.placement ?? null,
       totalEntrants: e.numEntrants ?? null,
       date: e.startAt ? new Date(e.startAt * 1000).toISOString().split('T')[0] : null,
@@ -78,7 +78,7 @@ for (const player of playerData.smash || []) {
     };
   });
 
-  console.log('✓', player.name, '->', player.recentTournaments.length, 'Turniere hinzugefügt:');
+  console.log('✓', player.name, '->', player.recentTournaments.length, 'Offline-Turniere hinzugefügt:');
   for (const t of player.recentTournaments) {
     console.log('  •', t.tournamentName, '|', t.eventName, ':', t.resultDisplay, '| URL:', t.url);
   }
