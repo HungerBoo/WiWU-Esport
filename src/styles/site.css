@@ -180,9 +180,32 @@ h1 { font-size: clamp(48px, 8vw, 104px); line-height: .92; letter-spacing: -.04e
 h2 { font-size: clamp(36px, 5vw, 64px); line-height: .95; letter-spacing: -.04em; margin-bottom: 28px; }
 em { color: #788d1d; font-style: normal; }
 .hero-copy { max-width: 450px; font-size: 19px; color: var(--muted); }
-.news-section, .story-grid, .history-grid, .roster-section, .meet-the-team-section, .instagram-section { border-top: 1px solid var(--line); padding-top: 24px; margin-top: 48px; }
+.news-section, .paulaner-section, .story-grid, .history-grid, .roster-section, .meet-the-team-section, .instagram-section { border-top: 1px solid var(--line); padding-top: 24px; margin-top: 48px; }
 .news-section, .roster-section { margin-top: 28px; }
 .section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+
+/* Paulanergarten News Section */
+.paulaner-section .section-heading { margin-bottom: 24px; }
+.paulaner-eyebrow-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.paulaner-eyebrow-row .eyebrow { margin: 0; }
+.paulaner-wip-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--acid); color: var(--ink); padding: 2px 8px; border: 1px solid rgba(22, 32, 29, .25); animation: wip-pulse 3s ease-in-out infinite; }
+@keyframes wip-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.03); opacity: .85; } }
+.paulaner-lead { max-width: 420px; color: var(--muted); font-size: 14px; line-height: 1.45; margin: 0; align-self: end; }
+.paulaner-wip-note { display: block; font-family: 'DM Mono', monospace; font-size: 11px; color: #788d1d; margin-top: 4px; }
+.paulaner-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.paulaner-card { background: var(--paper); border: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; position: relative; transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.paulaner-card:hover { transform: translateY(-3px); background: #fbfcf8; border-color: var(--ink); box-shadow: 4px 6px 0 rgba(22, 32, 29, .1); }
+.paulaner-card-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.paulaner-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 3px 8px; }
+.paulaner-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+.paulaner-card-body { display: flex; flex-direction: column; gap: 6px; }
+.paulaner-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.paulaner-card-body h3 { font-size: 18px; line-height: 1.15; margin: 0; color: var(--ink); }
+.paulaner-card-body p { color: var(--muted); font-size: 13px; line-height: 1.45; margin: 0; }
+.paulaner-card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--line); padding-top: 10px; margin-top: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+.paulaner-card-footer .paulaner-meta { color: var(--ink); font-weight: 500; }
+.paulaner-card-footer .paulaner-icon { color: var(--acid); background: var(--ink); width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
 .news-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
 .news-card { min-height: 190px; border-right: 1px solid var(--line); padding: 22px; text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; transition: background .2s, transform .2s; }
 .news-card:first-child { border-left: 1px solid var(--line); }
@@ -317,7 +340,7 @@ em { color: #788d1d; font-style: normal; }
 .site-footer { max-width: var(--max); margin: auto; padding: 25px 28px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; }
 .social-links { display: flex; gap: 18px; }
 @media (prefers-reduced-motion: reduce) { .ambient-symbol { animation: none; } }
-@media (max-width: 760px) { .ambient-symbol:nth-child(n + 5) { display: none; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid, .meet-the-team-grid { display: block; } .meet-the-team-carousel-col { margin-bottom: 40px; } .team-photo-frame { max-width: 300px; } .team-carousel-controls { max-width: 300px; } .team-roster-cards { grid-template-columns: 1fr; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { display: block; padding-top: 70px; } .game-hero-heading { display: flex; align-items: center; gap: 18px; } .game-hero h1 { flex: 1; font-size: clamp(42px, 12vw, 64px); } .game-hero-heading .game-logo { flex: 0 0 35%; width: auto; height: 100px; } .game-hero-feature.has-team-image { grid-template-columns: 1fr; gap: 30px; } .game-feature-gallery { width: min(100% - 20px, 420px); justify-self: start; min-height: 220px; transform: rotate(.8deg); } .history-images { align-self: auto; gap: 30px; margin-bottom: 42px; } .history-images img { flex: none; height: min(58vw, 260px); } .intro-carousel { margin-top: 24px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
+@media (max-width: 760px) { .ambient-symbol:nth-child(n + 5) { display: none; } main { padding: 0 20px 70px; } .hero { min-height: 480px; } .section-heading, .story-grid, .history-grid, .meet-the-team-grid { display: block; } .paulaner-grid { grid-template-columns: 1fr; } .meet-the-team-carousel-col { margin-bottom: 40px; } .team-photo-frame { max-width: 300px; } .team-carousel-controls { max-width: 300px; } .team-roster-cards { grid-template-columns: 1fr; } .story-copy { margin-top: 40px; } .news-grid { display: flex; overflow-x: auto; } .news-card { min-width: 230px; } .prime-stats { grid-template-columns: repeat(2, 1fr); } .prime-stats div:nth-child(3) { border-left: 1px solid var(--line); } .prime-season { display: block; } .prime-season > div:last-child { margin-top: 24px; } .roster-grid { grid-template-columns: repeat(2, 1fr); } .game-hero { display: block; padding-top: 70px; } .game-hero-heading { display: flex; align-items: center; gap: 18px; } .game-hero h1 { flex: 1; font-size: clamp(42px, 12vw, 64px); } .game-hero-heading .game-logo { flex: 0 0 35%; width: auto; height: 100px; } .game-hero-feature.has-team-image { grid-template-columns: 1fr; gap: 30px; } .game-feature-gallery { width: min(100% - 20px, 420px); justify-self: start; min-height: 220px; transform: rotate(.8deg); } .history-images { align-self: auto; gap: 30px; margin-bottom: 42px; } .history-images img { flex: none; height: min(58vw, 260px); } .intro-carousel { margin-top: 24px; } .site-footer { padding: 20px; display: block; } .social-links { margin-top: 12px; } }
 @media (max-width: 760px) {
   .home-hero { min-height: calc(100svh - 64px); align-items: flex-end; padding: 48px 20px 30px; }
   .home-hero::before { background: linear-gradient(to bottom, rgba(1, 59, 19, .08) 0%, rgba(1, 59, 19, .5) 44%, rgba(1, 59, 19, .96) 78%, var(--logo-bg) 100%); }

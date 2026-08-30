@@ -1,13 +1,10 @@
 import { renderLayout } from '../components/layout.js';
-import { games, primeLeague, site, teamShowcase } from '../content/site-data.js';
+import { paulanergartenNews, site, teamShowcase } from '../content/site-data.js';
 
 const oldLogoImage = '/images/Geschichte-alt.png';
 const newLogoImage = '/images/Geschichte-neu.png';
 
 export function renderHome() {
-  const seasonStats = primeLeague.stats.recentSeason.values;
-  const lifetimeStats = primeLeague.stats.lifetime.values;
-
   renderLayout(`
     <section class="home-hero">
       <div class="home-hero-media" aria-hidden="true"><img src="/images/Geschichte-neu.png" alt=""></div>
@@ -22,24 +19,7 @@ export function renderHome() {
       </div>
       <a class="home-hero-social" href="${siteInstagramUrl()}" target="_blank" rel="noreferrer">Instagram <span>@wiwu.esport ↗</span></a>
     </section>
-    <section class="news-section" aria-labelledby="prime-league-heading">
-      <div class="section-heading"><p class="eyebrow">01 / PRIME LEAGUE</p><h2 id="prime-league-heading">Unser Team</h2></div>
-      <div class="stats-toggle" role="tablist" aria-label="Statistikzeitraum">
-        <button type="button" class="stats-toggle-button active" role="tab" aria-selected="true" data-stats-view="lifetime">Lifetime</button>
-        <button type="button" class="stats-toggle-button" role="tab" aria-selected="false" data-stats-view="recentSeason">Most recent season</button>
-      </div>
-
-      <div class="prime-stats" id="prime-stats" data-stats-container></div>
-      <div class="prime-season" data-season-summary>
-        <div><p class="eyebrow">${primeLeague.currentSeason.toUpperCase()}</p><h3>${seasonStats[0][1]}</h3></div>
-        <div><strong>${seasonStats[1][1]}</strong><span>${seasonStats[2][1]} Punkte</span></div>
-      </div>
-      <a class="text-link" href="${primeLeague.url}" target="_blank" rel="noreferrer">Team auf Prime League ansehen <span>↗</span></a>
-    </section>
-    <section class="story-grid">
-      <div><p class="eyebrow">02 / LETZTE ERGEBNISSE</p><h2>Aktuelle<br><em>Matches.</em></h2></div>
-      <div class="story-copy"><ul class="match-list">${primeLeague.recentMatches.map((match) => `<li>${match}</li>`).join('')}</ul></div>
-    </section>
+    ${renderPaulanergarten(paulanergartenNews)}
     ${renderMeetTheTeam(teamShowcase)}
     <section class="history-grid">
       <div class="history-images">
@@ -47,7 +27,7 @@ export function renderHome() {
         <img src="${newLogoImage}" alt="Neues Logo der Wieländer Wühlmäuse" loading="lazy">
       </div>
       <div>
-    <p class="eyebrow">04 / TEAMPROFIL</p>
+    <p class="eyebrow">03 / TEAMPROFIL</p>
 
     <h2>Wieländer<br><em>Wühlmäuse.</em></h2>
 
@@ -71,7 +51,7 @@ export function renderHome() {
     </div>
     </section>
     <section class="instagram-section" aria-labelledby="instagram-heading">
-      <div class="section-heading"><p class="eyebrow">05 / SOCIAL</p><h2 id="instagram-heading">Instagram</h2></div>
+      <div class="section-heading"><p class="eyebrow">04 / SOCIAL</p><h2 id="instagram-heading">Instagram</h2></div>
       <div class="instagram-embed">
         <blockquote class="instagram-media" data-instgrm-permalink="${siteInstagramUrl()}" data-instgrm-version="14"></blockquote>
       </div>
@@ -79,12 +59,45 @@ export function renderHome() {
     </section>
   `, 'home');
 
-  renderStats('lifetime');
-  document.querySelectorAll('[data-stats-view]').forEach((button) => {
-    button.addEventListener('click', () => renderStats(button.dataset.statsView));
-  });
   setupTeamPhotoCarousel(teamShowcase.photos);
   loadInstagramEmbed();
+}
+
+function renderPaulanergarten(newsItems) {
+  return `
+    <section class="paulaner-section" aria-labelledby="paulaner-heading">
+      <div class="section-heading">
+        <div>
+          <div class="paulaner-eyebrow-row">
+            <p class="eyebrow">01 / LATEST NEWS & FEEDS</p>
+            <span class="paulaner-wip-badge">WIP • nur Bullshit for now</span>
+          </div>
+          <h2 id="paulaner-heading">Neues ausm<br><em>Paulanergarten.</em></h2>
+        </div>
+        <p class="paulaner-lead">Frische Updates von der Kluft bis zum Smash-Bracket – Live-Feeds, Rank-Ups und Spieltags-Berichte. <small class="paulaner-wip-note">(Hier entsteht die automatische Riot-, Prime League- & Start.gg-Anbindung)</small></p>
+      </div>
+
+      <div class="paulaner-grid">
+        ${newsItems.map((item) => `
+          <article class="paulaner-card" data-category="${item.category}">
+            <div class="paulaner-card-header">
+              <span class="paulaner-badge">${item.badge}</span>
+              <time class="paulaner-date">${item.date}</time>
+            </div>
+            <div class="paulaner-card-body">
+              <span class="paulaner-tag">${item.tag}</span>
+              <h3>${item.title}</h3>
+              <p>${item.description}</p>
+            </div>
+            <div class="paulaner-card-footer">
+              <span class="paulaner-meta">${item.meta}</span>
+              <span class="paulaner-icon">↗</span>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+  `;
 }
 
 function renderMeetTheTeam(showcase) {

@@ -101,8 +101,38 @@ export const primeLeague = {
   url: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
 };
 
+export const paulanergartenNews = [
+  {
+    tag: 'Riot API / Rankup',
+    category: 'lol',
+    title: 'Falafl grindet durch Smurf-Queue',
+    date: '30.08.2026',
+    description: 'Neues LP-Hoch in der Solo-Queue: Falafl sichert sich nach einer 7er-Winstreak den nächsten Division-Aufstieg. Statistiken werden demnächst live über die Riot API synchronisiert.',
+    meta: '+24 LP • Master Promo',
+    badge: 'Rank Up'
+  },
+  {
+    tag: 'Prime League / Matchday',
+    category: 'prime',
+    title: 'Nächster Spieltag in Division 7.5',
+    date: '28.08.2026',
+    description: 'Die Vorbereitungen auf den kommenden Prime League Spieltag laufen auf Hochtouren. Aktuelle Matchups und VODs folgen in Kürze direkt aus dem Ligensystem.',
+    meta: 'Div 7.5 • Best of 3',
+    badge: 'Matchday'
+  },
+  {
+    tag: 'SSBU / Tourney',
+    category: 'smash',
+    title: 'Martin dominiert im Smash Local',
+    date: '25.08.2026',
+    description: 'Starke Vorstellung im Bracket: Martin holt mit Game & Watch Platz 3 auf dem regionalen Major. Start.gg Bracket-Feeds werden automatisch eingebunden.',
+    meta: 'Top 3 Finish • 4-1 Set Count',
+    badge: 'Tournament'
+  }
+];
+
 export const teamShowcase = {
-  eyebrow: '03 / MEET THE TEAM',
+  eyebrow: '02 / MEET THE TEAM',
   title: 'Wühlmäuse',
   subtitle: 'Kader & Athleten.',
   description: 'Ob in der Kluft von Summoner\'s Rift oder auf den europäischen Turnier-Bühnen: Hinter den Wieländer Wühlmäusen stehen engagierte Spieler, Taktiker und Siegener Esport-Größen. Lerne das gesamte Line-up kennen.',

@@ -48,29 +48,14 @@ const main = async () => {
       throw new Error(`Expected HTTP 200, got ${status}`);
     }
 
-    // Check stats container initially contains "Matches" and "44"
-    console.log('Checking initial stats container...');
-    const statsContainerSelector = '[data-stats-container]';
-    await page.waitForSelector(statsContainerSelector);
-    let initialStatsText = await page.evaluate((sel) => document.querySelector(sel).innerText, statsContainerSelector);
-    console.log('Initial stats content:', initialStatsText);
-    if (!initialStatsText.includes('Matches') || !initialStatsText.includes('44')) {
-      throw new Error(`Initial stats do not contain "Matches" and "44". Got: ${initialStatsText}`);
-    }
-
-    // Find and click the "Most recent season" toggle
-    console.log('Clicking the "Most recent season" toggle...');
-    const toggleButtonSelector = '[data-stats-view="recentSeason"]';
-    await page.waitForSelector(toggleButtonSelector);
-    await page.click(toggleButtonSelector);
-
-    // Wait a brief moment or check the values directly
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    let updatedStatsText = await page.evaluate((sel) => document.querySelector(sel).innerText, statsContainerSelector);
-    console.log('Updated stats content:', updatedStatsText);
-    if (!updatedStatsText.includes('Gruppe') || !updatedStatsText.includes('Gruppe 7.5')) {
-      throw new Error(`Updated stats do not contain "Gruppe" and "Gruppe 7.5". Got: ${updatedStatsText}`);
+    // Check Paulanergarten news section
+    console.log('Checking Paulanergarten news section...');
+    const paulanerSectionSelector = '.paulaner-section';
+    await page.waitForSelector(paulanerSectionSelector);
+    let paulanerText = await page.evaluate((sel) => document.querySelector(sel).innerText, paulanerSectionSelector);
+    console.log('Paulanergarten content:', paulanerText);
+    if (!paulanerText.includes('Paulanergarten') || !paulanerText.includes('Rankup') || !paulanerText.includes('Prime League')) {
+      throw new Error(`Paulanergarten section does not contain expected text. Got: ${paulanerText}`);
     }
 
     // Check Instagram blockquote and its permalink
