@@ -457,6 +457,15 @@
         "leaguePoints": 30,
         "wins": 103,
         "losses": 97
+      },
+      {
+        "date": "2026-08-31",
+        "tier": "GOLD",
+        "rank": "IV",
+        "leaguePoints": 54,
+        "totalLp": 1254,
+        "wins": 103,
+        "losses": 106
       }
     ]
   },
@@ -561,6 +570,15 @@
         "leaguePoints": 54,
         "wins": 146,
         "losses": 151
+      },
+      {
+        "date": "2026-08-31",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 32,
+        "totalLp": 1632,
+        "wins": 146,
+        "losses": 152
       }
     ]
   },
