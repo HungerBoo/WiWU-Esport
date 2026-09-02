@@ -484,6 +484,15 @@
         "totalLp": 1093,
         "wins": 106,
         "losses": 114
+      },
+      {
+        "date": "2026-09-02",
+        "tier": "SILVER",
+        "rank": "I",
+        "leaguePoints": 20,
+        "totalLp": 1120,
+        "wins": 110,
+        "losses": 116
       }
     ]
   },

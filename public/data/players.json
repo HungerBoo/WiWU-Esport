@@ -24,7 +24,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "20 LP",
         "totalLp": 2120,
-        "lastUpdated": "2026-09-01T09:26:48.823Z"
+        "lastUpdated": "2026-09-02T08:49:17.999Z"
       },
       "lpHistory": [
         {
@@ -188,7 +188,7 @@
         "tierDisplay": "Platinum IV",
         "lpDisplay": "0 LP",
         "totalLp": 1600,
-        "lastUpdated": "2026-09-01T09:26:49.304Z"
+        "lastUpdated": "2026-09-02T08:49:18.389Z"
       },
       "lpHistory": [
         {
@@ -352,7 +352,7 @@
         "tierDisplay": "Gold III",
         "lpDisplay": "55 LP",
         "totalLp": 1355,
-        "lastUpdated": "2026-09-01T09:26:49.725Z"
+        "lastUpdated": "2026-09-02T08:49:18.771Z"
       },
       "lpHistory": [
         {
@@ -453,16 +453,16 @@
       "puuid": "nkO7La48fUnav8ExqOVe6MGhMbNG8MqrxuZ1QQ6JFw_JPrDJkyFvJ3WUeDux2_6Gn1-cksft-lpJzQ",
       "rank": {
         "tier": "SILVER",
-        "rank": "II",
-        "leaguePoints": 93,
-        "wins": 106,
-        "losses": 114,
-        "winrate": 48,
+        "rank": "I",
+        "leaguePoints": 20,
+        "wins": 110,
+        "losses": 116,
+        "winrate": 49,
         "hotStreak": false,
-        "tierDisplay": "Silver II",
-        "lpDisplay": "93 LP",
-        "totalLp": 1093,
-        "lastUpdated": "2026-09-01T09:26:50.176Z"
+        "tierDisplay": "Silver I",
+        "lpDisplay": "20 LP",
+        "totalLp": 1120,
+        "lastUpdated": "2026-09-02T08:49:19.138Z"
       },
       "lpHistory": [
         {
@@ -581,6 +581,15 @@
           "totalLp": 1093,
           "wins": 106,
           "losses": 114
+        },
+        {
+          "date": "2026-09-02",
+          "tier": "SILVER",
+          "rank": "I",
+          "leaguePoints": 20,
+          "totalLp": 1120,
+          "wins": 110,
+          "losses": 116
         }
       ]
     },
@@ -608,7 +617,7 @@
         "tierDisplay": "Platinum IV",
         "lpDisplay": "0 LP",
         "totalLp": 1600,
-        "lastUpdated": "2026-09-01T09:26:50.640Z"
+        "lastUpdated": "2026-09-02T08:49:19.507Z"
       },
       "lpHistory": [
         {
@@ -754,7 +763,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-09-01T09:26:51.103Z"
+        "lastUpdated": "2026-09-02T08:49:19.895Z"
       },
       "lpHistory": [
         {
@@ -846,7 +855,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "20 LP",
         "totalLp": 2020,
-        "lastUpdated": "2026-09-01T09:26:51.548Z"
+        "lastUpdated": "2026-09-02T08:49:20.268Z"
       },
       "lpHistory": [
         {
@@ -983,7 +992,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "97 LP",
         "totalLp": 2097,
-        "lastUpdated": "2026-09-01T09:26:52.000Z"
+        "lastUpdated": "2026-09-02T08:49:20.791Z"
       },
       "lpHistory": [
         {
@@ -1125,8 +1134,8 @@
       "profile": "https://www.supermajor.gg/ultimate/player/Martin?id=S3678798",
       "startggPlayerId": 3678798,
       "stats": {
-        "All Time": "374-301 (55%)",
-        "Letzte 6 Monate": "75-51 (60%)",
+        "All Time": "380-303 (56%)",
+        "Letzte 6 Monate": "81-53 (60%)",
         "Offline": "54%",
         "Online": "56%"
       },
