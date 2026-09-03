@@ -24,7 +24,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "20 LP",
         "totalLp": 2120,
-        "lastUpdated": "2026-09-02T08:49:17.999Z"
+        "lastUpdated": "2026-09-03T08:58:22.706Z"
       },
       "lpHistory": [
         {
@@ -180,15 +180,15 @@
       "rank": {
         "tier": "PLATINUM",
         "rank": "IV",
-        "leaguePoints": 0,
-        "wins": 134,
+        "leaguePoints": 19,
+        "wins": 135,
         "losses": 147,
         "winrate": 48,
         "hotStreak": false,
         "tierDisplay": "Platinum IV",
-        "lpDisplay": "0 LP",
-        "totalLp": 1600,
-        "lastUpdated": "2026-09-02T08:49:18.389Z"
+        "lpDisplay": "19 LP",
+        "totalLp": 1619,
+        "lastUpdated": "2026-09-03T08:58:23.086Z"
       },
       "lpHistory": [
         {
@@ -325,6 +325,15 @@
           "totalLp": 1600,
           "wins": 134,
           "losses": 147
+        },
+        {
+          "date": "2026-09-03",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 19,
+          "totalLp": 1619,
+          "wins": 135,
+          "losses": 147
         }
       ]
     },
@@ -352,7 +361,7 @@
         "tierDisplay": "Gold III",
         "lpDisplay": "55 LP",
         "totalLp": 1355,
-        "lastUpdated": "2026-09-02T08:49:18.771Z"
+        "lastUpdated": "2026-09-03T08:58:23.471Z"
       },
       "lpHistory": [
         {
@@ -462,7 +471,7 @@
         "tierDisplay": "Silver I",
         "lpDisplay": "20 LP",
         "totalLp": 1120,
-        "lastUpdated": "2026-09-02T08:49:19.138Z"
+        "lastUpdated": "2026-09-03T08:58:23.898Z"
       },
       "lpHistory": [
         {
@@ -617,7 +626,7 @@
         "tierDisplay": "Platinum IV",
         "lpDisplay": "0 LP",
         "totalLp": 1600,
-        "lastUpdated": "2026-09-02T08:49:19.507Z"
+        "lastUpdated": "2026-09-03T08:58:24.320Z"
       },
       "lpHistory": [
         {
@@ -763,7 +772,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-09-02T08:49:19.895Z"
+        "lastUpdated": "2026-09-03T08:58:24.699Z"
       },
       "lpHistory": [
         {
@@ -855,7 +864,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "20 LP",
         "totalLp": 2020,
-        "lastUpdated": "2026-09-02T08:49:20.268Z"
+        "lastUpdated": "2026-09-03T08:58:25.080Z"
       },
       "lpHistory": [
         {
@@ -983,16 +992,16 @@
       "puuid": "vXCKVuo7cWv30ABWDB5KCMk19mcvgXxlgGEIcs-Kci5CbB6iaYQKO0crFxda9bsgSEqrwwCNor0Dfg",
       "rank": {
         "tier": "EMERALD",
-        "rank": "IV",
-        "leaguePoints": 97,
-        "wins": 114,
-        "losses": 111,
+        "rank": "III",
+        "leaguePoints": 36,
+        "wins": 117,
+        "losses": 112,
         "winrate": 51,
-        "hotStreak": false,
-        "tierDisplay": "Emerald IV",
-        "lpDisplay": "97 LP",
-        "totalLp": 2097,
-        "lastUpdated": "2026-09-02T08:49:20.791Z"
+        "hotStreak": true,
+        "tierDisplay": "Emerald III",
+        "lpDisplay": "36 LP",
+        "totalLp": 2136,
+        "lastUpdated": "2026-09-03T08:58:25.458Z"
       },
       "lpHistory": [
         {
@@ -1120,6 +1129,15 @@
           "totalLp": 2097,
           "wins": 114,
           "losses": 111
+        },
+        {
+          "date": "2026-09-03",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 36,
+          "totalLp": 2136,
+          "wins": 117,
+          "losses": 112
         }
       ]
     }
@@ -1162,13 +1180,13 @@
         },
         {
           "tournamentName": "TGM Mini",
-          "eventName": "Ladder",
+          "eventName": "Singles",
           "isOnline": false,
-          "placement": 9,
-          "totalEntrants": 71,
+          "placement": 25,
+          "totalEntrants": 64,
           "date": "2026-05-09",
           "url": "https://www.start.gg/tournament/tgm-mini",
-          "resultDisplay": "9. Platz / 71"
+          "resultDisplay": "25. Platz / 64"
         }
       ],
       "userId": 2366873
