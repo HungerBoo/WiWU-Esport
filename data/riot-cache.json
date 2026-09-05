@@ -294,6 +294,15 @@
         "totalLp": 1600,
         "wins": 135,
         "losses": 148
+      },
+      {
+        "date": "2026-09-05",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 19,
+        "totalLp": 1619,
+        "wins": 136,
+        "losses": 148
       }
     ]
   },
@@ -520,6 +529,15 @@
         "totalLp": 1137,
         "wins": 112,
         "losses": 117
+      },
+      {
+        "date": "2026-09-05",
+        "tier": "GOLD",
+        "rank": "IV",
+        "leaguePoints": 52,
+        "totalLp": 1252,
+        "wins": 117,
+        "losses": 117
       }
     ]
   },
@@ -650,6 +668,15 @@
         "leaguePoints": 17,
         "totalLp": 1617,
         "wins": 147,
+        "losses": 154
+      },
+      {
+        "date": "2026-09-05",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 53,
+        "totalLp": 1653,
+        "wins": 149,
         "losses": 154
       }
     ]
