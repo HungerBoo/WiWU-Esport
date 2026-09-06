@@ -13,7 +13,7 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 - Behavior: page rendering and content are composed from ES modules under `src/`; no inline event handlers are required.
 - Build: Vite reads the four HTML entrypoints from `pages/` and generates a static `dist/` directory containing the four root-level `.html` routes and emitted assets.
 - Local verification: `npm run build` is the production-equivalent check; `npm run dev` and `npm run preview` serve the site locally.
-- Deployment: `.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages for pushes to `main` and manual runs. `CNAME` sets the custom domain to `www.wiwu-esport.de`.
+- Deployment: `.github/workflows/deploy.yml` builds and deploys `dist/` to GitHub Pages for pushes to `main`, manual runs, and automatically after successful runs of `Update player stats`. `CNAME` sets the custom domain to `www.wiwu-esport.de`.
 - Smash stats: `.github/workflows/update-startgg-stats.yml` runs `scripts/update-startgg-stats.mjs` daily (and on manual dispatch) to refresh Smash player `stats` in `public/data/players.json` from the start.gg GraphQL API. The start.gg API token is only ever read from the `STARTGG_API_TOKEN` GitHub secret/environment variable, never committed or logged.
 
 ## File Map
@@ -45,7 +45,7 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
 | `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
 | `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
-| `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes and manual dispatch |
+| `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes, manual dispatch, and after `Update player stats` completion |
 | `CNAME` | Custom-domain configuration marker | Used by the static hosting workflow |
 | `.gitignore` | Ignore rules | Currently empty |
 | `README.md` | Minimal project label (`WiWU-Esport`) | No setup or deployment instructions currently documented |
