@@ -24,7 +24,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "20 LP",
         "totalLp": 2120,
-        "lastUpdated": "2026-09-06T05:26:36.977Z"
+        "lastUpdated": "2026-09-06T08:41:50.617Z"
       },
       "lpHistory": [
         {
@@ -197,7 +197,7 @@
         "tierDisplay": "Gold I",
         "lpDisplay": "75 LP",
         "totalLp": 1575,
-        "lastUpdated": "2026-09-06T05:23:21.751Z"
+        "lastUpdated": "2026-09-06T08:41:51.110Z"
       },
       "lpHistory": [
         {
@@ -397,7 +397,7 @@
         "tierDisplay": "Gold III",
         "lpDisplay": "55 LP",
         "totalLp": 1355,
-        "lastUpdated": "2026-09-06T05:23:22.366Z"
+        "lastUpdated": "2026-09-06T08:41:51.592Z"
       },
       "lpHistory": [
         {
@@ -516,7 +516,7 @@
         "tierDisplay": "Gold IV",
         "lpDisplay": "52 LP",
         "totalLp": 1252,
-        "lastUpdated": "2026-09-06T05:23:22.933Z"
+        "lastUpdated": "2026-09-06T08:41:52.069Z"
       },
       "lpHistory": [
         {
@@ -698,7 +698,7 @@
         "tierDisplay": "Platinum IV",
         "lpDisplay": "25 LP",
         "totalLp": 1625,
-        "lastUpdated": "2026-09-06T05:23:23.592Z"
+        "lastUpdated": "2026-09-06T08:41:52.550Z"
       },
       "lpHistory": [
         {
@@ -871,7 +871,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-09-06T05:23:24.215Z"
+        "lastUpdated": "2026-09-06T08:41:53.034Z"
       },
       "lpHistory": [
         {
@@ -972,7 +972,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "20 LP",
         "totalLp": 2020,
-        "lastUpdated": "2026-09-06T05:23:24.822Z"
+        "lastUpdated": "2026-09-06T08:41:53.514Z"
       },
       "lpHistory": [
         {
@@ -1118,7 +1118,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "36 LP",
         "totalLp": 2136,
-        "lastUpdated": "2026-09-06T05:23:25.345Z"
+        "lastUpdated": "2026-09-06T08:41:54.021Z"
       },
       "lpHistory": [
         {
@@ -1306,13 +1306,13 @@
         },
         {
           "tournamentName": "TGM Mini",
-          "eventName": "Singles",
+          "eventName": "Ladder",
           "isOnline": false,
-          "placement": 25,
-          "totalEntrants": 64,
+          "placement": 9,
+          "totalEntrants": 71,
           "date": "2026-05-09",
           "url": "https://www.start.gg/tournament/tgm-mini",
-          "resultDisplay": "25. Platz / 64"
+          "resultDisplay": "9. Platz / 71"
         }
       ],
       "userId": 2366873
