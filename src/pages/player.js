@@ -62,7 +62,7 @@ export async function renderPlayerPage(playerSlug) {
       <section class="player-profile-hero">
         <div class="player-profile-media">
           <div class="player-hero-photo-frame">
-            <img src="${livePlayer.image}" alt="${livePlayer.name}" loading="eager">
+            <img src="${livePlayer.image}" alt="${livePlayer.name}" loading="eager" decoding="async">
             <div class="player-photo-caption">
               <strong>${livePlayer.gamertag || livePlayer.name}</strong>
               <span>${livePlayer.role}</span>
@@ -191,7 +191,7 @@ export async function renderPlayerPage(playerSlug) {
         <div class="teammates-pill-grid">
           ${allProfiles.map(p => `
             <a href="spielerprofil.html?player=${p.slug}" class="teammate-pill${p.slug === livePlayer.slug ? ' is-active' : ''}">
-              <img src="${p.image}" alt="" aria-hidden="true" onerror="this.src='/images/Wiwu_Logo.jpg'">
+              <img src="${p.image}" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.src='/images/Wiwu_Logo.jpg'">
               <div>
                 <strong>${p.gamertag}</strong>
                 <span>${p.role}</span>

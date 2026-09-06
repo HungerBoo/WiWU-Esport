@@ -7,7 +7,7 @@ export function renderPlayerCard({ slug, name, role, birthDate, image, profile, 
       <div class="player-card-inner">
         <button class="player-card-front" type="button" aria-label="Details zu ${name} anzeigen">
           <div class="player-card-img-wrap">
-            <img src="${image}" alt="${name}" loading="lazy">
+            <img src="${image}" alt="${name}" loading="lazy" decoding="async">
           </div>
           <span class="player-card-overlay">
             <span class="player-card-role-tag">${role}</span>

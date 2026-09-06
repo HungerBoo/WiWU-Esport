@@ -217,7 +217,7 @@ function setupSmashLeaderboard(players) {
           <a class="smash-leaderboard-row" href="${player.profile || '#'}" target="_blank" rel="noreferrer">
             <div class="smash-player-cell">
               <span class="smash-placement">#${String(index + 1).padStart(2, '0')}</span>
-              <img src="${player.image}" alt="${player.name}" loading="lazy" onerror="this.src='/images/Wiwu_Logo.jpg'">
+              <img src="${player.image}" alt="${player.name}" loading="lazy" decoding="async" onerror="this.src='/images/Wiwu_Logo.jpg'">
               <div><strong>${player.name}</strong><span>${player.role}</span></div>
             </div>
             <div class="smash-stat-cell"><strong>${player.stats?.['Letzte 6 Monate'] || 'N/A'}</strong><span>Satzbilanz</span></div>

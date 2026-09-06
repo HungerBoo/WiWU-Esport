@@ -24,8 +24,8 @@ export function renderHome() {
     ${renderPaulanergarten(paulanergartenNews)}
     <section class="history-grid">
       <div class="history-images">
-        <img src="${oldLogoImage}" alt="Altes Branding der Wieländer Wühlmäuse" loading="lazy">
-        <img src="${newLogoImage}" alt="Neues Logo der Wieländer Wühlmäuse" loading="lazy">
+        <img src="${oldLogoImage}" alt="Altes Branding der Wieländer Wühlmäuse" loading="lazy" decoding="async">
+        <img src="${newLogoImage}" alt="Neues Logo der Wieländer Wühlmäuse" loading="lazy" decoding="async">
       </div>
       <div class="history-content">
         <p class="eyebrow">03 / TEAMPROFIL & HISTORIE</p>
@@ -226,7 +226,7 @@ function renderMeetTheTeam(showcase) {
               <div class="team-carousel-viewport">
                 ${photos.map((photo, index) => `
                   <figure class="team-carousel-slide${index === 0 ? ' is-active' : ''}" data-slide-index="${index}">
-                    <img src="${photo.src}" alt="${photo.alt}" loading="lazy">
+                    <img src="${photo.src}" alt="${photo.alt}" loading="lazy" decoding="async">
                   </figure>
                 `).join('')}
               </div>
