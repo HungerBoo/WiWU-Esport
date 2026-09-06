@@ -1,6 +1,6 @@
 import { renderPlayerCard } from '../components/cards.js';
 import { renderLayout } from '../components/layout.js';
-import { games } from '../content/site-data.js';
+import { games, site } from '../content/site-data.js';
 
 const PLAYER_COLORS = {
   falafl: '#013b13',
@@ -59,6 +59,9 @@ export async function renderGame(gameKey) {
           </div>
           <div class="leaderboard-heading-meta">
             <span class="leaderboard-live-badge">Riot API Live</span>
+            <button type="button" class="rank-refresh-btn" data-league-refresh-all-btn aria-label="Alle Spieler über Riot API aktualisieren">
+              <span class="refresh-text">Alle aktualisieren</span>
+            </button>
           </div>
         </div>
 
@@ -231,77 +234,93 @@ function parseWinrate(record = '') {
   return Number(record.match(/\((\d+)%\)/)?.[1]) || 0;
 }
 
+function showToast(message) {
+  let toast = document.querySelector('.player-feedback-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'player-feedback-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('is-active');
+  setTimeout(() => toast.classList.remove('is-active'), 3200);
+}
+
 function setupLeaderboardAndGraph(leaguePlayers) {
+  let currentPlayers = [...leaguePlayers];
   const leaderboardListEl = document.querySelector('[data-leaderboard-list]');
-  if (!leaderboardListEl || !leaguePlayers?.length) return;
+  const refreshAllBtn = document.querySelector('[data-league-refresh-all-btn]');
+  if (!leaderboardListEl || !currentPlayers?.length) return;
 
-  // Sort players by totalLp descending
-  const sortedPlayers = [...leaguePlayers].sort((a, b) => {
-    const lpA = a.rank?.totalLp ?? 0;
-    const lpB = b.rank?.totalLp ?? 0;
-    return lpB - lpA;
-  });
+  const updateDisplay = () => {
+    // Sort players by totalLp descending
+    const sortedPlayers = [...currentPlayers].sort((a, b) => {
+      const lpA = a.rank?.totalLp ?? 0;
+      const lpB = b.rank?.totalLp ?? 0;
+      return lpB - lpA;
+    });
 
-  // Ensure default active slugs contains all available players
-  activeLeaderboardSlugs = new Set(sortedPlayers.map(p => p.slug));
+    // Render Leaderboard list
+    leaderboardListEl.innerHTML = sortedPlayers.map((player, index) => {
+      const rank = player.rank || {
+        tier: 'UNRANKED',
+        rank: '',
+        tierDisplay: 'Unranked',
+        lpDisplay: '0 LP',
+        winrate: 0,
+        wins: 0,
+        losses: 0
+      };
 
-  // Render Leaderboard list
-  leaderboardListEl.innerHTML = sortedPlayers.map((player, index) => {
-    const rank = player.rank || {
-      tier: 'UNRANKED',
-      rank: '',
-      tierDisplay: 'Unranked',
-      lpDisplay: '0 LP',
-      winrate: 0,
-      wins: 0,
-      losses: 0
-    };
+      const color = PLAYER_COLORS[player.slug] || DEFAULT_COLOR;
+      const isTop3 = index < 3;
+      const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
 
-    const color = PLAYER_COLORS[player.slug] || DEFAULT_COLOR;
-    const isTop3 = index < 3;
-    const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
-
-    return `
-      <div class="leaderboard-row${rankClass}" data-player-slug="${player.slug}">
-        <div class="leaderboard-player-cell">
-          <span class="leaderboard-rank-pos">#0${index + 1}</span>
-          <div class="leaderboard-avatar-wrap">
-            <img src="${player.image}" alt="${player.name}" class="leaderboard-avatar" onerror="this.src='/images/Wiwu_Logo.jpg'">
-            <span class="leaderboard-color-indicator" style="background-color: ${color};" title="Farbe im Chart"></span>
-          </div>
-          <div class="leaderboard-name-block">
-            <a href="${player.opgg || '#'}" class="leaderboard-player-link" target="_blank" rel="noreferrer" title="${player.name} auf OP.GG aufrufen">
-              <strong>${player.name}</strong>
-            </a>
-            <div class="leaderboard-sublinks">
-              <span class="leaderboard-role-tag">${player.role}</span>
-              <span class="dot-sep">•</span>
-              <a href="spielerprofil.html?player=${player.slug}" class="leaderboard-profile-link">Profil ↗</a>
+      return `
+        <div class="leaderboard-row${rankClass}" data-player-slug="${player.slug}">
+          <div class="leaderboard-player-cell">
+            <span class="leaderboard-rank-pos">#0${index + 1}</span>
+            <div class="leaderboard-avatar-wrap">
+              <img src="${player.image}" alt="${player.name}" class="leaderboard-avatar" onerror="this.src='/images/Wiwu_Logo.jpg'">
+              <span class="leaderboard-color-indicator" style="background-color: ${color};" title="Farbe im Chart"></span>
+            </div>
+            <div class="leaderboard-name-block">
+              <a href="${player.opgg || '#'}" class="leaderboard-player-link" target="_blank" rel="noreferrer" title="${player.name} auf OP.GG aufrufen">
+                <strong>${player.name}</strong>
+              </a>
+              <div class="leaderboard-sublinks">
+                <span class="leaderboard-role-tag">${player.role}</span>
+                <span class="dot-sep">•</span>
+                <a href="spielerprofil.html?player=${player.slug}" class="leaderboard-profile-link">Profil ↗</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="leaderboard-tier-cell">
-          <div class="leaderboard-tier-badge" data-tier="${(rank.tier || 'unranked').toLowerCase()}">
-            <img src="/images/ranks/${(rank.tier || 'unranked').toLowerCase()}.png" alt="" class="leaderboard-tier-icon" onerror="this.style.display='none';">
-            <span class="tier-name">${rank.tierDisplay}</span>
+          <div class="leaderboard-tier-cell">
+            <div class="leaderboard-tier-badge" data-tier="${(rank.tier || 'unranked').toLowerCase()}">
+              <img src="/images/ranks/${(rank.tier || 'unranked').toLowerCase()}.png" alt="" class="leaderboard-tier-icon" onerror="this.style.display='none';">
+              <span class="tier-name">${rank.tierDisplay}</span>
+            </div>
+            <span class="tier-lp-text">${rank.lpDisplay}</span>
           </div>
-          <span class="tier-lp-text">${rank.lpDisplay}</span>
-        </div>
 
-        <div class="leaderboard-winrate-cell">
-          <strong class="wr-percent">${rank.winrate}%</strong>
-          <div class="wr-mini-bar">
-            <div class="wr-mini-fill" style="width: ${rank.winrate}%;"></div>
+          <div class="leaderboard-winrate-cell">
+            <strong class="wr-percent">${rank.winrate}%</strong>
+            <div class="wr-mini-bar">
+              <div class="wr-mini-fill" style="width: ${rank.winrate}%;"></div>
+            </div>
+            <span class="wr-record">${rank.wins}W / ${rank.losses}L</span>
           </div>
-          <span class="wr-record">${rank.wins}W / ${rank.losses}L</span>
         </div>
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
 
-  // Initial draw of multi-player chart and legend
-  renderMultiPlayerChartAndLegend(sortedPlayers);
+    renderMultiPlayerChartAndLegend(sortedPlayers);
+  };
+
+  // Ensure default active slugs contains all available players
+  activeLeaderboardSlugs = new Set(currentPlayers.map(p => p.slug));
+  updateDisplay();
 
   // Timeframe selector buttons
   document.querySelectorAll('[data-lb-timeframe]').forEach(btn => {
@@ -318,20 +337,103 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const labelEl = document.querySelector('[data-lb-range-label]');
       if (labelEl) labelEl.textContent = rangeLabels[tf] || '';
 
-      renderMultiPlayerChartAndLegend(sortedPlayers);
+      updateDisplay();
     });
   });
 
   // Select all / Deselect all
   document.querySelector('[data-legend-select-all]')?.addEventListener('click', () => {
-    activeLeaderboardSlugs = new Set(sortedPlayers.map(p => p.slug));
-    renderMultiPlayerChartAndLegend(sortedPlayers);
+    activeLeaderboardSlugs = new Set(currentPlayers.map(p => p.slug));
+    updateDisplay();
   });
 
   document.querySelector('[data-legend-deselect-all]')?.addEventListener('click', () => {
     activeLeaderboardSlugs.clear();
-    renderMultiPlayerChartAndLegend(sortedPlayers);
+    updateDisplay();
   });
+
+  // Refresh All Button Handler
+  if (refreshAllBtn) {
+    refreshAllBtn.addEventListener('click', async () => {
+      if (refreshAllBtn.classList.contains('is-loading')) return;
+
+      refreshAllBtn.classList.add('is-loading');
+      refreshAllBtn.querySelector('.refresh-text').textContent = 'Synchronisiere ...';
+
+      try {
+        let liveUpdated = false;
+
+        // If Cloudflare proxy is configured
+        if (site.riotProxyUrl) {
+          const updatePromises = currentPlayers.map(async (player) => {
+            if (!player.riotId && !player.puuid) return;
+            const params = player.puuid
+              ? `puuid=${encodeURIComponent(player.puuid)}`
+              : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
+
+            try {
+              const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}`);
+              if (proxyRes.ok) {
+                const freshRank = await proxyRes.json();
+                if (freshRank && freshRank.tier) {
+                  player.rank = freshRank;
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  const todaySnapshot = {
+                    date: todayStr,
+                    tier: freshRank.tier,
+                    rank: freshRank.rank,
+                    leaguePoints: freshRank.leaguePoints,
+                    totalLp: freshRank.totalLp,
+                    wins: freshRank.wins,
+                    losses: freshRank.losses
+                  };
+
+                  player.lpHistory = [
+                    ...(player.lpHistory || []).filter(e => e.date !== todayStr),
+                    todaySnapshot
+                  ].sort((a, b) => a.date.localeCompare(b.date));
+                  liveUpdated = true;
+                }
+              }
+            } catch (e) {
+              console.warn(`Fehler beim Aktualisieren von ${player.name}:`, e);
+            }
+          });
+
+          await Promise.all(updatePromises);
+        }
+
+        // Fallback / standard sync with published players.json
+        if (!liveUpdated) {
+          const res = await fetch(`/data/players.json?nocache=${Date.now()}`);
+          if (res.ok) {
+            const freshData = await res.json();
+            const freshLeague = freshData.league || [];
+            currentPlayers.forEach((p, idx) => {
+              const match = freshLeague.find(fl => (fl.slug || '').toLowerCase() === (p.slug || '').toLowerCase());
+              if (match) {
+                currentPlayers[idx] = { ...p, ...match };
+              }
+            });
+          }
+        }
+
+        updateDisplay();
+        showToast('✓ Alle Spieler-Statistiken erfolgreich aktualisiert!');
+      } catch (err) {
+        console.error('Update all error:', err);
+        showToast('⚠ Aktualisierung abgeschlossen.');
+      } finally {
+        refreshAllBtn.classList.remove('is-loading');
+        refreshAllBtn.querySelector('.refresh-text').textContent = 'Rankings aktualisiert';
+        setTimeout(() => {
+          if (refreshAllBtn.querySelector('.refresh-text')) {
+            refreshAllBtn.querySelector('.refresh-text').textContent = 'Alle aktualisieren';
+          }
+        }, 3000);
+      }
+    });
+  }
 }
 
 function renderMultiPlayerChartAndLegend(players) {

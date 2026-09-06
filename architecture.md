@@ -44,6 +44,7 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `src/pages/game.js` | Reusable game/team page renderer and roster JSON loader | Called for League and Smash |
 | `src/pages/legal.js` | Legal page renderer | Called for `impressum.html` |
 | `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
+| `workers/riot-proxy.js` | Cloudflare Worker proxy script for fast Riot API rank queries without exposing API key | Deployed to Cloudflare Workers with `RIOT_API_KEY` secret |
 | `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
 | `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes, manual dispatch, and after `Update player stats` completion |
 | `CNAME` | Custom-domain configuration marker | Used by the static hosting workflow |

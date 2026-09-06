@@ -1,5 +1,6 @@
 import { renderLayout } from '../components/layout.js';
 import { getProfile, allProfiles } from '../playersites/index.js';
+import { site } from '../content/site-data.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -413,19 +414,55 @@ function setupPlayerInteractions(player) {
       refreshBtn.querySelector('.refresh-text').textContent = 'Synchronisiere ...';
 
       try {
-        // Fetch freshest JSON data with cache-buster
-        const res = await fetch(`/data/players.json?nocache=${Date.now()}`);
-        if (res.ok) {
-          const freshData = await res.json();
-          cachedPlayerData = freshData;
-          const all = [...(freshData.league || []), ...(freshData.smash || [])];
-          const updated = all.find(p => (p.slug || '').toLowerCase() === player.slug.toLowerCase());
+        let liveUpdated = false;
 
-          // UX feedback animation
-          await new Promise(r => setTimeout(r, 650));
+        // If a Riot Proxy Worker URL is configured and this is a League player
+        if (site.riotProxyUrl && (player.riotId || player.puuid)) {
+          const params = player.puuid
+            ? `puuid=${encodeURIComponent(player.puuid)}`
+            : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-          if (updated) {
-            updateLiveStatsUI(updated);
+          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}`);
+          if (proxyRes.ok) {
+            const freshRank = await proxyRes.json();
+            if (freshRank && freshRank.tier) {
+              player.rank = freshRank;
+              
+              // Update today's entry in lpHistory if available
+              const todayStr = new Date().toISOString().split('T')[0];
+              const todaySnapshot = {
+                date: todayStr,
+                tier: freshRank.tier,
+                rank: freshRank.rank,
+                leaguePoints: freshRank.leaguePoints,
+                totalLp: freshRank.totalLp,
+                wins: freshRank.wins,
+                losses: freshRank.losses
+              };
+
+              player.lpHistory = [
+                ...(player.lpHistory || []).filter(e => e.date !== todayStr),
+                todaySnapshot
+              ].sort((a, b) => a.date.localeCompare(b.date));
+
+              updateLiveStatsUI(player);
+              liveUpdated = true;
+            }
+          }
+        }
+
+        // Fallback / standard sync with published players.json
+        if (!liveUpdated) {
+          const res = await fetch(`/data/players.json?nocache=${Date.now()}`);
+          if (res.ok) {
+            const freshData = await res.json();
+            cachedPlayerData = freshData;
+            const all = [...(freshData.league || []), ...(freshData.smash || [])];
+            const updated = all.find(p => (p.slug || '').toLowerCase() === player.slug.toLowerCase());
+
+            if (updated) {
+              updateLiveStatsUI(updated);
+            }
           }
         }
 

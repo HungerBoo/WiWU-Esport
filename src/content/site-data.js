@@ -1,6 +1,8 @@
 export const site = {
   name: 'Wieländer Wühlmäuse',
   description: 'Wieländer Wühlmäuse - Dein Esport Verein aus Siegen.',
+  // Optional Cloudflare Worker Proxy URL for instant live rank updates (e.g., 'https://wiwu-riot-proxy.yourname.workers.dev')
+  riotProxyUrl: 'https://wiwu-rito-updater-proxy.julianflecke.workers.dev/',
   social: {
     instagram: 'https://www.instagram.com/wiwu.esport',
     primeLeague: 'https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse'
