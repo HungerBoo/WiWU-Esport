@@ -209,6 +209,7 @@ em { color: #788d1d; font-style: normal; }
 .paulaner-card-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .paulaner-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 3px 8px; }
 .paulaner-badge[data-type="Rank Up"] { background: var(--ink); color: var(--acid); border: 1px solid var(--ink); }
+.paulaner-badge[data-type="Derank"] { background: #5c1818; color: #ff9999; border: 1px solid #7d2626; }
 .paulaner-badge[data-type="Tournament"] { background: #013b13; color: #fff; }
 .paulaner-badge[data-type="Matchday"] { background: #5a2e05; color: #fff; }
 .paulaner-badge[data-type="Winrate"] { background: #0b3d59; color: #d4f34a; }
