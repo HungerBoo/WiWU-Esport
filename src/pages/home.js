@@ -1,5 +1,5 @@
 import { renderLayout } from '../components/layout.js';
-import { paulanergartenNews, site, teamShowcase, teamTimeline } from '../content/site-data.js';
+import { paulanergartenNews, primeLeague, site, teamShowcase, teamTimeline } from '../content/site-data.js';
 import { generateNewsFeed } from '../content/news-generator.js';
 
 const oldLogoImage = '/images/Geschichte-alt.png';
@@ -140,12 +140,26 @@ async function setupPaulanergarten() {
   let allNews = [];
 
   try {
-    const res = await fetch('/data/news.json', { cache: 'no-store' });
-    if (res.ok) {
-      allNews = await res.json();
+    // 1. Fetch current players.json to dynamically compute the latest news
+    const playerRes = await fetch(`/data/players.json?nocache=${Date.now()}`);
+    if (playerRes.ok) {
+      const playerData = await playerRes.json();
+      allNews = generateNewsFeed(playerData, primeLeague);
     }
   } catch (err) {
-    console.warn('Could not load /data/news.json, keeping fallback news', err);
+    console.warn('Could not dynamically generate news from players.json', err);
+  }
+
+  // 2. Fallback to /data/news.json if dynamic generation did not produce items
+  if (!allNews || allNews.length === 0) {
+    try {
+      const res = await fetch(`/data/news.json?nocache=${Date.now()}`);
+      if (res.ok) {
+        allNews = await res.json();
+      }
+    } catch (err) {
+      console.warn('Could not load /data/news.json, keeping fallback news', err);
+    }
   }
 
   if (!allNews || allNews.length === 0) {

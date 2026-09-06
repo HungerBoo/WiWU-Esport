@@ -23,7 +23,23 @@ export function generateNewsFeed(playerData, primeLeagueData) {
       let description = `Starke SoloQ-Performance: ${player.name} steht bei ${rank.lpDisplay} in ${rank.tierDisplay} mit einer Winrate von ${rank.winrate}% (${rank.wins} Siege / ${rank.losses} Niederlagen).`;
       let badge = 'Rank Up';
 
-      if (rank.tier === 'EMERALD') {
+      // Check for recent rank up by comparing to prior points in lpHistory
+      let isRecentRankUp = false;
+      let prevRankDisplay = null;
+      if (history.length > 1) {
+        const sorted = [...history].sort((a, b) => a.date.localeCompare(b.date));
+        const prev = sorted[sorted.length - 2];
+        if (prev && (prev.tier !== rank.tier || prev.rank !== rank.rank)) {
+          isRecentRankUp = (rank.totalLp || 0) > (prev.totalLp || 0);
+          prevRankDisplay = prev.tier ? `${prev.tier.charAt(0) + prev.tier.slice(1).toLowerCase()} ${prev.rank || ''}`.trim() : null;
+        }
+      }
+
+      if (isRecentRankUp && prevRankDisplay) {
+        title = `Aufstieg: ${player.name} erreicht ${rank.tierDisplay}!`;
+        description = `Glückwunsch zum Division-Aufstieg! ${player.name} steigt von ${prevRankDisplay} auf ${rank.tierDisplay} (${rank.lpDisplay}) auf. Winrate: ${rank.winrate}%.`;
+        badge = 'Rank Up';
+      } else if (rank.tier === 'EMERALD') {
         title = `${player.name} klettert auf ${rank.tierDisplay}`;
         description = `${player.name} behauptet sich in der oberen Elo und grindet durch Emerald mit ${rank.winrate}% Winrate. Nächstes Ziel: Diamond Promo!`;
       } else if (isHighWr) {
