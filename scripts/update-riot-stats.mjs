@@ -101,7 +101,7 @@ async function fetchRiotLeagueEntries(puuid, apiKey) {
   return response.json();
 }
 
-export async function updateRiotStats() {
+export async function updateRiotStats(targetPlayerSlug = null) {
   const apiKey = getRiotApiKey();
 
   if (!apiKey) {
@@ -116,7 +116,16 @@ export async function updateRiotStats() {
 
   const riotCache = await readJson(RIOT_CACHE_PATH, {});
   const todayStr = new Date().toISOString().split('T')[0];
-  const leaguePlayers = playerData.league || [];
+  const allLeaguePlayers = playerData.league || [];
+
+  const leaguePlayers = targetPlayerSlug
+    ? allLeaguePlayers.filter(p => (p.slug || '').toLowerCase() === targetPlayerSlug.toLowerCase())
+    : allLeaguePlayers;
+
+  if (targetPlayerSlug && leaguePlayers.length === 0) {
+    console.log(`Kein League-Spieler mit Slug "${targetPlayerSlug}" gefunden.`);
+    return;
+  }
 
   for (const player of leaguePlayers) {
     const riotId = player.riotId || parseRiotIdFromOpgg(player.opgg);
@@ -215,22 +224,22 @@ function recordLpChange(history, todaySnapshot) {
     return [todaySnapshot];
   }
 
-  const result = [...history].sort((a, b) => a.date.localeCompare(b.date));
-  const lastIndex = result.length - 1;
-  const lastItem = result[lastIndex];
+  // Remove any existing entry for the same day, then sort chronologically
+  const result = history
+    .filter((entry) => entry.date !== todaySnapshot.date)
+    .sort((a, b) => a.date.localeCompare(b.date));
 
-  // If there is already an entry for today, update it
-  if (lastItem.date === todaySnapshot.date) {
-    result[lastIndex] = todaySnapshot;
-    return result;
+  // If LP hasn't changed compared to previous recorded point, keep it or append if history empty
+  if (result.length > 0) {
+    const lastItem = result[result.length - 1];
+    if (lastItem.totalLp === todaySnapshot.totalLp) {
+      // Re-add today's snapshot to represent today's latest check / state
+      result.push(todaySnapshot);
+      return result;
+    }
   }
 
-  // If LP hasn't changed compared to previous recorded point, don't add duplicate
-  if (lastItem.totalLp === todaySnapshot.totalLp) {
-    return result;
-  }
-
-  // LP has changed on a new date -> add new data point
+  // Append the new snapshot for today
   result.push(todaySnapshot);
   return result;
 }
@@ -255,7 +264,8 @@ function parseRiotIdFromOpgg(opggUrl) {
 
 // Run directly if invoked as script
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  updateRiotStats().catch((err) => {
+  const targetSlug = process.argv[2] || null;
+  updateRiotStats(targetSlug).catch((err) => {
     console.error('Riot-Stats Update fehlgeschlagen:', err);
     process.exitCode = 1;
   });
