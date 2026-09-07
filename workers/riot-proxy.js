@@ -26,6 +26,7 @@ const CORS_HEADERS = {
 // Looked-up accounts expire from KV on their own after this many seconds
 const CACHE_TTL_SECONDS = 600; // 10 minutes
 const CHAMPION_MAP_TTL_SECONDS = 86400; // 24 hours, ddragon data rarely changes
+const LIVE_PARTICIPANT_RANK_TTL_SECONDS = 90; // short-lived: only needed while a game is in progress
 
 const TIER_BASE_LP = {
   IRON: 0,
@@ -71,6 +72,20 @@ function formatTierName(tier, rank) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Fetches items in small batches spaced a second apart, to stay under the
+// personal API key's rate limit (20 requests / 1s, 100 requests / 2min)
+async function fetchInBatches(items, batchSize, delayMs, fetchFn) {
+  const results = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    results.push(...await Promise.all(batch.map(fetchFn)));
+    if (i + batchSize < items.length) {
+      await sleep(delayMs);
+    }
+  }
+  return results;
 }
 
 // Retries once after Riot's Retry-After delay if the personal key's rate limit is hit
@@ -133,6 +148,39 @@ const QUEUE_NAMES = {
   1400: 'Ultimate Spellbook'
 };
 
+// Fetches one participant's Ranked Solo entry, cached briefly since it's only needed
+// while the spectated game is still in progress
+async function fetchParticipantRank(puuid, apiKey, env) {
+  const cacheKey = `live-rank:${puuid}`;
+  if (env?.SEARCH_CACHE) {
+    const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
+    if (cached) return cached;
+  }
+
+  const result = await fetchRiotJson(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`, apiKey);
+  let summary = null;
+
+  if (result.ok) {
+    const soloEntry = result.data.find((e) => e.queueType === 'RANKED_SOLO_5x5');
+    if (soloEntry) {
+      const wins = soloEntry.wins;
+      const losses = soloEntry.losses;
+      summary = {
+        tierDisplay: formatTierName(soloEntry.tier, soloEntry.rank),
+        lpDisplay: `${soloEntry.leaguePoints} LP`,
+        winrate: wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : 0,
+        wins,
+        losses
+      };
+    }
+  }
+
+  if (env?.SEARCH_CACHE) {
+    await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(summary), { expirationTtl: LIVE_PARTICIPANT_RANK_TTL_SECONDS });
+  }
+  return summary;
+}
+
 // Fetches the player's current spectator game (if any) and splits participants into two teams.
 // A 404 from Riot simply means the player isn't in a game right now, not an error.
 async function fetchActiveGame(puuid, apiKey, env) {
@@ -143,8 +191,18 @@ async function fetchActiveGame(puuid, apiKey, env) {
 
   const championMap = await getChampionMap(env);
   const data = result.data;
+  const rawParticipants = data.participants || [];
 
-  const participants = (data.participants || []).map((p) => ({
+  // Look up each participant's Ranked Solo entry, batched to respect the personal
+  // key's rate limit (20 requests / 1s)
+  const rankSummaries = await fetchInBatches(
+    rawParticipants,
+    8,
+    1100,
+    (p) => (p.puuid ? fetchParticipantRank(p.puuid, apiKey, env) : Promise.resolve(null))
+  );
+
+  const participants = rawParticipants.map((p, index) => ({
     puuid: p.puuid || null,
     isSearchedPlayer: p.puuid === puuid,
     teamId: p.teamId,
@@ -152,7 +210,8 @@ async function fetchActiveGame(puuid, apiKey, env) {
     championName: championMap[p.championId]?.name || `Champion ${p.championId}`,
     championImage: championMap[p.championId]?.image || null,
     riotIdGameName: p.riotId?.split('#')[0] || p.riotIdGameName || null,
-    riotIdTagline: p.riotId?.split('#')[1] || p.riotIdTagLine || null
+    riotIdTagline: p.riotId?.split('#')[1] || p.riotIdTagLine || null,
+    rank: rankSummaries[index] || null
   }));
 
   return {

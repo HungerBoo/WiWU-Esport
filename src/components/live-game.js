@@ -42,6 +42,9 @@ export function renderLiveGameContent(liveGame) {
 function renderLiveTeamParticipants(participants = []) {
   return participants.map(p => {
     const riotName = p.riotIdGameName ? `${p.riotIdGameName}${p.riotIdTagline ? `#${p.riotIdTagline}` : ''}` : 'Unbekannt';
+    const rankBadge = p.rank
+      ? `<span class="live-participant-rank">${p.rank.tierDisplay} · ${p.rank.winrate}% WR</span>`
+      : `<span class="live-participant-rank live-participant-rank--unranked">Unranked</span>`;
 
     if (p.isSearchedPlayer) {
       return `
@@ -50,6 +53,7 @@ function renderLiveTeamParticipants(participants = []) {
           <div class="live-participant-info">
             <strong>${p.championName}</strong>
             <span>${riotName}</span>
+            ${rankBadge}
           </div>
         </div>
       `;
@@ -61,6 +65,7 @@ function renderLiveTeamParticipants(participants = []) {
         <div class="live-participant-info">
           <strong>${p.championName}</strong>
           <span>${riotName}</span>
+          ${rankBadge}
         </div>
       </button>
     `;
@@ -152,6 +157,7 @@ function renderParticipantDetail(participant, rankData) {
   }
 
   const rank = rankData.unranked ? null : rankData;
+  const masteries = rankData.topMasteries || [];
 
   return `
     <div class="live-detail-card">
@@ -160,7 +166,7 @@ function renderParticipantDetail(participant, rankData) {
         ${championImage ? `<img src="${championImage}" alt="${championName}" class="live-champion-icon">` : ''}
         <div>
           <strong>${riotName || 'Unbekannt'}</strong>
-          <span>${championName}</span>
+          <span>${championName}${rankData.summonerLevel != null ? ` · Level ${rankData.summonerLevel}` : ''}</span>
         </div>
       </div>
       <div class="live-detail-rank">
@@ -168,6 +174,16 @@ function renderParticipantDetail(participant, rankData) {
         <span class="live-detail-lp">${rank?.lpDisplay || '0 LP'}</span>
         <span class="live-detail-wr">${rank?.winrate ?? 0}% WR (${rank?.wins ?? 0}S / ${rank?.losses ?? 0}N)</span>
       </div>
+      ${masteries.length ? `
+        <div class="live-detail-masteries">
+          ${masteries.map(m => `
+            <div class="live-detail-mastery-item">
+              ${m.image ? `<img src="${m.image}" alt="${m.name}" class="live-champion-icon">` : ''}
+              <span>${m.name} · Lvl ${m.championLevel}</span>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
     </div>
   `;
 }

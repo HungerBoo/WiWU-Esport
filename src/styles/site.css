@@ -946,6 +946,8 @@ button.live-participant-row:hover { background: rgba(212, 243, 74, .18); border-
 .live-participant-info { display: flex; flex-direction: column; gap: 0; min-width: 0; }
 .live-participant-info strong { font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .live-participant-info span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.live-participant-rank { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; color: #788d1d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.live-participant-rank--unranked { color: var(--muted); font-weight: 500; }
 
 .live-detail-slot { margin-top: 16px; }
 .live-detail-card { position: relative; background: var(--ink); color: var(--paper); border: 1px solid var(--ink); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
@@ -957,6 +959,10 @@ button.live-participant-row:hover { background: rgba(212, 243, 74, .18); border-
 .live-detail-rank { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .live-detail-tier { font-size: 13px; font-weight: 700; color: var(--acid); }
 .live-detail-lp, .live-detail-wr { font-family: 'DM Mono', monospace; font-size: 11px; color: #c4cabd; }
+.live-detail-masteries { display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px solid rgba(238, 240, 231, .18); padding-top: 10px; }
+.live-detail-mastery-item { display: flex; align-items: center; gap: 6px; background: rgba(238, 240, 231, .08); padding: 4px 8px; }
+.live-detail-mastery-item .live-champion-icon { width: 20px; height: 20px; }
+.live-detail-mastery-item span { font-family: 'DM Mono', monospace; font-size: 10px; color: #c4cabd; }
 
 /* Smash Recent Tournaments Card Box */
 .smash-tournaments-box {
