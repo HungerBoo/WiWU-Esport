@@ -5,7 +5,7 @@ import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
 import { formatDate, calculateAge } from '../utils/dates.js';
 import { showToast } from '../utils/dom.js';
 import { getTierDivisionFromTotalLp } from '../utils/ranks.js';
-import { renderLiveGameContent } from '../components/live-game.js';
+import { renderLiveGameContent, setupLiveGameInteractions } from '../components/live-game.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -406,6 +406,7 @@ function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
 function setupPlayerInteractions(player) {
   const chartContainer = document.querySelector('[data-lp-chart-container]');
   const refreshBtn = document.querySelector('[data-rank-refresh-btn]');
+  setupLiveGameInteractions(document.querySelector('[data-live-game-section]'));
 
   // Initialize LP Graph if history exists
   if (chartContainer && player.lpHistory?.length) {
@@ -583,6 +584,7 @@ function updateProfileUI(player) {
   const liveGameSection = document.querySelector('[data-live-game-section]');
   if (liveGameSection && player.liveGame !== undefined) {
     liveGameSection.innerHTML = renderLiveGameContent(player.liveGame);
+    setupLiveGameInteractions(liveGameSection);
   }
 }
 

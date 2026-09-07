@@ -1,7 +1,7 @@
 import { renderLayout } from '../components/layout.js';
 import { site } from '../content/site-data.js';
 import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
-import { renderLiveGameContent } from '../components/live-game.js';
+import { renderLiveGameContent, setupLiveGameInteractions } from '../components/live-game.js';
 
 const SEARCH_CACHE_TTL_MS = 10 * 60 * 1000; // mirrors the worker's KV TTL, session-only
 
@@ -200,9 +200,11 @@ async function renderResult(container, gameName, tagLine, data) {
         </div>
       ` : ''}
 
-      <div class="live-game-section">
+      <div class="live-game-section" data-live-game-section>
         ${renderLiveGameContent(data.liveGame)}
       </div>
     </article>
   `;
+
+  setupLiveGameInteractions(container.querySelector('[data-live-game-section]'));
 }
