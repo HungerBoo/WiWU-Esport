@@ -1,5 +1,7 @@
+import { calculateAge } from '../utils/dates.js';
+
 export function renderPlayerCard({ slug, name, role, birthDate, image, profile, profileLabel = 'Prime League', opgg, stats, rank }) {
-  const age = calculateAge(birthDate);
+  const age = calculateAge(birthDate, 'Alter nicht hinterlegt');
   const playerSlug = slug || name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   return `
@@ -80,35 +82,4 @@ function renderPlayerStats(data) {
   }
 
   return '';
-}
-
-function calculateAge(birthDate) {
-  if (!birthDate) {
-    return 'Alter nicht hinterlegt';
-  }
-
-  const [year, month, day] = birthDate.split('-').map(Number);
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  const birthdayHasPassed = today.getMonth() + 1 > month
-    || (today.getMonth() + 1 === month && today.getDate() >= day);
-
-  if (!birthdayHasPassed) {
-    age -= 1;
-  }
-
-  return `${age} Jahre`;
-}
-
-export function renderNewsCard([title, summary, date, href], index) {
-  return `
-    <a href="${href}" class="news-card">
-      <span class="news-number">0${index + 1}</span>
-      <div>
-        <h3>${title}</h3>
-        <p>${summary}</p>
-        <time>${date}</time>
-      </div>
-    </a>
-  `;
 }

@@ -1,6 +1,9 @@
 import { renderPlayerCard } from '../components/cards.js';
 import { renderLayout } from '../components/layout.js';
 import { games, site } from '../content/site-data.js';
+import { formatDate } from '../utils/dates.js';
+import { showToast } from '../utils/dom.js';
+import { getTierDivisionFromTotalLp } from '../utils/ranks.js';
 
 const PLAYER_COLORS = {
   falafl: '#013b13',
@@ -232,18 +235,6 @@ function setupSmashLeaderboard(players) {
 
 function parseWinrate(record = '') {
   return Number(record.match(/\((\d+)%\)/)?.[1]) || 0;
-}
-
-function showToast(message) {
-  let toast = document.querySelector('.player-feedback-toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.className = 'player-feedback-toast';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.classList.add('is-active');
-  setTimeout(() => toast.classList.remove('is-active'), 3200);
 }
 
 function setupLeaderboardAndGraph(leaguePlayers) {
@@ -690,33 +681,6 @@ function attachMultiChartTooltipEvents(container) {
     circle.addEventListener('focus', show);
     circle.addEventListener('blur', hide);
   });
-}
-
-function getTierDivisionFromTotalLp(totalLp) {
-  if (totalLp >= 2800) return `Master ${totalLp - 2800}LP`;
-  if (totalLp >= 2400) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 2400) / 100))];
-    return `Dia ${div}`;
-  }
-  if (totalLp >= 2000) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 2000) / 100))];
-    return `Eme ${div}`;
-  }
-  if (totalLp >= 1600) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 1600) / 100))];
-    return `Plat ${div}`;
-  }
-  if (totalLp >= 1200) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 1200) / 100))];
-    return `Gold ${div}`;
-  }
-  return `Silv ${totalLp}LP`;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
-  return `${d}.${m}.${y}`;
 }
 
 function renderGameImageGallery(images, title) {

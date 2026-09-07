@@ -1,7 +1,10 @@
 import { renderLayout } from '../components/layout.js';
-import { getProfile, allProfiles } from '../playersites/index.js';
+import { getProfile, allProfiles } from '../content/players/index.js';
 import { site } from '../content/site-data.js';
 import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
+import { formatDate, calculateAge } from '../utils/dates.js';
+import { showToast } from '../utils/dom.js';
+import { getTierDivisionFromTotalLp } from '../utils/ranks.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -181,7 +184,7 @@ export async function renderPlayerPage(playerSlug) {
               <div class="notebook-signature-container">
                 <div class="notebook-signature-block">
                   <div class="notebook-signature-visual">
-                    <img class="notebook-signature-img" src="/src/playersites/${livePlayer.slug}/signature.png" alt="Unterschrift von ${livePlayer.gamertag || livePlayer.name}" onerror="this.style.display='none'; this.nextElementSibling.classList.add('is-active');">
+                    <img class="notebook-signature-img" src="/images/signatures/${livePlayer.slug}.png" alt="Unterschrift von ${livePlayer.gamertag || livePlayer.name}" onerror="this.style.display='none'; this.nextElementSibling.classList.add('is-active');">
                     <span class="notebook-signature-handwritten">${livePlayer.gamertag || livePlayer.name}</span>
                   </div>
                   <div class="notebook-signature-bar"></div>
@@ -789,55 +792,5 @@ function attachTooltipEvents(container) {
     circle.addEventListener('focus', show);
     circle.addEventListener('blur', hide);
   });
-}
-
-function getTierDivisionFromTotalLp(totalLp) {
-  if (totalLp >= 2800) return `Master ${totalLp - 2800}LP`;
-  if (totalLp >= 2400) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 2400) / 100))];
-    return `Dia ${div}`;
-  }
-  if (totalLp >= 2000) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 2000) / 100))];
-    return `Eme ${div}`;
-  }
-  if (totalLp >= 1600) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 1600) / 100))];
-    return `Plat ${div}`;
-  }
-  if (totalLp >= 1200) {
-    const div = ['IV', 'III', 'II', 'I'][Math.min(3, Math.floor((totalLp - 1200) / 100))];
-    return `Gold ${div}`;
-  }
-  return `Silv ${totalLp}LP`;
-}
-
-function showToast(message) {
-  let toast = document.querySelector('.player-feedback-toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.className = 'player-feedback-toast';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.classList.add('is-active');
-  setTimeout(() => toast.classList.remove('is-active'), 3200);
-}
-
-function calculateAge(birthDate) {
-  if (!birthDate) return 'Alter unbekannt';
-  const [year, month, day] = birthDate.split('-').map(Number);
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  const birthdayHasPassed = today.getMonth() + 1 > month
-    || (today.getMonth() + 1 === month && today.getDate() >= day);
-  if (!birthdayHasPassed) age -= 1;
-  return `${age} Jahre`;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
-  return `${d}.${m}.${y}`;
 }
 

@@ -1,5 +1,17 @@
 [
   {
+    "id": "prime-league-results",
+    "category": "prime",
+    "badge": "Matchday",
+    "date": "07.09.2026",
+    "timestamp": 1788704814542,
+    "tag": "Prime League // Division 7.5",
+    "title": "Prime League Match-Ergebnisse",
+    "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
+    "meta": "Spring Split 2025/26",
+    "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
+  },
+  {
     "id": "lol-rank-falafl",
     "category": "lol",
     "badge": "Rank Up",
@@ -94,18 +106,6 @@
     "description": "Elkant behauptet sich in der oberen Elo und grindet durch Emerald mit 51% Winrate. Nächstes Ziel: Diamond Promo!",
     "meta": "Emerald III • 51% WR",
     "link": "spielerprofil.html?player=elkant"
-  },
-  {
-    "id": "prime-league-results",
-    "category": "prime",
-    "badge": "Matchday",
-    "date": "06.09.2026",
-    "timestamp": 1788640914061,
-    "tag": "Prime League // Division 7.5",
-    "title": "Prime League Match-Ergebnisse",
-    "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
-    "meta": "Spring Split 2025/26",
-    "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
   },
   {
     "id": "smash-martin-homie-stock--1",

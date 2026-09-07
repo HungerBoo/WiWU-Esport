@@ -1,12 +1,12 @@
-import { profile as falafl } from './falafl/content.js';
-import { profile as zwuck } from './zwuck/content.js';
-import { profile as oneoverninja1 } from './1overninja1/content.js';
-import { profile as hungerboo } from './hungerboo/content.js';
-import { profile as atrulixx } from './atrulixx/content.js';
-import { profile as martin } from './martin/content.js';
-import { profile as lostmyaim } from './lostmyaim/content.js';
-import { profile as beltrin } from './beltrin/content.js';
-import { profile as elkant } from './elkant/content.js';
+import { profile as falafl } from './falafl.js';
+import { profile as zwuck } from './zwuck.js';
+import { profile as oneoverninja1 } from './1overninja1.js';
+import { profile as hungerboo } from './hungerboo.js';
+import { profile as atrulixx } from './atrulixx.js';
+import { profile as martin } from './martin.js';
+import { profile as lostmyaim } from './lostmyaim.js';
+import { profile as beltrin } from './beltrin.js';
+import { profile as elkant } from './elkant.js';
 
 export const allProfiles = [
   falafl,

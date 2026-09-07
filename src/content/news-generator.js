@@ -1,6 +1,8 @@
 // Generates real-time news feed from League of Legends (Riot API),
 // Smash Bros. (start.gg), and Prime League data.
 
+import { formatDate } from '../utils/dates.js';
+
 export function generateNewsFeed(playerData, primeLeagueData) {
   const news = [];
   const todayStr = new Date().toISOString().split('T')[0];
@@ -137,13 +139,4 @@ export function generateNewsFeed(playerData, primeLeagueData) {
   news.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
   return news;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const parts = dateStr.split('-');
-  if (parts.length === 3) {
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
-  }
-  return dateStr;
 }
