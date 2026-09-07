@@ -13,6 +13,7 @@
  * OR
  * - ?puuid=...
  * - &profile=1 also includes summoner level, profile icon and top champion masteries
+ * - &live=1 also includes the current live/spectator game (head-to-head team view), if any
  */
 
 const CORS_HEADERS = {
@@ -115,6 +116,56 @@ async function getChampionMap(env) {
   }
 }
 
+const QUEUE_NAMES = {
+  400: 'Normal (Draft Pick)',
+  420: 'Ranked Solo/Duo',
+  430: 'Normal (Blind Pick)',
+  440: 'Ranked Flex',
+  450: 'ARAM',
+  490: 'Normal (Quickplay)',
+  700: 'Clash',
+  830: 'Co-op vs. AI (Intro)',
+  840: 'Co-op vs. AI (Beginner)',
+  850: 'Co-op vs. AI (Intermediate)',
+  900: 'URF',
+  1020: 'One for All',
+  1300: 'Nexus Blitz',
+  1400: 'Ultimate Spellbook'
+};
+
+// Fetches the player's current spectator game (if any) and splits participants into two teams.
+// A 404 from Riot simply means the player isn't in a game right now, not an error.
+async function fetchActiveGame(puuid, apiKey, env) {
+  const result = await fetchRiotJson(`https://euw1.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/${puuid}`, apiKey);
+  if (!result.ok) {
+    return { inGame: false };
+  }
+
+  const championMap = await getChampionMap(env);
+  const data = result.data;
+
+  const participants = (data.participants || []).map((p) => ({
+    puuid: p.puuid || null,
+    isSearchedPlayer: p.puuid === puuid,
+    teamId: p.teamId,
+    championId: p.championId,
+    championName: championMap[p.championId]?.name || `Champion ${p.championId}`,
+    championImage: championMap[p.championId]?.image || null,
+    riotIdGameName: p.riotId?.split('#')[0] || p.riotIdGameName || null,
+    riotIdTagline: p.riotId?.split('#')[1] || p.riotIdTagLine || null
+  }));
+
+  return {
+    inGame: true,
+    gameMode: data.gameMode,
+    queueName: QUEUE_NAMES[data.gameQueueConfigId] || `Queue ${data.gameQueueConfigId}`,
+    gameLengthSeconds: data.gameLength,
+    gameStartTime: data.gameStartTime,
+    team1: participants.filter((p) => p.teamId === 100),
+    team2: participants.filter((p) => p.teamId === 200)
+  };
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -143,6 +194,9 @@ export default {
     // Extra profile info (summoner level, icon, top champion masteries) is opt-in so
     // the lightweight rank-refresh buttons keep their existing fast response shape
     const includeProfile = url.searchParams.get('profile') === '1';
+    // Live/spectator game lookup is opt-in and always fetched fresh (never cached),
+    // since "currently in a game" goes stale within seconds
+    const includeLive = url.searchParams.get('live') === '1';
 
     try {
       if (!puuid) {
@@ -176,7 +230,8 @@ export default {
       if (env?.SEARCH_CACHE) {
         const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
         if (cached) {
-          return new Response(JSON.stringify({ ...cached, cached: true }), {
+          const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
+          return new Response(JSON.stringify({ ...cached, cached: true, ...(liveGame ? { liveGame } : {}) }), {
             status: 200,
             headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
           });
@@ -232,7 +287,8 @@ export default {
         if (canCache) {
           await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(unrankedResult), { expirationTtl: CACHE_TTL_SECONDS });
         }
-        return new Response(JSON.stringify(unrankedResult), {
+        const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
+        return new Response(JSON.stringify({ ...unrankedResult, ...(liveGame ? { liveGame } : {}) }), {
           status: 200,
           headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
         });
@@ -266,7 +322,9 @@ export default {
         await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(rankResult), { expirationTtl: CACHE_TTL_SECONDS });
       }
 
-      return new Response(JSON.stringify(rankResult), {
+      const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
+
+      return new Response(JSON.stringify({ ...rankResult, ...(liveGame ? { liveGame } : {}) }), {
         status: 200,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
       });

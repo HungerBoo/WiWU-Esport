@@ -1,6 +1,7 @@
 import { renderLayout } from '../components/layout.js';
 import { site } from '../content/site-data.js';
 import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
+import { renderLiveGameContent } from '../components/live-game.js';
 
 const SEARCH_CACHE_TTL_MS = 10 * 60 * 1000; // mirrors the worker's KV TTL, session-only
 
@@ -81,7 +82,7 @@ async function runSearch(resultsEl, gameName, tagLine) {
   }
 
   try {
-    const params = new URLSearchParams({ gameName, tagLine, profile: '1' });
+    const params = new URLSearchParams({ gameName, tagLine, profile: '1', live: '1' });
     const res = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params.toString()}`);
     const data = await res.json();
 
@@ -198,6 +199,10 @@ async function renderResult(container, gameName, tagLine, data) {
           </div>
         </div>
       ` : ''}
+
+      <div class="live-game-section">
+        ${renderLiveGameContent(data.liveGame)}
+      </div>
     </article>
   `;
 }

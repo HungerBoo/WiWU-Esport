@@ -5,6 +5,7 @@ import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
 import { formatDate, calculateAge } from '../utils/dates.js';
 import { showToast } from '../utils/dom.js';
 import { getTierDivisionFromTotalLp } from '../utils/ranks.js';
+import { renderLiveGameContent } from '../components/live-game.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -307,6 +308,11 @@ function renderRankAndLpSection(player, sectionNumber = '02') {
           <!-- Rendered via JS -->
         </div>
       </div>
+
+      <!-- Live Game (Head-to-Head) -->
+      <div class="live-game-section" data-live-game-section>
+        ${renderLiveGameContent(player.liveGame)}
+      </div>
     </section>
   `;
 }
@@ -441,7 +447,7 @@ function setupPlayerInteractions(player) {
             ? `puuid=${encodeURIComponent(player.puuid)}`
             : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1`);
+          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1`);
           if (proxyRes.ok) {
             const freshRank = await proxyRes.json();
             if (freshRank && freshRank.tier) {
@@ -449,6 +455,7 @@ function setupPlayerInteractions(player) {
               player.summonerLevel = freshRank.summonerLevel;
               player.profileIconId = freshRank.profileIconId;
               player.topMasteries = freshRank.topMasteries;
+              player.liveGame = freshRank.liveGame;
 
               // Update today's entry in lpHistory if available
               const todayStr = new Date().toISOString().split('T')[0];
@@ -504,22 +511,25 @@ function setupPlayerInteractions(player) {
     });
   }
 
-  // Quietly fetch profile icon / level / top champions in the background on page load,
-  // without touching the rank card or blocking the refresh button
+  // Quietly fetch profile icon / level / top champions / live game in the background on
+  // page load, without touching the rank card or blocking the refresh button
   if (site.riotProxyUrl && !player.topMasteries?.length && (player.riotId || player.puuid)) {
     const params = player.puuid
       ? `puuid=${encodeURIComponent(player.puuid)}`
       : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-    fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1`)
+    fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1`)
       .then(res => (res.ok ? res.json() : null))
       .then(freshRank => {
         if (freshRank?.topMasteries?.length || freshRank?.summonerLevel != null) {
           player.summonerLevel = freshRank.summonerLevel;
           player.profileIconId = freshRank.profileIconId;
           player.topMasteries = freshRank.topMasteries;
-          updateProfileUI(player);
         }
+        if (freshRank?.liveGame) {
+          player.liveGame = freshRank.liveGame;
+        }
+        updateProfileUI(player);
       })
       .catch(() => {
         // Non-critical background enrichment - silently ignore failures
@@ -568,6 +578,11 @@ function updateProfileUI(player) {
   if (masteryList) {
     masteryList.innerHTML = renderMasteryCards(player);
     if (masteryWrapper) masteryWrapper.hidden = !player.topMasteries?.length;
+  }
+
+  const liveGameSection = document.querySelector('[data-live-game-section]');
+  if (liveGameSection && player.liveGame !== undefined) {
+    liveGameSection.innerHTML = renderLiveGameContent(player.liveGame);
   }
 }
 

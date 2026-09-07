@@ -923,6 +923,24 @@ em { color: #788d1d; font-style: normal; }
 .mastery-info strong { font-size: 13px; color: var(--ink); }
 .mastery-info span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
 
+/* Live Game (Head-to-Head) */
+.live-game-section { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px; }
+.live-game-status { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); margin: 0; }
+.live-game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.live-game-header strong { font-size: 14px; color: var(--ink); }
+.live-game-timer { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: #788d1d; background: rgba(212, 243, 74, .18); padding: 3px 9px; border-radius: 10px; }
+.live-teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.live-team-col { display: flex; flex-direction: column; gap: 6px; }
+.live-team-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
+.live-team-col--blue .live-team-label { color: #1b6ca8; }
+.live-team-col--red .live-team-label { color: #c0392b; }
+.live-participant-row { display: flex; align-items: center; gap: 8px; background: rgba(22, 32, 29, .04); border: 1px solid var(--line); padding: 6px 10px; }
+.live-participant-row--self { background: rgba(212, 243, 74, .22); border-color: var(--ink); }
+.live-champion-icon { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+.live-participant-info { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.live-participant-info strong { font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.live-participant-info span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 /* Smash Recent Tournaments Card Box */
 .smash-tournaments-box {
   border: 1px solid var(--line);
@@ -1264,6 +1282,7 @@ em { color: #788d1d; font-style: normal; }
   .smash-tournaments-grid { grid-template-columns: 1fr; }
   .player-search-form { flex-direction: column; }
   .search-result-header { flex-direction: column; align-items: flex-start; }
+  .live-teams-grid { grid-template-columns: 1fr; }
   .rank-section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .lp-graph-wrapper { padding: 18px 12px; }
   .lp-graph-controls { flex-direction: column; align-items: flex-start; gap: 12px; }
