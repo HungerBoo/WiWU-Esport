@@ -779,13 +779,18 @@ em { color: #788d1d; font-style: normal; }
 
 .player-profile-intro { display: flex; flex-direction: column; gap: 14px; }
 .player-profile-intro h1 { margin: 0; font-size: clamp(40px, 6vw, 76px); line-height: .95; }
+.player-name-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.player-summoner-sticker { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; transform: rotate(-8deg); flex-shrink: 0; transition: transform .2s ease; cursor: default; }
+.player-summoner-sticker:hover { transform: rotate(0deg) scale(1.06); }
+.player-summoner-sticker[hidden] { display: none; }
+.player-summoner-icon { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background: var(--ink); border: 3px solid var(--paper); box-shadow: 0 6px 14px rgba(22, 32, 29, .35), 0 0 0 2px var(--ink); transition: box-shadow .2s ease; }
+.player-summoner-sticker:hover .player-summoner-icon { box-shadow: 0 8px 18px rgba(22, 32, 29, .45), 0 0 0 2px var(--acid); }
+.player-summoner-sticker span { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; background: var(--ink); color: var(--acid); padding: 2px 9px; border-radius: 10px; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
 .player-profile-alias { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--muted); margin: -6px 0 4px; }
 .player-profile-alias strong { color: var(--ink); }
 .player-profile-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .player-profile-role-badge { display: inline-block; width: fit-content; background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; text-transform: uppercase; letter-spacing: .08em; margin: 0; }
 .player-profile-rank-badge { display: inline-block; width: fit-content; background: #24361d; color: var(--acid); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; padding: 4px 10px; text-transform: uppercase; letter-spacing: .06em; border: 1px solid rgba(212, 243, 74, .3); }
-.player-summoner-badge { display: inline-flex; align-items: center; gap: 6px; width: fit-content; background: var(--paper); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 10px 3px 3px; text-transform: uppercase; letter-spacing: .06em; border: 1px solid var(--line); }
-.player-summoner-icon { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: var(--ink); }
 .player-profile-quote { font-size: 18px; line-height: 1.45; color: var(--ink); font-style: italic; border-left: 3px solid var(--acid); padding: 12px 18px; background: rgba(22, 32, 29, .03); margin: 6px 0; }
 .player-profile-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 .player-ext-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--line); background: var(--paper); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--ink); transition: background .2s, border-color .2s, transform .2s; }
@@ -910,8 +915,10 @@ em { color: #788d1d; font-style: normal; }
 .mastery-list-wrapper { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px; }
 .mastery-list-title { display: block; font-size: 14px; color: var(--ink); margin-bottom: 12px; }
 .mastery-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.mastery-card { display: flex; align-items: center; gap: 10px; background: rgba(22, 32, 29, .04); border: 1px solid var(--line); padding: 10px 14px; }
-.mastery-icon { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+.mastery-card { display: flex; align-items: center; gap: 10px; background: rgba(22, 32, 29, .04); border: 1px solid var(--line); padding: 10px 14px; transition: background .2s ease, border-color .2s ease, transform .15s ease, box-shadow .2s ease; }
+.mastery-card:hover { background: rgba(212, 243, 74, .18); border-color: var(--ink); transform: translateY(-3px); box-shadow: 3px 5px 0 rgba(22, 32, 29, .18); }
+.mastery-card:hover .mastery-icon { transform: scale(1.08); }
+.mastery-icon { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; transition: transform .2s ease; }
 .mastery-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .mastery-info strong { font-size: 13px; color: var(--ink); }
 .mastery-info span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
@@ -1252,6 +1259,7 @@ em { color: #788d1d; font-style: normal; }
   .team-roster-cards { grid-template-columns: 1fr; }
   .player-profile-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
   .player-hero-photo-frame { max-width: 260px; margin: 0; }
+  .player-summoner-icon { width: 44px; height: 44px; }
   .rank-metrics-grid { grid-template-columns: 1fr; }
   .smash-tournaments-grid { grid-template-columns: 1fr; }
   .player-search-form { flex-direction: column; }

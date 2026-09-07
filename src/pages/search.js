@@ -1,8 +1,8 @@
 import { renderLayout } from '../components/layout.js';
 import { site } from '../content/site-data.js';
+import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
 
 const SEARCH_CACHE_TTL_MS = 10 * 60 * 1000; // mirrors the worker's KV TTL, session-only
-let ddragonVersion = null;
 
 export async function renderPlayerSearch(gameName, tagLine) {
   renderLayout(`
@@ -127,24 +127,6 @@ function writeSessionCache(key, data) {
   }
 }
 
-async function getDdragonVersion() {
-  if (ddragonVersion) return ddragonVersion;
-  try {
-    const cached = sessionStorage.getItem('ddragon-version');
-    if (cached) {
-      ddragonVersion = cached;
-      return ddragonVersion;
-    }
-    const res = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
-    const versions = await res.json();
-    ddragonVersion = versions[0];
-    sessionStorage.setItem('ddragon-version', ddragonVersion);
-  } catch {
-    ddragonVersion = '14.1.1'; // reasonable fallback if ddragon is unreachable
-  }
-  return ddragonVersion;
-}
-
 function renderMessage(container, message, type = 'info') {
   container.innerHTML = `<p class="search-status search-status--${type}">${message}</p>`;
 }
@@ -152,11 +134,12 @@ function renderMessage(container, message, type = 'info') {
 async function renderResult(container, gameName, tagLine, data) {
   const version = await getDdragonVersion();
   const iconUrl = data.profileIconId != null
-    ? `https://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${data.profileIconId}.png`
+    ? profileIconUrl(version, data.profileIconId)
     : '/images/Wiwu_Logo.jpg';
 
   const rank = data.unranked ? null : data;
   const masteries = data.topMasteries || [];
+  const opggUrl = `https://www.op.gg/summoners/euw/${encodeURIComponent(gameName)}-${encodeURIComponent(tagLine)}`;
 
   container.innerHTML = `
     <article class="search-result-card">
@@ -166,6 +149,7 @@ async function renderResult(container, gameName, tagLine, data) {
           <strong>${gameName}<span class="search-result-tag">#${tagLine}</span></strong>
           ${data.summonerLevel != null ? `<span class="search-result-level">Level ${data.summonerLevel}</span>` : ''}
         </div>
+        <a href="${opggUrl}" class="player-ext-btn" target="_blank" rel="noreferrer">OP.GG <span>↗</span></a>
         ${data.cached ? '<span class="leaderboard-live-badge">Aus Cache</span>' : '<span class="leaderboard-live-badge">Riot API Live</span>'}
       </div>
 

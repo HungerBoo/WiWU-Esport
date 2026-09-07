@@ -68,8 +68,18 @@ function formatTierName(tier, rank) {
   return `${prettyTier} ${rank || ''}`.trim();
 }
 
-async function fetchRiotJson(url, apiKey) {
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Retries once after Riot's Retry-After delay if the personal key's rate limit is hit
+async function fetchRiotJson(url, apiKey, allowRetry = true) {
   const res = await fetch(url, { headers: { 'X-Riot-Token': apiKey } });
+  if (res.status === 429 && allowRetry) {
+    const retryAfterSeconds = Number(res.headers.get('Retry-After')) || 1;
+    await sleep(retryAfterSeconds * 1000);
+    return fetchRiotJson(url, apiKey, false);
+  }
   if (!res.ok) return { ok: false, status: res.status };
   return { ok: true, data: await res.json() };
 }
@@ -162,7 +172,7 @@ export default {
 
       // Serve from short-lived KV cache when available, so repeated lookups never
       // re-hit Riot's API or get written into the repo/build output
-      const cacheKey = `search:${puuid}:${includeProfile ? 'full' : 'rank'}`;
+      const cacheKey = `search:${puuid}:${includeProfile ? 'p1' : 'p0'}`;
       if (env?.SEARCH_CACHE) {
         const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
         if (cached) {
@@ -214,9 +224,12 @@ export default {
         };
       }
 
+      // Skip caching entirely when nothing is bound, so the site still works without KV
+      const canCache = Boolean(env?.SEARCH_CACHE);
+
       if (!soloEntry) {
         const unrankedResult = { unranked: true, puuid, ...profileInfo };
-        if (env?.SEARCH_CACHE) {
+        if (canCache) {
           await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(unrankedResult), { expirationTtl: CACHE_TTL_SECONDS });
         }
         return new Response(JSON.stringify(unrankedResult), {

@@ -1,6 +1,7 @@
 import { renderLayout } from '../components/layout.js';
 import { getProfile, allProfiles } from '../playersites/index.js';
 import { site } from '../content/site-data.js';
+import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -72,15 +73,17 @@ export async function renderPlayerPage(playerSlug) {
 
         <div class="player-profile-intro">
           <p class="eyebrow">SPIELERPROFIL // ${(livePlayer.team || 'WIWU').toUpperCase()}</p>
-          <h1>${livePlayer.name}</h1>
+          <div class="player-name-row">
+            <h1>${livePlayer.name}</h1>
+            <div class="player-summoner-sticker" data-summoner-badge${livePlayer.summonerLevel ? '' : ' hidden'}>
+              <img alt="Summoner Icon" class="player-summoner-icon" data-summoner-icon onerror="this.style.display='none';">
+              <span data-summoner-level-text>Level ${livePlayer.summonerLevel || ''}</span>
+            </div>
+          </div>
           ${livePlayer.alias ? `<p class="player-profile-alias">auch bekannt als: <strong>${livePlayer.alias}</strong></p>` : ''}
           <div class="player-profile-badges">
             <span class="player-profile-role-badge">${livePlayer.role}</span>
             ${livePlayer.rank?.tierDisplay ? `<span class="player-profile-rank-badge">★ ${livePlayer.rank.tierDisplay} (${livePlayer.rank.lpDisplay})</span>` : ''}
-            <span class="player-summoner-badge" data-summoner-badge${livePlayer.summonerLevel ? '' : ' hidden'}>
-              <img src="${livePlayer.profileIconId != null ? `https://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${livePlayer.profileIconId}.png` : ''}" alt="" class="player-summoner-icon" data-summoner-icon onerror="this.style.display='none';">
-              <span data-summoner-level-text>Level ${livePlayer.summonerLevel || ''}</span>
-            </span>
           </div>
           <p class="player-profile-quote">„${livePlayer.steckbrief?.bestQuote || livePlayer.details?.quote || livePlayer.steckbrief?.notes || ''}“</p>
 
@@ -550,7 +553,9 @@ function updateProfileUI(player) {
   if (summonerBadge && player.summonerLevel != null) {
     summonerBadge.hidden = false;
     if (summonerIcon && player.profileIconId != null) {
-      summonerIcon.src = `https://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${player.profileIconId}.png`;
+      getDdragonVersion().then(version => {
+        summonerIcon.src = profileIconUrl(version, player.profileIconId);
+      });
     }
     if (summonerLevelText) summonerLevelText.textContent = `Level ${player.summonerLevel}`;
   }
