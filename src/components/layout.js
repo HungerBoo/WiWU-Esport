@@ -5,7 +5,8 @@ const logoUrl = '/images/Wiwu_Logo.jpg';
 
 const navigation = [
   ['League of Legends', 'league-of-legends.html', 'league'],
-  ['Super Smash Bros.', 'super-smash-bros.html', 'smash']
+  ['Super Smash Bros.', 'super-smash-bros.html', 'smash'],
+  ['Spieler-Suche', 'spielersuche.html', 'spielersuche']
 ];
 
 export function renderLayout(content, page = '', { introSplash = false } = {}) {

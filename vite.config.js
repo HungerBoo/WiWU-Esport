@@ -19,6 +19,7 @@ export default defineConfig({
         'league-of-legends': resolve(__dirname, 'pages/league-of-legends.html'),
         'super-smash-bros': resolve(__dirname, 'pages/super-smash-bros.html'),
         spielerprofil: resolve(__dirname, 'pages/spielerprofil.html'),
+        spielersuche: resolve(__dirname, 'pages/spielersuche.html'),
         impressum: resolve(__dirname, 'pages/impressum.html')
       }
     }

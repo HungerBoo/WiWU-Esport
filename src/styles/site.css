@@ -13,11 +13,13 @@ a { color: inherit; }
 .site-header--league,
 .site-header--smash,
 .site-header--home,
-.site-header--spielerprofil { background: var(--header-col); color: var(--paper); border-bottom-color: var(--logo-bg-line); }
+.site-header--spielerprofil,
+.site-header--spielersuche { background: var(--header-col); color: var(--paper); border-bottom-color: var(--logo-bg-line); }
 .site-header--league nav a,
 .site-header--smash nav a,
 .site-header--home nav a,
-.site-header--spielerprofil nav a { color: var(--paper); }
+.site-header--spielerprofil nav a,
+.site-header--spielersuche nav a { color: var(--paper); }
 .site-header--league nav a:hover,
 .site-header--league nav a.active,
 .site-header--smash nav a:hover,
@@ -26,6 +28,8 @@ a { color: inherit; }
 .site-header--home nav a.active,
 .site-header--spielerprofil nav a:hover,
 .site-header--spielerprofil nav a.active,
+.site-header--spielersuche nav a:hover,
+.site-header--spielersuche nav a.active,
 .site-header--intro.is-visible nav a:hover,
 .site-header--intro.is-visible nav a.active { color: var(--ink); background: var(--acid); }
 .site-header--intro.is-visible .brand-mark.is-morph-target { visibility: visible; }
@@ -780,6 +784,8 @@ em { color: #788d1d; font-style: normal; }
 .player-profile-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .player-profile-role-badge { display: inline-block; width: fit-content; background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; text-transform: uppercase; letter-spacing: .08em; margin: 0; }
 .player-profile-rank-badge { display: inline-block; width: fit-content; background: #24361d; color: var(--acid); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; padding: 4px 10px; text-transform: uppercase; letter-spacing: .06em; border: 1px solid rgba(212, 243, 74, .3); }
+.player-summoner-badge { display: inline-flex; align-items: center; gap: 6px; width: fit-content; background: var(--paper); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 10px 3px 3px; text-transform: uppercase; letter-spacing: .06em; border: 1px solid var(--line); }
+.player-summoner-icon { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: var(--ink); }
 .player-profile-quote { font-size: 18px; line-height: 1.45; color: var(--ink); font-style: italic; border-left: 3px solid var(--acid); padding: 12px 18px; background: rgba(22, 32, 29, .03); margin: 6px 0; }
 .player-profile-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 .player-ext-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--line); background: var(--paper); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--ink); transition: background .2s, border-color .2s, transform .2s; }
@@ -876,6 +882,39 @@ em { color: #788d1d; font-style: normal; }
   transform: translateY(0);
   opacity: 1;
 }
+
+/* Spieler-Suche Page */
+.player-search-page { padding: 30px 0 60px; }
+.search-hero { max-width: 640px; margin: 0 auto 40px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.search-hero h1 { margin: 0; font-size: clamp(32px, 5vw, 52px); line-height: 1; }
+.search-hero-copy { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+.player-search-form { display: flex; gap: 10px; width: 100%; max-width: 480px; }
+.player-search-input { flex: 1; padding: 12px 16px; border: 1px solid var(--line); background: var(--paper); font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: var(--ink); }
+.player-search-input:focus { outline: none; border-color: var(--ink); }
+.player-search-submit { appearance: none; border: 1px solid var(--ink); background: var(--acid); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700; padding: 12px 22px; cursor: pointer; transition: background .2s, transform .15s; }
+.player-search-submit:hover { background: #e0ff54; transform: translateY(-1px); }
+
+.search-results { max-width: 900px; margin: 0 auto; }
+.search-status { text-align: center; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); padding: 32px 0; }
+.search-status--error { color: #a33; }
+.search-status--loading { color: var(--ink); }
+
+.search-result-card { border: 1px solid var(--line); background: var(--paper); padding: 24px 28px; }
+.search-result-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+.search-result-icon { width: 56px; height: 56px; object-fit: cover; border-radius: 50%; border: 2px solid var(--line); background: var(--ink); }
+.search-result-name-block { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.search-result-name-block strong { font-size: 20px; color: var(--ink); }
+.search-result-tag { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); font-weight: 500; margin-left: 2px; }
+.search-result-level { font-family: 'DM Mono', monospace; font-size: 11px; color: #788d1d; font-weight: 700; text-transform: uppercase; }
+
+.mastery-list-wrapper { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px; }
+.mastery-list-title { display: block; font-size: 14px; color: var(--ink); margin-bottom: 12px; }
+.mastery-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.mastery-card { display: flex; align-items: center; gap: 10px; background: rgba(22, 32, 29, .04); border: 1px solid var(--line); padding: 10px 14px; }
+.mastery-icon { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+.mastery-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.mastery-info strong { font-size: 13px; color: var(--ink); }
+.mastery-info span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
 
 /* Smash Recent Tournaments Card Box */
 .smash-tournaments-box {
@@ -1215,6 +1254,8 @@ em { color: #788d1d; font-style: normal; }
   .player-hero-photo-frame { max-width: 260px; margin: 0; }
   .rank-metrics-grid { grid-template-columns: 1fr; }
   .smash-tournaments-grid { grid-template-columns: 1fr; }
+  .player-search-form { flex-direction: column; }
+  .search-result-header { flex-direction: column; align-items: flex-start; }
   .rank-section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .lp-graph-wrapper { padding: 18px 12px; }
   .lp-graph-controls { flex-direction: column; align-items: flex-start; gap: 12px; }

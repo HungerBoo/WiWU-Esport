@@ -4,10 +4,15 @@
  * Secrets/Environment variables needed in Cloudflare Dashboard:
  * - RIOT_API_KEY: Secret Riot Games API Key
  *
+ * Optional KV binding (Settings -> Bindings -> KV Namespace):
+ * - SEARCH_CACHE: caches lookups for CACHE_TTL_SECONDS so repeated searches don't
+ *   re-hit the Riot API or get persisted anywhere permanent. Worker works without it.
+ *
  * Query params:
  * - ?gameName=Twisted%20Falafl&tagLine=CRIT
  * OR
  * - ?puuid=...
+ * - &profile=1 also includes summoner level, profile icon and top champion masteries
  */
 
 const CORS_HEADERS = {
@@ -16,6 +21,10 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type',
   'Cache-Control': 'public, max-age=60' // Cache at edge for 60 seconds
 };
+
+// Looked-up accounts expire from KV on their own after this many seconds
+const CACHE_TTL_SECONDS = 600; // 10 minutes
+const CHAMPION_MAP_TTL_SECONDS = 86400; // 24 hours, ddragon data rarely changes
 
 const TIER_BASE_LP = {
   IRON: 0,
@@ -59,6 +68,43 @@ function formatTierName(tier, rank) {
   return `${prettyTier} ${rank || ''}`.trim();
 }
 
+async function fetchRiotJson(url, apiKey) {
+  const res = await fetch(url, { headers: { 'X-Riot-Token': apiKey } });
+  if (!res.ok) return { ok: false, status: res.status };
+  return { ok: true, data: await res.json() };
+}
+
+// Maps numeric championId -> { name, image } via Data Dragon, cached in KV since it barely changes
+async function getChampionMap(env) {
+  const cacheKey = 'ddragon:champion-map:v1';
+  if (env?.SEARCH_CACHE) {
+    const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
+    if (cached) return cached;
+  }
+
+  try {
+    const versionsRes = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+    const versions = await versionsRes.json();
+    const latest = versions[0];
+
+    const champsRes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${latest}/data/de_DE/champion.json`);
+    const champsJson = await champsRes.json();
+
+    const map = {};
+    for (const key of Object.keys(champsJson.data)) {
+      const c = champsJson.data[key];
+      map[c.key] = { name: c.name, image: `https://ddragon.leagueoflegends.com/cdn/${latest}/img/champion/${c.image.full}` };
+    }
+
+    if (env?.SEARCH_CACHE) {
+      await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(map), { expirationTtl: CHAMPION_MAP_TTL_SECONDS });
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -84,6 +130,9 @@ export default {
     const gameName = url.searchParams.get('gameName');
     const tagLine = url.searchParams.get('tagLine');
     let puuid = url.searchParams.get('puuid');
+    // Extra profile info (summoner level, icon, top champion masteries) is opt-in so
+    // the lightweight rank-refresh buttons keep their existing fast response shape
+    const includeProfile = url.searchParams.get('profile') === '1';
 
     try {
       if (!puuid) {
@@ -111,6 +160,19 @@ export default {
         puuid = accountData.puuid;
       }
 
+      // Serve from short-lived KV cache when available, so repeated lookups never
+      // re-hit Riot's API or get written into the repo/build output
+      const cacheKey = `search:${puuid}:${includeProfile ? 'full' : 'rank'}`;
+      if (env?.SEARCH_CACHE) {
+        const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
+        if (cached) {
+          return new Response(JSON.stringify({ ...cached, cached: true }), {
+            status: 200,
+            headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+          });
+        }
+      }
+
       // Fetch League Entries
       const leagueUrl = `https://euw1.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
       const leagueRes = await fetch(leagueUrl, {
@@ -127,8 +189,37 @@ export default {
       const entries = await leagueRes.json();
       const soloEntry = entries.find((e) => e.queueType === 'RANKED_SOLO_5x5') || entries[0];
 
+      let profileInfo = {};
+      if (includeProfile) {
+        const [summonerResult, masteryResult, championMap] = await Promise.all([
+          fetchRiotJson(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`, apiKey),
+          fetchRiotJson(`https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}/top?count=3`, apiKey),
+          getChampionMap(env)
+        ]);
+
+        profileInfo = {
+          gameName: gameName || null,
+          tagLine: tagLine || null,
+          summonerLevel: summonerResult.ok ? summonerResult.data.summonerLevel : null,
+          profileIconId: summonerResult.ok ? summonerResult.data.profileIconId : null,
+          topMasteries: masteryResult.ok
+            ? masteryResult.data.map((m) => ({
+                championId: m.championId,
+                championLevel: m.championLevel,
+                championPoints: m.championPoints,
+                name: championMap[m.championId]?.name || `Champion ${m.championId}`,
+                image: championMap[m.championId]?.image || null
+              }))
+            : []
+        };
+      }
+
       if (!soloEntry) {
-        return new Response(JSON.stringify({ unranked: true, puuid }), {
+        const unrankedResult = { unranked: true, puuid, ...profileInfo };
+        if (env?.SEARCH_CACHE) {
+          await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(unrankedResult), { expirationTtl: CACHE_TTL_SECONDS });
+        }
+        return new Response(JSON.stringify(unrankedResult), {
           status: 200,
           headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
         });
@@ -154,8 +245,13 @@ export default {
         tierDisplay: formatTierName(tier, rank),
         lpDisplay: `${lp} LP`,
         totalLp,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
+        ...profileInfo
       };
+
+      if (env?.SEARCH_CACHE) {
+        await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(rankResult), { expirationTtl: CACHE_TTL_SECONDS });
+      }
 
       return new Response(JSON.stringify(rankResult), {
         status: 200,

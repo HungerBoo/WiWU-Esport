@@ -77,6 +77,10 @@ export async function renderPlayerPage(playerSlug) {
           <div class="player-profile-badges">
             <span class="player-profile-role-badge">${livePlayer.role}</span>
             ${livePlayer.rank?.tierDisplay ? `<span class="player-profile-rank-badge">★ ${livePlayer.rank.tierDisplay} (${livePlayer.rank.lpDisplay})</span>` : ''}
+            <span class="player-summoner-badge" data-summoner-badge${livePlayer.summonerLevel ? '' : ' hidden'}>
+              <img src="${livePlayer.profileIconId != null ? `https://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${livePlayer.profileIconId}.png` : ''}" alt="" class="player-summoner-icon" data-summoner-icon onerror="this.style.display='none';">
+              <span data-summoner-level-text>Level ${livePlayer.summonerLevel || ''}</span>
+            </span>
           </div>
           <p class="player-profile-quote">„${livePlayer.steckbrief?.bestQuote || livePlayer.details?.quote || livePlayer.steckbrief?.notes || ''}“</p>
 
@@ -159,6 +163,15 @@ export async function renderPlayerPage(playerSlug) {
                 <span class="notebook-label">Notizen & Besonderheiten:</span>
                 <div class="notebook-notes-content">
                   <p>${livePlayer.steckbrief?.notes || ''}</p>
+                </div>
+              </div>
+
+              <div class="notebook-entry notebook-entry--multiline" data-mastery-wrapper${livePlayer.topMasteries?.length ? '' : ' hidden'}>
+                <span class="notebook-label">Top Champions (Riot API):</span>
+                <div class="notebook-value-wrap">
+                  <div class="mastery-list" data-mastery-list>
+                    ${renderMasteryCards(livePlayer)}
+                  </div>
                 </div>
               </div>
 
@@ -422,12 +435,15 @@ function setupPlayerInteractions(player) {
             ? `puuid=${encodeURIComponent(player.puuid)}`
             : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}`);
+          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1`);
           if (proxyRes.ok) {
             const freshRank = await proxyRes.json();
             if (freshRank && freshRank.tier) {
               player.rank = freshRank;
-              
+              player.summonerLevel = freshRank.summonerLevel;
+              player.profileIconId = freshRank.profileIconId;
+              player.topMasteries = freshRank.topMasteries;
+
               // Update today's entry in lpHistory if available
               const todayStr = new Date().toISOString().split('T')[0];
               const todaySnapshot = {
@@ -481,6 +497,28 @@ function setupPlayerInteractions(player) {
       }
     });
   }
+
+  // Quietly fetch profile icon / level / top champions in the background on page load,
+  // without touching the rank card or blocking the refresh button
+  if (site.riotProxyUrl && !player.topMasteries?.length && (player.riotId || player.puuid)) {
+    const params = player.puuid
+      ? `puuid=${encodeURIComponent(player.puuid)}`
+      : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
+
+    fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1`)
+      .then(res => (res.ok ? res.json() : null))
+      .then(freshRank => {
+        if (freshRank?.topMasteries?.length || freshRank?.summonerLevel != null) {
+          player.summonerLevel = freshRank.summonerLevel;
+          player.profileIconId = freshRank.profileIconId;
+          player.topMasteries = freshRank.topMasteries;
+          updateProfileUI(player);
+        }
+      })
+      .catch(() => {
+        // Non-critical background enrichment - silently ignore failures
+      });
+  }
 }
 
 function updateLiveStatsUI(player) {
@@ -501,7 +539,42 @@ function updateLiveStatsUI(player) {
       drawLpChart(player.lpHistory, activeTimeframe);
     }
   }
+
+  updateProfileUI(player);
 }
+
+function updateProfileUI(player) {
+  const summonerBadge = document.querySelector('[data-summoner-badge]');
+  const summonerIcon = document.querySelector('[data-summoner-icon]');
+  const summonerLevelText = document.querySelector('[data-summoner-level-text]');
+  if (summonerBadge && player.summonerLevel != null) {
+    summonerBadge.hidden = false;
+    if (summonerIcon && player.profileIconId != null) {
+      summonerIcon.src = `https://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${player.profileIconId}.png`;
+    }
+    if (summonerLevelText) summonerLevelText.textContent = `Level ${player.summonerLevel}`;
+  }
+
+  const masteryWrapper = document.querySelector('[data-mastery-wrapper]');
+  const masteryList = document.querySelector('[data-mastery-list]');
+  if (masteryList) {
+    masteryList.innerHTML = renderMasteryCards(player);
+    if (masteryWrapper) masteryWrapper.hidden = !player.topMasteries?.length;
+  }
+}
+
+function renderMasteryCards(player) {
+  return (player.topMasteries || []).map(m => `
+    <div class="mastery-card">
+      ${m.image ? `<img src="${m.image}" alt="${m.name}" class="mastery-icon" onerror="this.style.display='none';">` : ''}
+      <div class="mastery-info">
+        <strong>${m.name}</strong>
+        <span>Level ${m.championLevel} • ${m.championPoints.toLocaleString('de-DE')} Punkte</span>
+      </div>
+    </div>
+  `).join('');
+}
+
 
 function drawLpChart(rawHistory, days) {
   const container = document.querySelector('[data-lp-chart-container]');
