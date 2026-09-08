@@ -3,6 +3,8 @@
 // the full scoreboard. Expanding costs no extra API calls since the worker already sent
 // every participant.
 
+import { attachPlayerHoverCards } from './player-hovercard.js';
+
 export function renderMatchHistoryContent(matches, ownPuuid, wiwuPuuids = {}) {
   if (!matches) {
     return `<p class="match-history-status">Letzte Spiele werden geladen ...</p>`;
@@ -126,7 +128,7 @@ function renderScoreboardTeam(label, participants, ownPuuid, wiwuPuuids, duratio
           : 'Unbekannt';
 
         return `
-          <div class="${classes}">
+          <div class="${classes}" tabindex="0" data-hover-puuid="${p.puuid || ''}" data-hover-name="${displayName}">
             <img src="${p.championImage || ''}" alt="${p.championName}" class="match-scoreboard-icon" onerror="this.style.display='none';">
             <span class="match-scoreboard-name">${displayName}${wiwuName ? '<span class="match-wiwu-badge">WiWU</span>' : ''}</span>
             <span class="match-scoreboard-kda">${p.kills}/${p.deaths}/${p.assists}</span>
@@ -177,4 +179,6 @@ export function setupMatchHistoryInteractions(root) {
       button.setAttribute('aria-expanded', String(willOpen));
     });
   });
+
+  attachPlayerHoverCards(root);
 }

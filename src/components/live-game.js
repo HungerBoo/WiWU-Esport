@@ -3,6 +3,7 @@
 // worker (by puuid) and shows it in a detail card below the two team columns.
 
 import { site } from '../content/site-data.js';
+import { attachPlayerHoverCards } from './player-hovercard.js';
 
 // Session-only cache so re-clicking the same participant doesn't refetch
 const rankDetailCache = new Map();
@@ -60,7 +61,7 @@ function renderLiveTeamParticipants(participants = []) {
     }
 
     return `
-      <button type="button" class="live-participant-row" data-live-participant data-puuid="${p.puuid || ''}" data-champion-name="${p.championName}" data-champion-image="${p.championImage || ''}" data-riot-name="${riotName}">
+      <button type="button" class="live-participant-row" data-live-participant data-puuid="${p.puuid || ''}" data-champion-name="${p.championName}" data-champion-image="${p.championImage || ''}" data-riot-name="${riotName}" data-hover-puuid="${p.puuid || ''}" data-hover-name="${riotName}">
         ${p.championImage ? `<img src="${p.championImage}" alt="${p.championName}" class="live-champion-icon" onerror="this.style.display='none';">` : ''}
         <div class="live-participant-info">
           <strong>${p.championName}</strong>
@@ -78,6 +79,8 @@ export function setupLiveGameInteractions(root) {
   root.querySelectorAll('[data-live-participant]').forEach(row => {
     row.addEventListener('click', () => toggleParticipantDetail(root, row));
   });
+
+  attachPlayerHoverCards(root);
 }
 
 async function toggleParticipantDetail(root, row) {

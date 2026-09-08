@@ -1019,6 +1019,42 @@ button.live-participant-row:hover { background: rgba(212, 243, 74, .18); border-
 .match-wiwu-badge { font-size: 8px; font-weight: 700; background: var(--logo-bg); color: var(--acid); padding: 1px 4px; margin-left: 5px; border-radius: 2px; }
 .match-scoreboard-kda, .match-scoreboard-cs { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink); white-space: nowrap; }
 .match-scoreboard-cs { color: var(--muted); }
+.match-scoreboard-row[data-hover-puuid] { cursor: help; transition: background .15s ease; }
+.match-scoreboard-row[data-hover-puuid]:hover,
+.match-scoreboard-row[data-hover-puuid]:focus { background: rgba(1, 59, 19, .12); outline: none; }
+
+/* Player hover card (rank + winrate preview) */
+.player-hovercard {
+  position: absolute;
+  z-index: 60;
+  min-width: 210px;
+  background: var(--paper);
+  border: 1px solid rgba(1, 59, 19, .18);
+  border-left: 4px solid var(--logo-bg);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 10px 24px rgba(22, 32, 29, .22);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .15s ease, visibility .15s ease;
+}
+.player-hovercard.is-visible { opacity: 1; visibility: visible; }
+.player-hovercard-head { display: flex; align-items: center; gap: 10px; }
+.player-hovercard-icon { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--ink); flex-shrink: 0; }
+.player-hovercard-icon--empty { background: rgba(1, 59, 19, .12); }
+.player-hovercard-identity { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.player-hovercard-identity strong,
+.player-hovercard-head > strong { font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player-hovercard-identity span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+.player-hovercard-rank { display: flex; align-items: baseline; gap: 8px; }
+.player-hovercard-tier { font-size: 13px; font-weight: 700; color: var(--logo-bg); }
+.player-hovercard-lp { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+.player-hovercard-wr { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink); }
+.player-hovercard-status { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
 
 /* Smash Recent Tournaments Card Box */
 .smash-tournaments-box {
