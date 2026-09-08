@@ -24,7 +24,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "20 LP",
         "totalLp": 2120,
-        "lastUpdated": "2026-09-07T09:34:25.703Z"
+        "lastUpdated": "2026-09-08T09:12:40.919Z"
       },
       "lpHistory": [
         {
@@ -179,6 +179,15 @@
           "totalLp": 2120,
           "wins": 37,
           "losses": 21
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 20,
+          "totalLp": 2120,
+          "wins": 37,
+          "losses": 21
         }
       ]
     },
@@ -196,17 +205,17 @@
       },
       "puuid": "LxgVya_GvYFl6urm_h7uJLHFNcIh_bfstHB0rR2z3LvIzBnnaHYFeR6VmU0Sh6cMzPmo5RJwv03Y5w",
       "rank": {
-        "tier": "GOLD",
-        "rank": "I",
-        "leaguePoints": 94,
-        "wins": 137,
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 32,
+        "wins": 139,
         "losses": 150,
         "winrate": 48,
-        "hotStreak": false,
-        "tierDisplay": "Gold I",
-        "lpDisplay": "94 LP",
-        "totalLp": 1594,
-        "lastUpdated": "2026-09-07T09:34:26.096Z"
+        "hotStreak": true,
+        "tierDisplay": "Platinum IV",
+        "lpDisplay": "32 LP",
+        "totalLp": 1632,
+        "lastUpdated": "2026-09-08T09:12:41.371Z"
       },
       "lpHistory": [
         {
@@ -388,6 +397,15 @@
           "totalLp": 1594,
           "wins": 137,
           "losses": 150
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 32,
+          "totalLp": 1632,
+          "wins": 139,
+          "losses": 150
         }
       ]
     },
@@ -415,7 +433,7 @@
         "tierDisplay": "Gold III",
         "lpDisplay": "55 LP",
         "totalLp": 1355,
-        "lastUpdated": "2026-09-07T09:34:26.474Z"
+        "lastUpdated": "2026-09-08T09:12:41.841Z"
       },
       "lpHistory": [
         {
@@ -516,6 +534,15 @@
           "totalLp": 1355,
           "wins": 12,
           "losses": 9
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "GOLD",
+          "rank": "III",
+          "leaguePoints": 55,
+          "totalLp": 1355,
+          "wins": 12,
+          "losses": 9
         }
       ]
     },
@@ -535,15 +562,15 @@
       "rank": {
         "tier": "GOLD",
         "rank": "IV",
-        "leaguePoints": 30,
+        "leaguePoints": 0,
         "wins": 119,
-        "losses": 120,
-        "winrate": 50,
+        "losses": 122,
+        "winrate": 49,
         "hotStreak": false,
         "tierDisplay": "Gold IV",
-        "lpDisplay": "30 LP",
-        "totalLp": 1230,
-        "lastUpdated": "2026-09-07T09:34:26.853Z"
+        "lpDisplay": "0 LP",
+        "totalLp": 1200,
+        "lastUpdated": "2026-09-08T09:12:42.301Z"
       },
       "lpHistory": [
         {
@@ -707,6 +734,15 @@
           "totalLp": 1230,
           "wins": 119,
           "losses": 120
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "GOLD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 1200,
+          "wins": 119,
+          "losses": 122
         }
       ]
     },
@@ -726,15 +762,15 @@
       "rank": {
         "tier": "PLATINUM",
         "rank": "IV",
-        "leaguePoints": 38,
-        "wins": 152,
+        "leaguePoints": 74,
+        "wins": 154,
         "losses": 158,
         "winrate": 49,
-        "hotStreak": false,
+        "hotStreak": true,
         "tierDisplay": "Platinum IV",
-        "lpDisplay": "38 LP",
-        "totalLp": 1638,
-        "lastUpdated": "2026-09-07T09:34:27.241Z"
+        "lpDisplay": "74 LP",
+        "totalLp": 1674,
+        "lastUpdated": "2026-09-08T09:12:42.745Z"
       },
       "lpHistory": [
         {
@@ -889,6 +925,15 @@
           "totalLp": 1638,
           "wins": 152,
           "losses": 158
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 74,
+          "totalLp": 1674,
+          "wins": 154,
+          "losses": 158
         }
       ]
     },
@@ -916,7 +961,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-09-07T09:34:27.623Z"
+        "lastUpdated": "2026-09-08T09:12:43.197Z"
       },
       "lpHistory": [
         {
@@ -999,6 +1044,15 @@
           "totalLp": 2000,
           "wins": 57,
           "losses": 47
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 2000,
+          "wins": 57,
+          "losses": 47
         }
       ]
     },
@@ -1026,7 +1080,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "20 LP",
         "totalLp": 2020,
-        "lastUpdated": "2026-09-07T09:34:27.994Z"
+        "lastUpdated": "2026-09-08T09:12:43.646Z"
       },
       "lpHistory": [
         {
@@ -1154,6 +1208,15 @@
           "totalLp": 2020,
           "wins": 78,
           "losses": 70
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 20,
+          "totalLp": 2020,
+          "wins": 78,
+          "losses": 70
         }
       ]
     },
@@ -1181,7 +1244,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "36 LP",
         "totalLp": 2136,
-        "lastUpdated": "2026-09-07T09:34:28.373Z"
+        "lastUpdated": "2026-09-08T09:12:44.101Z"
       },
       "lpHistory": [
         {
@@ -1336,6 +1399,15 @@
           "totalLp": 2136,
           "wins": 117,
           "losses": 112
+        },
+        {
+          "date": "2026-09-08",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 36,
+          "totalLp": 2136,
+          "wins": 117,
+          "losses": 112
         }
       ]
     }
@@ -1350,8 +1422,8 @@
       "profile": "https://www.supermajor.gg/ultimate/player/Martin?id=S3678798",
       "startggPlayerId": 3678798,
       "stats": {
-        "All Time": "380-303 (56%)",
-        "Letzte 6 Monate": "81-51 (61%)",
+        "All Time": "384-305 (56%)",
+        "Letzte 6 Monate": "79-49 (62%)",
         "Offline": "54%",
         "Online": "56%"
       },
@@ -1378,13 +1450,13 @@
         },
         {
           "tournamentName": "TGM Mini",
-          "eventName": "Singles",
+          "eventName": "Ladder",
           "isOnline": false,
-          "placement": 25,
-          "totalEntrants": 64,
+          "placement": 9,
+          "totalEntrants": 71,
           "date": "2026-05-09",
           "url": "https://www.start.gg/tournament/tgm-mini",
-          "resultDisplay": "25. Platz / 64"
+          "resultDisplay": "9. Platz / 71"
         }
       ],
       "userId": 2366873
