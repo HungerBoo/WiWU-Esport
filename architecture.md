@@ -51,6 +51,8 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `src/components/layout.js` | Shared header, navigation, and footer renderer | Used by all page renderers |
 | `src/components/cards.js` | Shared player card renderer | Used by homepage and game pages |
 | `src/components/live-game.js` | Shared "head-to-head" live/spectator game renderer | Used by `src/views/player.js` and `src/views/search.js` |
+| `src/components/match-history.js` | Shared last-5 Ranked Solo/Duo match list with click-to-expand scoreboard | Used by `src/views/player.js` and `src/views/search.js` |
+| `src/utils/roster.js` | Loads WiWU League PUUIDs from `players.json` so teammates get highlighted in match scoreboards | Used by `src/components/match-history.js` call sites |
 | `src/utils/dates.js` | Shared `formatDate` / `calculateAge` helpers | Used by `cards.js`, `player.js`, `news-generator.js` |
 | `src/utils/dom.js` | Shared `showToast` feedback helper | Used by `game.js`, `player.js` |
 | `src/utils/ranks.js` | Shared `getTierDivisionFromTotalLp` LP-chart axis helper | Used by `game.js`, `player.js` |
@@ -61,7 +63,7 @@ This document is the maintainer guide for the WiWU Esport website. It describes 
 | `src/views/search.js` | Public League of Legends player search (any Riot ID), live rank + masteries via the Cloudflare Worker | Called for `spielersuche.html` |
 | `src/views/legal.js` | Legal page renderer | Called for `impressum.html` |
 | `src/styles/site.css` | Shared visual system and responsive layout | Imported by `src/main.js` |
-| `workers/riot-proxy.js` | Cloudflare Worker proxy: live Riot API rank lookups, optional summoner level/icon/top masteries (`?profile=1`), optional live/spectator game head-to-head view (`?live=1`), Data Dragon champion map, optional KV response caching | Deployed to Cloudflare Workers with `RIOT_API_KEY` secret and optional `SEARCH_CACHE` KV binding |
+| `workers/riot-proxy.js` | Cloudflare Worker proxy: live Riot API rank lookups, optional summoner level/icon/top masteries (`?profile=1`), optional live/spectator game head-to-head view (`?live=1`), optional last N Ranked Solo/Duo matches (`?matches=5`), Data Dragon champion map, optional KV response caching | Deployed to Cloudflare Workers with `RIOT_API_KEY` secret and optional `SEARCH_CACHE` KV binding |
 | `public/CNAME` | Copies custom-domain metadata into `dist/` | Used by the Pages artifact |
 | `.github/workflows/deploy.yml` | Build and GitHub Pages deployment pipeline | Runs on `main` pushes, manual dispatch, and after `Update player stats` completion |
 | `CNAME` | Custom-domain configuration marker | Used by the static hosting workflow |

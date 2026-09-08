@@ -14,6 +14,7 @@
  * - ?puuid=...
  * - &profile=1 also includes summoner level, profile icon and top champion masteries
  * - &live=1 also includes the current live/spectator game (head-to-head team view), if any
+ * - &matches=<1-5> also includes the last N Ranked Solo/Duo matches
  */
 
 const CORS_HEADERS = {
@@ -27,6 +28,10 @@ const CORS_HEADERS = {
 const CACHE_TTL_SECONDS = 600; // 10 minutes
 const CHAMPION_MAP_TTL_SECONDS = 86400; // 24 hours, ddragon data rarely changes
 const LIVE_PARTICIPANT_RANK_TTL_SECONDS = 90; // short-lived: only needed while a game is in progress
+const MATCH_IDS_TTL_SECONDS = 180; // short, so freshly played games show up quickly
+const MATCH_DETAIL_TTL_SECONDS = 2592000; // 30 days: a finished match never changes
+const RANKED_SOLO_QUEUE_ID = 420;
+const MAX_MATCHES = 5;
 
 const TIER_BASE_LP = {
   IRON: 0,
@@ -100,6 +105,28 @@ async function fetchRiotJson(url, apiKey, allowRetry = true) {
   return { ok: true, data: await res.json() };
 }
 
+const DDRAGON_FALLBACK_VERSION = '15.1.1';
+
+async function getDdragonVersion(env) {
+  const cacheKey = 'ddragon:version:v1';
+  if (env?.SEARCH_CACHE) {
+    const cached = await env.SEARCH_CACHE.get(cacheKey);
+    if (cached) return cached;
+  }
+
+  try {
+    const versionsRes = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+    const versions = await versionsRes.json();
+    const latest = versions[0];
+    if (env?.SEARCH_CACHE) {
+      await env.SEARCH_CACHE.put(cacheKey, latest, { expirationTtl: CHAMPION_MAP_TTL_SECONDS });
+    }
+    return latest;
+  } catch {
+    return DDRAGON_FALLBACK_VERSION;
+  }
+}
+
 // Maps numeric championId -> { name, image } via Data Dragon, cached in KV since it barely changes
 async function getChampionMap(env) {
   const cacheKey = 'ddragon:champion-map:v1';
@@ -109,9 +136,7 @@ async function getChampionMap(env) {
   }
 
   try {
-    const versionsRes = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
-    const versions = await versionsRes.json();
-    const latest = versions[0];
+    const latest = await getDdragonVersion(env);
 
     const champsRes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${latest}/data/de_DE/champion.json`);
     const champsJson = await champsRes.json();
@@ -225,6 +250,139 @@ async function fetchActiveGame(puuid, apiKey, env) {
   };
 }
 
+// Reduces Riot's ~100KB match payload down to only what the UI renders
+function trimMatch(raw, championMap, ddragonVersion) {
+  const info = raw.info || {};
+  const participants = (info.participants || []).map((p) => ({
+    puuid: p.puuid,
+    riotIdGameName: p.riotIdGameName || null,
+    riotIdTagline: p.riotIdTagline || null,
+    teamId: p.teamId,
+    teamPosition: p.teamPosition || null,
+    championId: p.championId,
+    championName: championMap[p.championId]?.name || p.championName || `Champion ${p.championId}`,
+    championImage: championMap[p.championId]?.image || null,
+    champLevel: p.champLevel,
+    win: Boolean(p.win),
+    kills: p.kills,
+    deaths: p.deaths,
+    assists: p.assists,
+    cs: (p.totalMinionsKilled || 0) + (p.neutralMinionsKilled || 0),
+    goldEarned: p.goldEarned,
+    damageToChampions: p.totalDamageDealtToChampions,
+    damageTaken: p.totalDamageTaken,
+    visionScore: p.visionScore,
+    wardsPlaced: p.wardsPlaced,
+    wardsKilled: p.wardsKilled,
+    largestMultiKill: p.largestMultiKill,
+    pentaKills: p.pentaKills,
+    quadraKills: p.quadraKills,
+    tripleKills: p.tripleKills,
+    doubleKills: p.doubleKills,
+    turretKills: p.turretKills,
+    dragonKills: p.dragonKills,
+    baronKills: p.baronKills,
+    items: [p.item0, p.item1, p.item2, p.item3, p.item4, p.item5, p.item6]
+      .map((id) => (id ? `https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/item/${id}.png` : null)),
+    // `challenges` is absent on some matches/queues, so every read must be optional
+    killParticipation: p.challenges?.killParticipation ?? null,
+    teamDamagePercentage: p.challenges?.teamDamagePercentage ?? null
+  }));
+
+  return {
+    matchId: raw.metadata?.matchId || null,
+    queueId: info.queueId,
+    queueName: QUEUE_NAMES[info.queueId] || `Queue ${info.queueId}`,
+    gameDurationSeconds: info.gameDuration,
+    gameEndTimestamp: info.gameEndTimestamp || info.gameStartTimestamp || info.gameCreation || null,
+    gameEndedInSurrender: Boolean(info.participants?.[0]?.gameEndedInSurrender),
+    teams: (info.teams || []).map((t) => ({
+      teamId: t.teamId,
+      win: Boolean(t.win),
+      objectives: {
+        baron: t.objectives?.baron?.kills ?? 0,
+        dragon: t.objectives?.dragon?.kills ?? 0,
+        tower: t.objectives?.tower?.kills ?? 0,
+        inhibitor: t.objectives?.inhibitor?.kills ?? 0,
+        riftHerald: t.objectives?.riftHerald?.kills ?? 0
+      }
+    })),
+    participants
+  };
+}
+
+// Fetches the last N Ranked Solo/Duo matches. Finished matches are immutable, so each one is
+// cached long-term and only cache misses ever hit the Riot API.
+async function fetchRecentMatches(puuid, apiKey, env, count) {
+  const idsCacheKey = `matchids:${puuid}:${count}`;
+  let matchIds = null;
+
+  if (env?.SEARCH_CACHE) {
+    matchIds = await env.SEARCH_CACHE.get(idsCacheKey, 'json');
+  }
+
+  if (!matchIds) {
+    const idsResult = await fetchRiotJson(
+      `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=${RANKED_SOLO_QUEUE_ID}&start=0&count=${count}`,
+      apiKey
+    );
+    if (!idsResult.ok) return { ok: false, matches: [] };
+    matchIds = Array.isArray(idsResult.data) ? idsResult.data : [];
+
+    if (env?.SEARCH_CACHE) {
+      await env.SEARCH_CACHE.put(idsCacheKey, JSON.stringify(matchIds), { expirationTtl: MATCH_IDS_TTL_SECONDS });
+    }
+  }
+
+  if (matchIds.length === 0) return { ok: true, matches: [] };
+
+  const cached = {};
+  const missingIds = [];
+  for (const id of matchIds) {
+    const hit = env?.SEARCH_CACHE ? await env.SEARCH_CACHE.get(`match:${id}`, 'json') : null;
+    if (hit) cached[id] = hit;
+    else missingIds.push(id);
+  }
+
+  if (missingIds.length > 0) {
+    const [championMap, ddragonVersion] = await Promise.all([getChampionMap(env), getDdragonVersion(env)]);
+
+    const fetched = await fetchInBatches(
+      missingIds,
+      5,
+      1100,
+      (id) => fetchRiotJson(`https://europe.api.riotgames.com/lol/match/v5/matches/${id}`, apiKey)
+    );
+
+    if (fetched.every((r) => !r.ok)) return { ok: false, matches: [] };
+
+    for (let i = 0; i < missingIds.length; i++) {
+      const result = fetched[i];
+      if (!result.ok) continue;
+      const trimmed = trimMatch(result.data, championMap, ddragonVersion);
+      cached[missingIds[i]] = trimmed;
+      if (env?.SEARCH_CACHE) {
+        await env.SEARCH_CACHE.put(`match:${missingIds[i]}`, JSON.stringify(trimmed), { expirationTtl: MATCH_DETAIL_TTL_SECONDS });
+      }
+    }
+  }
+
+  return { ok: true, matches: matchIds.map((id) => cached[id]).filter(Boolean) };
+}
+
+// Opt-in extras that carry their own caching, so they're merged in outside the profile KV cache
+async function fetchExtras(puuid, apiKey, env, includeLive, matchCount) {
+  const [liveGame, matchResult] = await Promise.all([
+    includeLive ? fetchActiveGame(puuid, apiKey, env) : Promise.resolve(undefined),
+    matchCount > 0 ? fetchRecentMatches(puuid, apiKey, env, matchCount) : Promise.resolve(undefined)
+  ]);
+
+  return {
+    ...(liveGame ? { liveGame } : {}),
+    ...(matchResult ? { recentMatches: matchResult.matches, recentMatchesOk: matchResult.ok } : {})
+  };
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -256,6 +414,7 @@ export default {
     // Live/spectator game lookup is opt-in and always fetched fresh (never cached),
     // since "currently in a game" goes stale within seconds
     const includeLive = url.searchParams.get('live') === '1';
+    const matchCount = Math.min(MAX_MATCHES, Math.max(0, Number(url.searchParams.get('matches')) || 0));
 
     try {
       if (!puuid) {
@@ -289,8 +448,8 @@ export default {
       if (env?.SEARCH_CACHE) {
         const cached = await env.SEARCH_CACHE.get(cacheKey, 'json');
         if (cached) {
-          const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
-          return new Response(JSON.stringify({ ...cached, cached: true, ...(liveGame ? { liveGame } : {}) }), {
+          const extras = await fetchExtras(puuid, apiKey, env, includeLive, matchCount);
+          return new Response(JSON.stringify({ ...cached, cached: true, ...extras }), {
             status: 200,
             headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
           });
@@ -346,8 +505,8 @@ export default {
         if (canCache) {
           await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(unrankedResult), { expirationTtl: CACHE_TTL_SECONDS });
         }
-        const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
-        return new Response(JSON.stringify({ ...unrankedResult, ...(liveGame ? { liveGame } : {}) }), {
+        const extras = await fetchExtras(puuid, apiKey, env, includeLive, matchCount);
+        return new Response(JSON.stringify({ ...unrankedResult, ...extras }), {
           status: 200,
           headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
         });
@@ -381,9 +540,9 @@ export default {
         await env.SEARCH_CACHE.put(cacheKey, JSON.stringify(rankResult), { expirationTtl: CACHE_TTL_SECONDS });
       }
 
-      const liveGame = includeLive ? await fetchActiveGame(puuid, apiKey, env) : undefined;
+      const extras = await fetchExtras(puuid, apiKey, env, includeLive, matchCount);
 
-      return new Response(JSON.stringify({ ...rankResult, ...(liveGame ? { liveGame } : {}) }), {
+      return new Response(JSON.stringify({ ...rankResult, ...extras }), {
         status: 200,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
       });

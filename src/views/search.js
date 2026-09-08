@@ -2,6 +2,8 @@ import { renderLayout } from '../components/layout.js';
 import { site } from '../content/site-data.js';
 import { getDdragonVersion, profileIconUrl } from '../utils/ddragon.js';
 import { renderLiveGameContent, setupLiveGameInteractions } from '../components/live-game.js';
+import { renderMatchHistoryContent, setupMatchHistoryInteractions } from '../components/match-history.js';
+import { getWiwuPuuidMap } from '../utils/roster.js';
 
 const SEARCH_CACHE_TTL_MS = 10 * 60 * 1000; // mirrors the worker's KV TTL, session-only
 
@@ -82,7 +84,7 @@ async function runSearch(resultsEl, gameName, tagLine) {
   }
 
   try {
-    const params = new URLSearchParams({ gameName, tagLine, profile: '1', live: '1' });
+    const params = new URLSearchParams({ gameName, tagLine, profile: '1', live: '1', matches: '5' });
     const res = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params.toString()}`);
     const data = await res.json();
 
@@ -203,8 +205,20 @@ async function renderResult(container, gameName, tagLine, data) {
       <div class="live-game-section" data-live-game-section>
         ${renderLiveGameContent(data.liveGame)}
       </div>
+
+      <div class="match-history-section" data-match-history-section>
+        ${renderMatchHistoryContent(data.recentMatchesOk ? data.recentMatches : null, data.puuid, {})}
+      </div>
     </article>
   `;
 
   setupLiveGameInteractions(container.querySelector('[data-live-game-section]'));
+
+  const matchSection = container.querySelector('[data-match-history-section]');
+  if (matchSection) {
+    getWiwuPuuidMap().then(wiwuPuuids => {
+      matchSection.innerHTML = renderMatchHistoryContent(data.recentMatchesOk ? data.recentMatches : null, data.puuid, wiwuPuuids);
+      setupMatchHistoryInteractions(matchSection);
+    });
+  }
 }

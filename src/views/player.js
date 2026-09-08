@@ -6,6 +6,8 @@ import { formatDate, calculateAge } from '../utils/dates.js';
 import { showToast } from '../utils/dom.js';
 import { getTierDivisionFromTotalLp } from '../utils/ranks.js';
 import { renderLiveGameContent, setupLiveGameInteractions } from '../components/live-game.js';
+import { renderMatchHistoryContent, setupMatchHistoryInteractions } from '../components/match-history.js';
+import { getWiwuPuuidMap } from '../utils/roster.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
@@ -313,6 +315,11 @@ function renderRankAndLpSection(player, sectionNumber = '02') {
       <div class="live-game-section" data-live-game-section>
         ${renderLiveGameContent(player.liveGame)}
       </div>
+
+      <!-- Last Ranked Solo/Duo Matches -->
+      <div class="match-history-section" data-match-history-section>
+        ${renderMatchHistoryContent(player.recentMatches, player.puuid, {})}
+      </div>
     </section>
   `;
 }
@@ -448,15 +455,17 @@ function setupPlayerInteractions(player) {
             ? `puuid=${encodeURIComponent(player.puuid)}`
             : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1`);
+          const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`);
           if (proxyRes.ok) {
             const freshRank = await proxyRes.json();
             if (freshRank && freshRank.tier) {
               player.rank = freshRank;
+              player.puuid = freshRank.puuid || player.puuid;
               player.summonerLevel = freshRank.summonerLevel;
               player.profileIconId = freshRank.profileIconId;
               player.topMasteries = freshRank.topMasteries;
               player.liveGame = freshRank.liveGame;
+              if (freshRank.recentMatchesOk) player.recentMatches = freshRank.recentMatches;
 
               // Update today's entry in lpHistory if available
               const todayStr = new Date().toISOString().split('T')[0];
@@ -512,14 +521,14 @@ function setupPlayerInteractions(player) {
     });
   }
 
-  // Quietly fetch profile icon / level / top champions / live game in the background on
-  // page load, without touching the rank card or blocking the refresh button
+  // Quietly fetch profile icon / level / top champions / live game / recent matches in the
+  // background on page load, without touching the rank card or blocking the refresh button
   if (site.riotProxyUrl && !player.topMasteries?.length && (player.riotId || player.puuid)) {
     const params = player.puuid
       ? `puuid=${encodeURIComponent(player.puuid)}`
       : `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine)}`;
 
-    fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1`)
+    fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`)
       .then(res => (res.ok ? res.json() : null))
       .then(freshRank => {
         if (freshRank?.topMasteries?.length || freshRank?.summonerLevel != null) {
@@ -527,8 +536,14 @@ function setupPlayerInteractions(player) {
           player.profileIconId = freshRank.profileIconId;
           player.topMasteries = freshRank.topMasteries;
         }
+        if (freshRank?.puuid) {
+          player.puuid = freshRank.puuid;
+        }
         if (freshRank?.liveGame) {
           player.liveGame = freshRank.liveGame;
+        }
+        if (freshRank?.recentMatchesOk) {
+          player.recentMatches = freshRank.recentMatches;
         }
         updateProfileUI(player);
       })
@@ -585,6 +600,14 @@ function updateProfileUI(player) {
   if (liveGameSection && player.liveGame !== undefined) {
     liveGameSection.innerHTML = renderLiveGameContent(player.liveGame);
     setupLiveGameInteractions(liveGameSection);
+  }
+
+  const matchSection = document.querySelector('[data-match-history-section]');
+  if (matchSection && player.recentMatches !== undefined) {
+    getWiwuPuuidMap().then(wiwuPuuids => {
+      matchSection.innerHTML = renderMatchHistoryContent(player.recentMatches, player.puuid, wiwuPuuids);
+      setupMatchHistoryInteractions(matchSection);
+    });
   }
 }
 
