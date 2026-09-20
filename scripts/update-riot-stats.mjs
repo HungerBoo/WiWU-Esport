@@ -210,6 +210,28 @@ export async function updateRiotStats(targetPlayerSlug = null) {
     } catch (error) {
       console.error(`  Fehler bei ${player.name}:`, error.message);
     }
+
+    const alternateAccounts = Array.isArray(player.alternateRiotIds) ? player.alternateRiotIds : [];
+    for (const [index, account] of alternateAccounts.entries()) {
+      if (!account?.gameName || !account?.tagLine) continue;
+
+      const accountLabel = `${account.gameName}#${account.tagLine}`;
+      try {
+        const cacheKey = `${player.slug}:alt-${index}`;
+        const updated = await updateAlternateRiotAccount(account, cacheKey, riotCache, todayStr, apiKey);
+
+        if (updated) {
+          account.puuid = updated.puuid;
+          account.rank = updated.rank;
+          account.lpHistory = updated.history;
+          console.log(`  ✓ ${player.name} (${accountLabel}): ${account.rank.tierDisplay} (${account.rank.lpDisplay}) - ${account.rank.winrate}% WR (${account.rank.wins}W/${account.rank.losses}L)`);
+        } else {
+          console.log(`  ! ${player.name} (${accountLabel}) ist aktuell unranked.`);
+        }
+      } catch (error) {
+        console.error(`  Fehler bei ${player.name} (${accountLabel}):`, error.message);
+      }
+    }
   }
 
   await fs.mkdir(path.dirname(RIOT_CACHE_PATH), { recursive: true });
@@ -260,6 +282,54 @@ function parseRiotIdFromOpgg(opggUrl) {
     // ignore
   }
   return null;
+}
+
+async function updateAlternateRiotAccount(account, cacheKey, riotCache, todayStr, apiKey) {
+  let puuid = account.puuid || riotCache[cacheKey]?.puuid;
+  if (!puuid) {
+    const riotAccount = await fetchRiotAccount(account.gameName, account.tagLine, apiKey);
+    puuid = riotAccount.puuid;
+    await sleep(REQUEST_DELAY_MS);
+  }
+
+  const entries = await fetchRiotLeagueEntries(puuid, apiKey);
+  await sleep(REQUEST_DELAY_MS);
+  const soloEntry = entries.find((entry) => entry.queueType === 'RANKED_SOLO_5x5') || entries[0];
+  if (!soloEntry) return null;
+
+  const tier = soloEntry.tier;
+  const rank = soloEntry.rank;
+  const leaguePoints = soloEntry.leaguePoints;
+  const wins = soloEntry.wins;
+  const losses = soloEntry.losses;
+  const winrate = wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : 0;
+  const totalLp = calculateTotalLp(tier, rank, leaguePoints);
+  const rankData = {
+    tier,
+    rank,
+    leaguePoints,
+    wins,
+    losses,
+    winrate,
+    hotStreak: Boolean(soloEntry.hotStreak),
+    tierDisplay: formatTierName(tier, rank),
+    lpDisplay: `${leaguePoints} LP`,
+    totalLp,
+    lastUpdated: new Date().toISOString()
+  };
+  const snapshot = {
+    date: todayStr,
+    tier,
+    rank,
+    leaguePoints,
+    totalLp,
+    wins,
+    losses
+  };
+  const history = recordLpChange(riotCache[cacheKey]?.history || account.lpHistory || [], snapshot).slice(-100);
+
+  riotCache[cacheKey] = { puuid, history };
+  return { puuid, rank: rankData, history };
 }
 
 // Run directly if invoked as script

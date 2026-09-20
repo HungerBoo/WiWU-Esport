@@ -15,7 +15,32 @@
       "alternateRiotIds": [
         {
           "gameName": "Juli006",
-          "tagLine": "EUW"
+          "tagLine": "EUW",
+          "puuid": "dvTDq1B1DZntHzBAq4z29TuenDEKYstO00CFtrHQnniMHCo8M_wK15TcgsY8o-E3fnfpqDleGVL_pQ",
+          "rank": {
+            "tier": "GOLD",
+            "rank": "I",
+            "leaguePoints": 37,
+            "wins": 18,
+            "losses": 9,
+            "winrate": 67,
+            "hotStreak": false,
+            "tierDisplay": "Gold I",
+            "lpDisplay": "37 LP",
+            "totalLp": 1537,
+            "lastUpdated": "2026-09-20T10:34:00.864Z"
+          },
+          "lpHistory": [
+            {
+              "date": "2026-09-20",
+              "tier": "GOLD",
+              "rank": "I",
+              "leaguePoints": 37,
+              "totalLp": 1537,
+              "wins": 18,
+              "losses": 9
+            }
+          ]
         }
       ],
       "puuid": "gtVN2n87Ss0G0WSune3UTviYREOiP78MtG7QiRyOcY9lBQjTXLsmGubwYrGYNuFKsBvpaunqegXzyQ",

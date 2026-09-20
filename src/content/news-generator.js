@@ -53,8 +53,7 @@ export function generateNewsFeed(playerData, primeLeagueData) {
 
     const tierChanged = !!previousHistory && (previousHistory.tier || '') !== (rank.tier || '');
     const rankChanged = !!previousHistory && (previousHistory.rank || '') !== (rank.rank || '');
-    const lpChanged = !!previousHistory && Number(previousHistory.totalLp || 0) !== Number(rank.totalLp || 0);
-    const recentRankEvent = (latestDateTs >= nowTs - recentWindowMs) && (tierChanged || rankChanged || lpChanged);
+    const recentRankEvent = (latestDateTs >= nowTs - recentWindowMs) && (tierChanged || rankChanged);
 
     if (!recentRankEvent) continue;
 

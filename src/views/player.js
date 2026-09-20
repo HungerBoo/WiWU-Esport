@@ -16,9 +16,10 @@ const accountStateMap = new Map();
 
 function getPlayerRiotAccounts(player) {
   const accounts = [];
+  const mainRiotId = player?.mainRiotId || player?.riotId;
 
-  if (player?.riotId?.gameName) {
-    accounts.push({ key: 'main', label: 'Hauptaccount', gameName: player.riotId.gameName, tagLine: player.riotId.tagLine || 'EUW' });
+  if (mainRiotId?.gameName) {
+    accounts.push({ key: 'main', label: 'Hauptaccount', gameName: mainRiotId.gameName, tagLine: mainRiotId.tagLine || 'EUW' });
   }
 
   (player?.alternateRiotIds || []).forEach((account, index) => {
@@ -49,17 +50,18 @@ function getAccountState(player, key) {
   const existing = accountStateMap.get(`${player.slug || 'player'}:${key}`);
   if (existing) return existing;
 
+  const source = key === 'main' ? (player.mainAccountState || player) : account;
   const freshState = {
     ...player,
     riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
-    rank: player.rank,
-    lpHistory: player.lpHistory || [],
-    summonerLevel: player.summonerLevel,
-    profileIconId: player.profileIconId,
-    topMasteries: player.topMasteries || [],
-    liveGame: player.liveGame,
-    recentMatches: player.recentMatches,
-    puuid: player.puuid
+    rank: source.rank || null,
+    lpHistory: source.lpHistory || [],
+    summonerLevel: source.summonerLevel,
+    profileIconId: source.profileIconId,
+    topMasteries: source.topMasteries || [],
+    liveGame: source.liveGame,
+    recentMatches: source.recentMatches,
+    puuid: source.puuid
   };
 
   accountStateMap.set(`${player.slug || 'player'}:${key}`, freshState);
@@ -72,6 +74,30 @@ function applyAccountState(player, key) {
 
   Object.assign(player, accountState);
   return player;
+}
+
+function saveAccountState(player, key, state) {
+  if (key === 'main') {
+    player.mainAccountState = { ...state };
+    return;
+  }
+
+  if (!key.startsWith('alt-')) return;
+
+  const index = Number(key.slice(4));
+  const account = player.alternateRiotIds?.[index];
+  if (!account) return;
+
+  Object.assign(account, {
+    puuid: state.puuid || account.puuid,
+    rank: state.rank,
+    lpHistory: state.lpHistory || [],
+    summonerLevel: state.summonerLevel,
+    profileIconId: state.profileIconId,
+    topMasteries: state.topMasteries || [],
+    liveGame: state.liveGame,
+    recentMatches: state.recentMatches
+  });
 }
 
 export async function renderPlayerPage(playerSlug) {
@@ -114,6 +140,20 @@ export async function renderPlayerPage(playerSlug) {
     }
   } catch (error) {
     console.warn('Live-Spielerdaten konnten nicht geladen werden, verwende statische Daten:', error);
+  }
+
+  if (livePlayer.riotId?.gameName) {
+    livePlayer.mainRiotId = { ...livePlayer.riotId };
+    livePlayer.mainAccountState = {
+      rank: livePlayer.rank,
+      lpHistory: livePlayer.lpHistory || [],
+      summonerLevel: livePlayer.summonerLevel,
+      profileIconId: livePlayer.profileIconId,
+      topMasteries: livePlayer.topMasteries || [],
+      liveGame: livePlayer.liveGame,
+      recentMatches: livePlayer.recentMatches,
+      puuid: livePlayer.puuid
+    };
   }
 
   const age = calculateAge(livePlayer.birthDate);
@@ -550,6 +590,7 @@ function setupPlayerInteractions(player) {
             };
 
             accountStateMap.set(`${player.slug || 'player'}:${nextKey}`, nextState);
+            saveAccountState(player, nextKey, nextState);
             Object.assign(player, nextState);
             updateLiveStatsUI(player);
             return;
@@ -630,6 +671,7 @@ function setupPlayerInteractions(player) {
               };
 
               accountStateMap.set(`${player.slug || 'player'}:${selectedKey}`, nextState);
+              saveAccountState(player, selectedKey, nextState);
               Object.assign(player, nextState);
               updateLiveStatsUI(player);
               liveUpdated = true;

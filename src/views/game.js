@@ -253,8 +253,8 @@ function setupLeaderboardAndGraph(leaguePlayers) {
         const accountName = (account.gameName || 'Smurf').trim();
         const riotIdLabel = `${accountName}#${account.tagLine || 'EUW'}`;
         const accountSlug = `${player.slug || 'player'}-smurf-${accountName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${index + 1}`;
-        const altRank = account.rank || player.rank || null;
-        const altHistory = Array.isArray(account.lpHistory) && account.lpHistory.length ? account.lpHistory : (Array.isArray(player.lpHistory) ? player.lpHistory : []);
+        const altRank = account.rank || null;
+        const altHistory = Array.isArray(account.lpHistory) ? account.lpHistory : [];
 
         entries.push({
           ...player,
@@ -300,7 +300,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const color = PLAYER_COLORS[player.slug] || DEFAULT_COLOR;
       const isTop3 = index < 3;
       const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
-      const displayName = player.isSmurfAccount ? `${player.name} <span class="leaderboard-smurf-tag">2nd Acc</span>` : player.name;
+      const displayName = player.isSmurfAccount ? `${player.name} <span class="leaderboard-smurf-tag">${player.smurfLabel}</span>` : player.name;
       const leaderboardName = player.isSmurfAccount ? `${player.name}` : player.name;
 
       return `
@@ -510,7 +510,7 @@ function renderMultiPlayerChartAndLegend(players) {
       const isActive = activeLeaderboardSlugs.has(player.slug);
       const tierDisplay = player.rank?.tierDisplay || 'Unranked';
       const lpDisplay = player.rank?.lpDisplay || '0 LP';
-      const legendName = player.isSmurfAccount ? `${player.name} • 2nd Acc` : player.name;
+      const legendName = player.isSmurfAccount ? `${player.name} • ${player.smurfLabel}` : player.name;
 
       return `
         <button type="button" class="legend-pill${isActive ? ' is-active' : ''}" data-toggle-slug="${player.slug}" aria-pressed="${isActive}">
