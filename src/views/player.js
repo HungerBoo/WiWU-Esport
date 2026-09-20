@@ -87,6 +87,11 @@ export async function renderPlayerPage(playerSlug) {
             </div>
           </div>
           ${livePlayer.alias ? `<p class="player-profile-alias">auch bekannt als: <strong>${livePlayer.alias}</strong></p>` : ''}
+          ${Array.isArray(livePlayer.alternateRiotIds) && livePlayer.alternateRiotIds.length ? `
+            <p class="player-profile-alias">
+              weitere Riot IDs: ${livePlayer.alternateRiotIds.map(account => `<strong>${account.gameName}#${account.tagLine}</strong>`).join(' • ')}
+            </p>
+          ` : ''}
           <div class="player-profile-badges">
             <span class="player-profile-role-badge">${livePlayer.role}</span>
             ${livePlayer.rank?.tierDisplay ? `<span class="player-profile-rank-badge">★ ${livePlayer.rank.tierDisplay} (${livePlayer.rank.lpDisplay})</span>` : ''}

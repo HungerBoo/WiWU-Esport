@@ -6,6 +6,9 @@ export const profile = {
   team: 'League of Legends & Super Smash Bros.',
   birthDate: '2006-10-25',
   image: '/images/players/league/falafl.jpg',
+  alternateRiotIds: [
+    { gameName: 'Juli006', tagLine: 'EUW' }
+  ],
   steckbrief: {
     gamertag: 'Falafl',
     age: '2006-10-25',
@@ -21,6 +24,7 @@ export const profile = {
   links: [
     { label: 'Prime League', url: 'https://www.primeleague.gg/de/users/2163142-fal4fl' },
     { label: 'OP.GG', url: 'https://www.op.gg/summoners/euw/Twisted%20Falafl-CRIT' },
+    { label: 'Juli006#EUW', url: 'https://www.op.gg/summoners/euw/Juli006-EUW' },
     { label: 'Supermajor', url: 'https://www.supermajor.gg/ultimate/player/Falafl?id=S4922057' },
     { label: 'Twitch', url: 'https://www.twitch.tv/fal4fl' },
     { label: 'Insta', url: 'https://www.instagram.com/miot_falafl/' }

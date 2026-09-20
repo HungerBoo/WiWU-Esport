@@ -12,6 +12,12 @@
         "gameName": "Twisted Falafl",
         "tagLine": "CRIT"
       },
+      "alternateRiotIds": [
+        {
+          "gameName": "Juli006",
+          "tagLine": "EUW"
+        }
+      ],
       "puuid": "gtVN2n87Ss0G0WSune3UTviYREOiP78MtG7QiRyOcY9lBQjTXLsmGubwYrGYNuFKsBvpaunqegXzyQ",
       "rank": {
         "tier": "EMERALD",

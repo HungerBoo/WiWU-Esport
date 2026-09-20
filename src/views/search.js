@@ -22,7 +22,7 @@ export async function renderPlayerSearch(gameName, tagLine) {
         <p class="search-hero-copy">Gib einen Riot ID ein (Name#Tag), um Rang, Level und Top-Champions live abzurufen.</p>
 
         <form class="player-search-form" data-search-form>
-          <input type="text" name="riotId" class="player-search-input" placeholder="z. B. Twisted Falafl#CRIT" data-search-input required autocomplete="off">
+          <input type="text" name="riotId" class="player-search-input" placeholder="z. B. Twisted Falafl#CRIT oder Juli006#EUW" data-search-input required autocomplete="off">
           <button type="submit" class="player-search-submit">Suchen</button>
         </form>
       </section>
