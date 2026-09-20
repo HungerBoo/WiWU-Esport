@@ -3,95 +3,121 @@
 
 import { formatDate } from '../utils/dates.js';
 
+function normalizeDateValue(dateLike) {
+  if (!dateLike) return null;
+  const parsed = new Date(dateLike);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function getSortedHistory(history = []) {
+  return [...history]
+    .filter((entry) => entry && (entry.date || entry.totalLp || entry.tier || entry.rank))
+    .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+}
+
+function createNewsItem(item) {
+  if (!item || !item.id || !item.title) return null;
+  return item;
+}
+
 export function generateNewsFeed(playerData, primeLeagueData) {
   const news = [];
+  const seenIds = new Set();
   const todayStr = new Date().toISOString().split('T')[0];
+  const recentWindowMs = 1000 * 60 * 60 * 24 * 90;
+  const nowTs = Date.now();
 
-  // 1. League of Legends Rank-Ups & SoloQ Milestones
+  const addNews = (entry) => {
+    const safeEntry = createNewsItem(entry);
+    if (!safeEntry) return;
+
+    if (seenIds.has(safeEntry.id)) return;
+    seenIds.add(safeEntry.id);
+    news.push(safeEntry);
+  };
+
+  // 1. League of Legends Rank-Ups / Deranks only when the rank actually changed recently
   const leaguePlayers = playerData?.league || [];
   for (const player of leaguePlayers) {
-    if (!player.rank) continue;
+    if (!player?.rank) continue;
 
     const rank = player.rank;
-    const history = player.lpHistory || [];
+    const history = getSortedHistory(player.lpHistory || []);
+    const latestHistory = history[history.length - 1] || null;
+    const previousHistory = history.length > 1 ? history[history.length - 2] : null;
     const playerUrl = `spielerprofil.html?player=${player.slug}`;
+    const latestDate = latestHistory?.date || player.rank?.lastUpdated || todayStr;
+    const latestDateTs = normalizeDateValue(latestDate)?.getTime() || nowTs;
 
-    // Rank-Up / High Performance item
-    if (rank.tier && rank.tier !== 'UNRANKED') {
-      const isEmeraldPlus = ['EMERALD', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'].includes(rank.tier);
-      const isHighWr = rank.winrate >= 55;
+    if (!rank.tier || rank.tier === 'UNRANKED') continue;
 
-      let title = `${player.name} auf ${rank.tierDisplay}`;
-      let description = `Starke SoloQ-Performance: ${player.name} steht bei ${rank.lpDisplay} in ${rank.tierDisplay} mit einer Winrate von ${rank.winrate}% (${rank.wins} Siege / ${rank.losses} Niederlagen).`;
-      let badge = 'Rank Up';
+    const tierChanged = !!previousHistory && (previousHistory.tier || '') !== (rank.tier || '');
+    const rankChanged = !!previousHistory && (previousHistory.rank || '') !== (rank.rank || '');
+    const lpChanged = !!previousHistory && Number(previousHistory.totalLp || 0) !== Number(rank.totalLp || 0);
+    const recentRankEvent = (latestDateTs >= nowTs - recentWindowMs) && (tierChanged || rankChanged || lpChanged);
 
-      // Check for recent rank change (rank up or derank) by comparing to prior points in lpHistory
-      let isRecentRankUp = false;
-      let isRecentDerank = false;
-      let prevRankDisplay = null;
-      if (history.length > 1) {
-        const sorted = [...history].sort((a, b) => a.date.localeCompare(b.date));
-        const prev = sorted[sorted.length - 2];
-        if (prev && (prev.tier !== rank.tier || prev.rank !== rank.rank)) {
-          isRecentRankUp = (rank.totalLp || 0) > (prev.totalLp || 0);
-          isRecentDerank = (rank.totalLp || 0) < (prev.totalLp || 0);
-          prevRankDisplay = prev.tier ? `${prev.tier.charAt(0) + prev.tier.slice(1).toLowerCase()} ${prev.rank || ''}`.trim() : null;
-        }
-      }
+    if (!recentRankEvent) continue;
 
-      if (isRecentDerank && prevRankDisplay) {
-        title = `Absturz: ${player.name} stinkt ab und ist nun in ${rank.tierDisplay}`;
-        description = `Bitterer Rückschlag in der SoloQ: Nach einer unglücklichen Serie stürzt ${player.name} von ${prevRankDisplay} ab und findet sich mit ${rank.lpDisplay} in ${rank.tierDisplay} wieder. Mental stabil bleiben!`;
-        badge = 'Derank';
-      } else if (isRecentRankUp && prevRankDisplay) {
-        title = `Aufstieg: ${player.name} erreicht ${rank.tierDisplay}!`;
-        description = `Glückwunsch zum Division-Aufstieg! ${player.name} steigt von ${prevRankDisplay} auf ${rank.tierDisplay} (${rank.lpDisplay}) auf. Winrate: ${rank.winrate}%.`;
-        badge = 'Rank Up';
-      } else if (rank.tier === 'EMERALD') {
-        title = `${player.name} klettert auf ${rank.tierDisplay}`;
-        description = `${player.name} behauptet sich in der oberen Elo und grindet durch Emerald mit ${rank.winrate}% Winrate. Nächstes Ziel: Diamond Promo!`;
-      } else if (isHighWr) {
-        title = `${player.name} dominiert Solo-Queue mit ${rank.winrate}% WR`;
-        description = `Nach ${rank.wins + rank.losses} Spielen hält ${player.name} eine überragende Siegrate in ${rank.tierDisplay} (${rank.lpDisplay}).`;
-        badge = 'Winrate';
-      }
+    const prevRankDisplay = previousHistory && previousHistory.tier
+      ? `${previousHistory.tier.charAt(0).toUpperCase() + previousHistory.tier.slice(1).toLowerCase()} ${previousHistory.rank || ''}`.trim()
+      : null;
 
-      // Date of latest match/point or today
-      const latestDate = history.length > 0 ? history[history.length - 1].date : todayStr;
+    const currentRankDisplay = rank.tierDisplay || `${rank.tier} ${rank.rank}`.trim();
+    const isRecentRankUp = Number(rank.totalLp || 0) > Number(previousHistory?.totalLp || 0);
+    const isRecentDerank = Number(rank.totalLp || 0) < Number(previousHistory?.totalLp || 0);
 
-      news.push({
-        id: `lol-rank-${player.slug}`,
-        category: 'lol',
-        badge,
-        date: formatDate(latestDate),
-        timestamp: new Date(latestDate).getTime(),
-        tag: `Riot Games // ${rank.tierDisplay}`,
-        title,
-        description,
-        meta: `${rank.tierDisplay} • ${rank.winrate}% WR`,
-        link: playerUrl
-      });
+    let title = `${player.name} auf ${currentRankDisplay}`;
+    let description = `Moderne SoloQ-Form: ${player.name} steht bei ${rank.lpDisplay} in ${currentRankDisplay} mit ${rank.winrate}% Winrate (${rank.wins}W / ${rank.losses}L).`;
+    let badge = 'Rank Up';
+
+    if (isRecentDerank && prevRankDisplay) {
+      title = `Absturz: ${player.name} in ${currentRankDisplay}`;
+      description = `Nach einer harten Serie fällt ${player.name} von ${prevRankDisplay} auf ${currentRankDisplay} (${rank.lpDisplay}) zurück. Stabilität ist jetzt der Schlüssel.`;
+      badge = 'Derank';
+    } else if (isRecentRankUp && prevRankDisplay) {
+      title = `Aufstieg: ${player.name} erreicht ${currentRankDisplay}!`;
+      description = `Glückwunsch! ${player.name} steigt von ${prevRankDisplay} auf ${currentRankDisplay} (${rank.lpDisplay}) und hält dabei ${rank.winrate}% Winrate.`;
+      badge = 'Rank Up';
     }
+
+    addNews({
+      id: `lol-rank-${player.slug}-${latestDate}`,
+      category: 'lol',
+      badge,
+      date: formatDate(latestDate),
+      timestamp: latestDateTs,
+      tag: `Riot Games // ${currentRankDisplay}`,
+      title,
+      description,
+      meta: `${currentRankDisplay} • ${rank.winrate}% WR`,
+      link: playerUrl
+    });
   }
 
-  // 2. Smash Bros. Offline Tournament Results (start.gg)
+  // 2. Smash Bros. Offline Tournament Results (only recent offline events)
   const smashPlayers = playerData?.smash || [];
   for (const player of smashPlayers) {
-    const tournaments = player.recentTournaments || [];
+    const tournaments = [...(player.recentTournaments || [])]
+      .filter((t) => !!t?.tournamentName && (t.isOnline === false || t.isOnline === 'false'))
+      .filter((t) => {
+        const date = normalizeDateValue(t.date);
+        return date && (nowTs - date.getTime()) <= recentWindowMs;
+      })
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
     for (const t of tournaments) {
-      if (!t.tournamentName) continue;
-
       const placementText = t.placement ? `${t.placement}. Platz${t.totalEntrants ? ` / ${t.totalEntrants}` : ''}` : 'Teilgenommen';
+      const eventKey = `${player.slug}-${(t.tournamentName || '').trim()}-${(t.eventName || '').trim()}-${t.date || ''}`;
       const eventTitle = `${player.name} bei ${t.tournamentName}`;
-      const description = `${player.name} vertritt die Wieländer Wühlmäuse offline im ${t.eventName} Bracket und erzielt den ${placementText}.`;
+      const description = `${player.name} vertritt die Wieländer Wühlmäuse offline im ${t.eventName || 'Main Event'} Bracket und erzielt den ${placementText}.`;
 
-      news.push({
-        id: `smash-${player.slug}-${t.tournamentName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+      addNews({
+        id: `smash-${eventKey.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`,
         category: 'smash',
         badge: 'Tournament',
         date: formatDate(t.date || todayStr),
-        timestamp: t.date ? new Date(t.date).getTime() : Date.now() - 86400000,
-        tag: `start.gg // Offline Event`,
+        timestamp: normalizeDateValue(t.date)?.getTime() || Date.now() - 86400000,
+        tag: 'start.gg // Offline Event',
         title: eventTitle,
         description,
         meta: placementText,
@@ -104,32 +130,16 @@ export function generateNewsFeed(playerData, primeLeagueData) {
   if (primeLeagueData) {
     const recentMatches = primeLeagueData.recentMatches || [];
     if (recentMatches.length > 0) {
-      news.push({
+      addNews({
         id: 'prime-league-results',
         category: 'prime',
         badge: 'Matchday',
         date: formatDate(todayStr),
         timestamp: Date.now() - 3600000 * 12,
         tag: `Prime League // Division 7.5`,
-        title: `Prime League Match-Ergebnisse`,
+        title: 'Prime League Match-Ergebnisse',
         description: `Die jüngsten Begegnungen der Gruppenphase: ${recentMatches.join(', ')}. Vorbereitung auf die nächste Saison läuft!`,
         meta: `${primeLeagueData.currentSeason || 'Division 7.5'}`,
-        link: primeLeagueData.url || 'league-of-legends.html'
-      });
-    }
-
-    const seasonStats = primeLeagueData.stats?.recentSeason?.values || [];
-    if (seasonStats.length > 0) {
-      news.push({
-        id: 'prime-league-season-summary',
-        category: 'prime',
-        badge: 'Season',
-        date: formatDate('2026-08-20'),
-        timestamp: new Date('2026-08-20').getTime(),
-        tag: `Prime League // Tabelle`,
-        title: `Saisonabschluss: ${primeLeagueData.currentSeason}`,
-        description: `Die Wieländer Wühlmäuse belegen den 6. Platz in Gruppe 7.5 mit 4 Punkten. Taktische Invades und neue Teamcompositions für den nächsten Split sind in Vorbereitung.`,
-        meta: `6. Platz • 4 Punkte`,
         link: primeLeagueData.url || 'league-of-legends.html'
       });
     }
