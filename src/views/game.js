@@ -243,15 +243,43 @@ function setupLeaderboardAndGraph(leaguePlayers) {
   const refreshAllBtn = document.querySelector('[data-league-refresh-all-btn]');
   if (!leaderboardListEl || !currentPlayers?.length) return;
 
+  const buildLeaderboardData = (players) => {
+    const entries = [...players];
+
+    players.forEach((player, playerIndex) => {
+      const altAccounts = Array.isArray(player.alternateRiotIds) ? player.alternateRiotIds : [];
+      altAccounts.forEach((account, index) => {
+        const isFalafl = (player.slug || '').toLowerCase() === 'falafl';
+        entries.push({
+          ...player,
+          slug: `${player.slug || 'player'}-smurf-${playerIndex + 1}-${index + 1}`,
+          isSmurfAccount: true,
+          smurfLabel: isFalafl ? 'Falafl 2nd Acc' : `${player.name} 2nd Acc`,
+          name: isFalafl ? 'Falafl 2nd Acc' : `${player.name} 2nd Acc`,
+          role: `${player.role || 'Top Lane'} • Smurf`,
+          riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
+          opgg: account.gameName && account.tagLine
+            ? `https://www.op.gg/summoners/euw/${encodeURIComponent(account.gameName)}-${encodeURIComponent(account.tagLine)}`
+            : player.opgg,
+          image: player.image,
+          rank: player.rank ? { ...player.rank, tierDisplay: player.rank.tierDisplay || 'Unranked', lpDisplay: player.rank.lpDisplay || '0 LP' } : player.rank,
+          lpHistory: player.lpHistory || []
+        });
+      });
+    });
+
+    return entries;
+  };
+
   const updateDisplay = () => {
-    // Sort players by totalLp descending
-    const sortedPlayers = [...currentPlayers].sort((a, b) => {
+    const leaderboardPlayers = buildLeaderboardData(currentPlayers);
+
+    const sortedPlayers = [...leaderboardPlayers].sort((a, b) => {
       const lpA = a.rank?.totalLp ?? 0;
       const lpB = b.rank?.totalLp ?? 0;
       return lpB - lpA;
     });
 
-    // Render Leaderboard list
     leaderboardListEl.innerHTML = sortedPlayers.map((player, index) => {
       const rank = player.rank || {
         tier: 'UNRANKED',
@@ -266,6 +294,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const color = PLAYER_COLORS[player.slug] || DEFAULT_COLOR;
       const isTop3 = index < 3;
       const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
+      const displayName = player.isSmurfAccount ? `${player.name} <span class="leaderboard-smurf-tag">2nd Acc</span>` : player.name;
 
       return `
         <div class="leaderboard-row${rankClass}" data-player-slug="${player.slug}">
@@ -277,7 +306,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
             </div>
             <div class="leaderboard-name-block">
               <a href="${player.opgg || '#'}" class="leaderboard-player-link" target="_blank" rel="noreferrer" title="${player.name} auf OP.GG aufrufen">
-                <strong>${player.name}</strong>
+                <strong>${displayName}</strong>
               </a>
               <div class="leaderboard-sublinks">
                 <span class="leaderboard-role-tag">${player.role}</span>
@@ -309,8 +338,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
     renderMultiPlayerChartAndLegend(sortedPlayers);
   };
 
-  // Ensure default active slugs contains all available players
-  activeLeaderboardSlugs = new Set(currentPlayers.map(p => p.slug));
+  activeLeaderboardSlugs = new Set(buildLeaderboardData(currentPlayers).map(p => p.slug));
   updateDisplay();
 
   // Timeframe selector buttons
@@ -334,7 +362,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
 
   // Select all / Deselect all
   document.querySelector('[data-legend-select-all]')?.addEventListener('click', () => {
-    activeLeaderboardSlugs = new Set(currentPlayers.map(p => p.slug));
+    activeLeaderboardSlugs = new Set(buildLeaderboardData(currentPlayers).map(p => p.slug));
     updateDisplay();
   });
 
@@ -439,11 +467,12 @@ function renderMultiPlayerChartAndLegend(players) {
       const isActive = activeLeaderboardSlugs.has(player.slug);
       const tierDisplay = player.rank?.tierDisplay || 'Unranked';
       const lpDisplay = player.rank?.lpDisplay || '0 LP';
+      const legendName = player.isSmurfAccount ? `${player.name} • 2nd Acc` : player.name;
 
       return `
         <button type="button" class="legend-pill${isActive ? ' is-active' : ''}" data-toggle-slug="${player.slug}" aria-pressed="${isActive}">
           <span class="legend-color-dot" style="background-color: ${color};"></span>
-          <span class="legend-player-name">${player.name}</span>
+          <span class="legend-player-name">${legendName}</span>
           <span class="legend-player-lp">${tierDisplay.split(' ')[0]} ${lpDisplay}</span>
         </button>
       `;

@@ -399,6 +399,7 @@ em { color: #788d1d; font-style: normal; }
 .leaderboard-name-block { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .leaderboard-player-link { display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: var(--ink); font-size: 14px; line-height: 1.2; font-weight: 700; }
 .leaderboard-player-link:hover { color: #788d1d; text-decoration: underline; }
+.leaderboard-smurf-tag { display: inline-block; margin-left: 6px; font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--acid); background: #013b13; padding: 2px 5px; border-radius: 2px; vertical-align: middle; }
 .opgg-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: #5383e8; background: rgba(83, 131, 232, .12); padding: 1px 4px; border-radius: 2px; }
 .leaderboard-sublinks { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
 .leaderboard-role-tag { text-transform: uppercase; font-size: 9px; }
@@ -805,6 +806,11 @@ em { color: #788d1d; font-style: normal; }
 .rank-refresh-btn:hover { background: #e0ff54; border-color: var(--ink); transform: translateY(-1px); box-shadow: 3px 4px 0 rgba(22, 32, 29, .2); }
 .rank-refresh-btn:active { transform: translateY(1px); box-shadow: 1px 1px 0 rgba(22, 32, 29, .2); }
 .rank-refresh-btn.is-loading { opacity: .7; pointer-events: none; }
+
+.riot-account-switcher { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+.riot-account-switch-btn { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: .05em; padding: 7px 12px; cursor: pointer; text-transform: uppercase; transition: background .2s, border-color .2s, color .2s; }
+.riot-account-switch-btn:hover { color: var(--ink); border-color: var(--ink); }
+.riot-account-switch-btn.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 .rank-metrics-grid { display: grid; grid-template-columns: 1.4fr 1.2fr 1.2fr; gap: 16px; margin: 28px 0; }
 .rank-metric-card { background: var(--paper); border: 1px solid var(--line); padding: 20px 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; position: relative; }
