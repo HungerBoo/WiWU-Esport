@@ -12,6 +12,7 @@ import { getWiwuPuuidMap } from '../utils/roster.js';
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
 let activeRiotAccountKey = 'main';
+const accountStateMap = new Map();
 
 function getPlayerRiotAccounts(player) {
   const accounts = [];
@@ -36,6 +37,41 @@ function getPlayerRiotAccounts(player) {
 function getSelectedRiotAccount(player) {
   const accounts = getPlayerRiotAccounts(player);
   return accounts.find(account => account.key === activeRiotAccountKey) || accounts[0] || null;
+}
+
+function getAccountState(player, key) {
+  if (!player) return null;
+
+  const accounts = getPlayerRiotAccounts(player);
+  const account = accounts.find(item => item.key === key) || accounts[0];
+  if (!account) return null;
+
+  const existing = accountStateMap.get(`${player.slug || 'player'}:${key}`);
+  if (existing) return existing;
+
+  const freshState = {
+    ...player,
+    riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
+    rank: player.rank,
+    lpHistory: player.lpHistory || [],
+    summonerLevel: player.summonerLevel,
+    profileIconId: player.profileIconId,
+    topMasteries: player.topMasteries || [],
+    liveGame: player.liveGame,
+    recentMatches: player.recentMatches,
+    puuid: player.puuid
+  };
+
+  accountStateMap.set(`${player.slug || 'player'}:${key}`, freshState);
+  return freshState;
+}
+
+function applyAccountState(player, key) {
+  const accountState = getAccountState(player, key);
+  if (!accountState) return player;
+
+  Object.assign(player, accountState);
+  return player;
 }
 
 export async function renderPlayerPage(playerSlug) {
@@ -479,21 +515,42 @@ function setupPlayerInteractions(player) {
       const selectedAccount = getSelectedRiotAccount(player);
       if (!selectedAccount) return;
 
+      const accountState = getAccountState(player, nextKey) || player;
+      const selectedPlayer = { ...player, ...accountState };
+      Object.assign(player, selectedPlayer);
+
       if (site.riotProxyUrl) {
         const params = `gameName=${encodeURIComponent(selectedAccount.gameName)}&tagLine=${encodeURIComponent(selectedAccount.tagLine)}`;
         const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`);
         if (proxyRes.ok) {
           const freshRank = await proxyRes.json();
           if (freshRank?.tier) {
-            Object.assign(player, {
+            const state = getAccountState(player, nextKey) || {};
+            const nextState = {
+              ...state,
               rank: freshRank,
               summonerLevel: freshRank.summonerLevel,
               profileIconId: freshRank.profileIconId,
               topMasteries: freshRank.topMasteries,
               liveGame: freshRank.liveGame,
-              recentMatches: freshRank.recentMatchesOk ? freshRank.recentMatches : player.recentMatches,
-              puuid: freshRank.puuid || player.puuid
-            });
+              recentMatches: freshRank.recentMatchesOk ? freshRank.recentMatches : (state.recentMatches || player.recentMatches),
+              puuid: freshRank.puuid || state.puuid || player.puuid,
+              lpHistory: [
+                ...(state.lpHistory || player.lpHistory || []).filter(e => e.date !== new Date().toISOString().split('T')[0]),
+                {
+                  date: new Date().toISOString().split('T')[0],
+                  tier: freshRank.tier,
+                  rank: freshRank.rank,
+                  leaguePoints: freshRank.leaguePoints,
+                  totalLp: freshRank.totalLp,
+                  wins: freshRank.wins,
+                  losses: freshRank.losses
+                }
+              ].sort((a, b) => a.date.localeCompare(b.date))
+            };
+
+            accountStateMap.set(`${player.slug || 'player'}:${nextKey}`, nextState);
+            Object.assign(player, nextState);
             updateLiveStatsUI(player);
             return;
           }
@@ -538,6 +595,7 @@ function setupPlayerInteractions(player) {
       try {
         let liveUpdated = false;
         const selectedAccount = getSelectedRiotAccount(player);
+        const selectedKey = activeRiotAccountKey || 'main';
 
         // If a Riot Proxy Worker URL is configured and this is a League player
         if (site.riotProxyUrl && selectedAccount) {
@@ -547,30 +605,32 @@ function setupPlayerInteractions(player) {
           if (proxyRes.ok) {
             const freshRank = await proxyRes.json();
             if (freshRank && freshRank.tier) {
-              player.rank = freshRank;
-              player.puuid = freshRank.puuid || player.puuid;
-              player.summonerLevel = freshRank.summonerLevel;
-              player.profileIconId = freshRank.profileIconId;
-              player.topMasteries = freshRank.topMasteries;
-              player.liveGame = freshRank.liveGame;
-              if (freshRank.recentMatchesOk) player.recentMatches = freshRank.recentMatches;
-
-              const todayStr = new Date().toISOString().split('T')[0];
-              const todaySnapshot = {
-                date: todayStr,
-                tier: freshRank.tier,
-                rank: freshRank.rank,
-                leaguePoints: freshRank.leaguePoints,
-                totalLp: freshRank.totalLp,
-                wins: freshRank.wins,
-                losses: freshRank.losses
+              const state = getAccountState(player, selectedKey) || { ...player };
+              const nextState = {
+                ...state,
+                rank: freshRank,
+                puuid: freshRank.puuid || state.puuid || player.puuid,
+                summonerLevel: freshRank.summonerLevel,
+                profileIconId: freshRank.profileIconId,
+                topMasteries: freshRank.topMasteries,
+                liveGame: freshRank.liveGame,
+                recentMatches: freshRank.recentMatchesOk ? freshRank.recentMatches : (state.recentMatches || player.recentMatches),
+                lpHistory: [
+                  ...(state.lpHistory || []).filter(e => e.date !== new Date().toISOString().split('T')[0]),
+                  {
+                    date: new Date().toISOString().split('T')[0],
+                    tier: freshRank.tier,
+                    rank: freshRank.rank,
+                    leaguePoints: freshRank.leaguePoints,
+                    totalLp: freshRank.totalLp,
+                    wins: freshRank.wins,
+                    losses: freshRank.losses
+                  }
+                ].sort((a, b) => a.date.localeCompare(b.date))
               };
 
-              player.lpHistory = [
-                ...(player.lpHistory || []).filter(e => e.date !== todayStr),
-                todaySnapshot
-              ].sort((a, b) => a.date.localeCompare(b.date));
-
+              accountStateMap.set(`${player.slug || 'player'}:${selectedKey}`, nextState);
+              Object.assign(player, nextState);
               updateLiveStatsUI(player);
               liveUpdated = true;
             }

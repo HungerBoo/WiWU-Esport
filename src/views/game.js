@@ -250,12 +250,16 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const altAccounts = Array.isArray(player.alternateRiotIds) ? player.alternateRiotIds : [];
       altAccounts.forEach((account, index) => {
         const isFalafl = (player.slug || '').toLowerCase() === 'falafl';
+        const accountName = (account.gameName || 'Smurf').trim();
+        const riotIdLabel = `${accountName}#${account.tagLine || 'EUW'}`;
+        const accountSlug = `${player.slug || 'player'}-smurf-${accountName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${index + 1}`;
+
         entries.push({
           ...player,
-          slug: `${player.slug || 'player'}-smurf-${playerIndex + 1}-${index + 1}`,
+          slug: accountSlug,
           isSmurfAccount: true,
-          smurfLabel: isFalafl ? 'Falafl 2nd Acc' : `${player.name} 2nd Acc`,
-          name: isFalafl ? 'Falafl 2nd Acc' : `${player.name} 2nd Acc`,
+          smurfLabel: riotIdLabel,
+          name: isFalafl ? `${accountName}#${account.tagLine || 'EUW'}` : `${player.name} • ${riotIdLabel}`,
           role: `${player.role || 'Top Lane'} • Smurf`,
           riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
           opgg: account.gameName && account.tagLine
@@ -263,7 +267,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
             : player.opgg,
           image: player.image,
           rank: player.rank ? { ...player.rank, tierDisplay: player.rank.tierDisplay || 'Unranked', lpDisplay: player.rank.lpDisplay || '0 LP' } : player.rank,
-          lpHistory: player.lpHistory || []
+          lpHistory: Array.isArray(player.lpHistory) ? player.lpHistory : []
         });
       });
     });
@@ -295,6 +299,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const isTop3 = index < 3;
       const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
       const displayName = player.isSmurfAccount ? `${player.name} <span class="leaderboard-smurf-tag">2nd Acc</span>` : player.name;
+      const leaderboardName = player.isSmurfAccount ? (player.riotId ? `${player.riotId.gameName}#${player.riotId.tagLine}` : player.name) : player.name;
 
       return `
         <div class="leaderboard-row${rankClass}" data-player-slug="${player.slug}">
@@ -305,7 +310,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
               <span class="leaderboard-color-indicator" style="background-color: ${color};" title="Farbe im Chart"></span>
             </div>
             <div class="leaderboard-name-block">
-              <a href="${player.opgg || '#'}" class="leaderboard-player-link" target="_blank" rel="noreferrer" title="${player.name} auf OP.GG aufrufen">
+              <a href="${player.opgg || '#'}" class="leaderboard-player-link" target="_blank" rel="noreferrer" title="${leaderboardName} auf OP.GG aufrufen">
                 <strong>${displayName}</strong>
               </a>
               <div class="leaderboard-sublinks">
@@ -467,7 +472,9 @@ function renderMultiPlayerChartAndLegend(players) {
       const isActive = activeLeaderboardSlugs.has(player.slug);
       const tierDisplay = player.rank?.tierDisplay || 'Unranked';
       const lpDisplay = player.rank?.lpDisplay || '0 LP';
-      const legendName = player.isSmurfAccount ? `${player.name} • 2nd Acc` : player.name;
+      const legendName = player.isSmurfAccount
+        ? (player.riotId ? `${player.riotId.gameName}#${player.riotId.tagLine} • 2nd Acc` : `${player.name} • 2nd Acc`)
+        : player.name;
 
       return `
         <button type="button" class="legend-pill${isActive ? ' is-active' : ''}" data-toggle-slug="${player.slug}" aria-pressed="${isActive}">
