@@ -28,7 +28,7 @@
             "tierDisplay": "Platinum III",
             "lpDisplay": "47 LP",
             "totalLp": 1747,
-            "lastUpdated": "2026-09-25T09:38:43.690Z"
+            "lastUpdated": "2026-09-26T09:23:15.694Z"
           },
           "lpHistory": [
             {
@@ -84,6 +84,15 @@
               "totalLp": 1747,
               "wins": 25,
               "losses": 12
+            },
+            {
+              "date": "2026-09-26",
+              "tier": "PLATINUM",
+              "rank": "III",
+              "leaguePoints": 47,
+              "totalLp": 1747,
+              "wins": 25,
+              "losses": 12
             }
           ]
         }
@@ -100,7 +109,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "20 LP",
         "totalLp": 2120,
-        "lastUpdated": "2026-09-25T09:38:43.250Z"
+        "lastUpdated": "2026-09-26T09:23:15.234Z"
       },
       "lpHistory": [
         {
@@ -408,6 +417,15 @@
           "totalLp": 2120,
           "wins": 37,
           "losses": 21
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 20,
+          "totalLp": 2120,
+          "wins": 37,
+          "losses": 21
         }
       ]
     },
@@ -435,7 +453,7 @@
         "tierDisplay": "Platinum II",
         "lpDisplay": "15 LP",
         "totalLp": 1815,
-        "lastUpdated": "2026-09-25T09:38:44.137Z"
+        "lastUpdated": "2026-09-26T09:23:16.143Z"
       },
       "lpHistory": [
         {
@@ -770,6 +788,15 @@
           "totalLp": 1815,
           "wins": 158,
           "losses": 160
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "PLATINUM",
+          "rank": "II",
+          "leaguePoints": 15,
+          "totalLp": 1815,
+          "wins": 158,
+          "losses": 160
         }
       ]
     },
@@ -797,7 +824,7 @@
         "tierDisplay": "Gold III",
         "lpDisplay": "55 LP",
         "totalLp": 1355,
-        "lastUpdated": "2026-09-25T09:38:44.580Z"
+        "lastUpdated": "2026-09-26T09:23:16.670Z"
       },
       "lpHistory": [
         {
@@ -1051,6 +1078,15 @@
           "totalLp": 1355,
           "wins": 12,
           "losses": 9
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "GOLD",
+          "rank": "III",
+          "leaguePoints": 55,
+          "totalLp": 1355,
+          "wins": 12,
+          "losses": 9
         }
       ]
     },
@@ -1070,15 +1106,15 @@
       "rank": {
         "tier": "GOLD",
         "rank": "III",
-        "leaguePoints": 22,
-        "wins": 140,
+        "leaguePoints": 61,
+        "wins": 142,
         "losses": 137,
         "winrate": 51,
-        "hotStreak": false,
+        "hotStreak": true,
         "tierDisplay": "Gold III",
-        "lpDisplay": "22 LP",
-        "totalLp": 1322,
-        "lastUpdated": "2026-09-25T09:38:45.010Z"
+        "lpDisplay": "61 LP",
+        "totalLp": 1361,
+        "lastUpdated": "2026-09-26T09:23:17.124Z"
       },
       "lpHistory": [
         {
@@ -1395,6 +1431,15 @@
           "totalLp": 1322,
           "wins": 140,
           "losses": 137
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "GOLD",
+          "rank": "III",
+          "leaguePoints": 61,
+          "totalLp": 1361,
+          "wins": 142,
+          "losses": 137
         }
       ]
     },
@@ -1422,7 +1467,7 @@
         "tierDisplay": "Platinum III",
         "lpDisplay": "73 LP",
         "totalLp": 1773,
-        "lastUpdated": "2026-09-25T09:38:45.462Z"
+        "lastUpdated": "2026-09-26T09:23:17.586Z"
       },
       "lpHistory": [
         {
@@ -1730,6 +1775,15 @@
           "totalLp": 1773,
           "wins": 175,
           "losses": 172
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "PLATINUM",
+          "rank": "III",
+          "leaguePoints": 73,
+          "totalLp": 1773,
+          "wins": 175,
+          "losses": 172
         }
       ]
     },
@@ -1757,7 +1811,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-09-25T09:38:45.890Z"
+        "lastUpdated": "2026-09-26T09:23:18.100Z"
       },
       "lpHistory": [
         {
@@ -1993,6 +2047,15 @@
           "totalLp": 2000,
           "wins": 57,
           "losses": 47
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 2000,
+          "wins": 57,
+          "losses": 47
         }
       ]
     },
@@ -2020,7 +2083,7 @@
         "tierDisplay": "Platinum I",
         "lpDisplay": "71 LP",
         "totalLp": 1971,
-        "lastUpdated": "2026-09-25T09:38:46.328Z"
+        "lastUpdated": "2026-09-26T09:23:18.553Z"
       },
       "lpHistory": [
         {
@@ -2301,6 +2364,15 @@
           "totalLp": 1971,
           "wins": 81,
           "losses": 76
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "PLATINUM",
+          "rank": "I",
+          "leaguePoints": 71,
+          "totalLp": 1971,
+          "wins": 81,
+          "losses": 76
         }
       ]
     },
@@ -2320,15 +2392,15 @@
       "rank": {
         "tier": "EMERALD",
         "rank": "III",
-        "leaguePoints": 35,
-        "wins": 126,
-        "losses": 122,
+        "leaguePoints": 33,
+        "wins": 127,
+        "losses": 123,
         "winrate": 51,
         "hotStreak": false,
         "tierDisplay": "Emerald III",
-        "lpDisplay": "35 LP",
-        "totalLp": 2135,
-        "lastUpdated": "2026-09-25T09:38:46.769Z"
+        "lpDisplay": "33 LP",
+        "totalLp": 2133,
+        "lastUpdated": "2026-09-26T09:23:19.000Z"
       },
       "lpHistory": [
         {
@@ -2636,6 +2708,15 @@
           "totalLp": 2135,
           "wins": 126,
           "losses": 122
+        },
+        {
+          "date": "2026-09-26",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 33,
+          "totalLp": 2133,
+          "wins": 127,
+          "losses": 123
         }
       ]
     }
