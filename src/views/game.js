@@ -244,37 +244,7 @@ function setupLeaderboardAndGraph(leaguePlayers) {
   if (!leaderboardListEl || !currentPlayers?.length) return;
 
   const buildLeaderboardData = (players) => {
-    const entries = [...players];
-
-    players.forEach((player, playerIndex) => {
-      const altAccounts = Array.isArray(player.alternateRiotIds) ? player.alternateRiotIds : [];
-      altAccounts.forEach((account, index) => {
-        const isFalafl = (player.slug || '').toLowerCase() === 'falafl';
-        const accountName = (account.gameName || 'Smurf').trim();
-        const riotIdLabel = `${accountName}#${account.tagLine || 'EUW'}`;
-        const accountSlug = `${player.slug || 'player'}-smurf-${accountName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${index + 1}`;
-        const altRank = account.rank || null;
-        const altHistory = Array.isArray(account.lpHistory) ? account.lpHistory : [];
-
-        entries.push({
-          ...player,
-          slug: accountSlug,
-          isSmurfAccount: true,
-          smurfLabel: riotIdLabel,
-          name: isFalafl ? 'Falafl 2nd Acc' : `${player.name} 2nd Acc`,
-          role: `${player.role || 'Top Lane'} • Smurf`,
-          riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
-          opgg: account.gameName && account.tagLine
-            ? `https://www.op.gg/summoners/euw/${encodeURIComponent(account.gameName)}-${encodeURIComponent(account.tagLine)}`
-            : player.opgg,
-          image: player.image,
-          rank: altRank ? { ...altRank, tierDisplay: altRank.tierDisplay || 'Unranked', lpDisplay: altRank.lpDisplay || '0 LP' } : altRank,
-          lpHistory: altHistory
-        });
-      });
-    });
-
-    return entries;
+    return [...players];
   };
 
   const updateDisplay = () => {
@@ -300,8 +270,8 @@ function setupLeaderboardAndGraph(leaguePlayers) {
       const color = PLAYER_COLORS[player.slug] || DEFAULT_COLOR;
       const isTop3 = index < 3;
       const rankClass = isTop3 ? ` leaderboard-row--top${index + 1}` : '';
-      const displayName = player.isSmurfAccount ? `${player.name} <span class="leaderboard-smurf-tag">${player.smurfLabel}</span>` : player.name;
-      const leaderboardName = player.isSmurfAccount ? `${player.name}` : player.name;
+      const displayName = player.name;
+      const leaderboardName = player.name;
 
       return `
         <div class="leaderboard-row${rankClass}" data-player-slug="${player.slug}">
@@ -391,75 +361,42 @@ function setupLeaderboardAndGraph(leaguePlayers) {
 
         // If Cloudflare proxy is configured
         if (site.riotProxyUrl) {
-          const updatePromises = currentPlayers.flatMap(async (player) => {
-            const accountFetches = [{ key: 'main', riotId: player.riotId, puuid: player.puuid }];
+          const updatePromises = currentPlayers.map(async (player) => {
+            const riotId = player.riotId;
+            if (!riotId && !player.puuid) return;
 
-            if (Array.isArray(player.alternateRiotIds)) {
-              player.alternateRiotIds.forEach((account, index) => {
-                accountFetches.push({
-                  key: `alt-${index}`,
-                  riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
-                  puuid: null
-                });
-              });
-            }
+            const params = player.puuid
+              ? `puuid=${encodeURIComponent(player.puuid)}`
+              : `gameName=${encodeURIComponent(riotId.gameName)}&tagLine=${encodeURIComponent(riotId.tagLine)}`;
 
-            return Promise.all(accountFetches.map(async (accountInfo) => {
-              const riotId = accountInfo.riotId;
-              if (!riotId && !accountInfo.puuid) return;
+            try {
+              const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}`);
+              if (proxyRes.ok) {
+                const freshRank = await proxyRes.json();
+                if (freshRank && freshRank.tier) {
+                  player.rank = freshRank;
+                  player.puuid = freshRank.puuid || player.puuid;
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  const todaySnapshot = {
+                    date: todayStr,
+                    tier: freshRank.tier,
+                    rank: freshRank.rank,
+                    leaguePoints: freshRank.leaguePoints,
+                    totalLp: freshRank.totalLp,
+                    wins: freshRank.wins,
+                    losses: freshRank.losses
+                  };
 
-              const params = accountInfo.puuid
-                ? `puuid=${encodeURIComponent(accountInfo.puuid)}`
-                : `gameName=${encodeURIComponent(riotId.gameName)}&tagLine=${encodeURIComponent(riotId.tagLine)}`;
-
-              try {
-                const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}`);
-                if (proxyRes.ok) {
-                  const freshRank = await proxyRes.json();
-                  if (freshRank && freshRank.tier) {
-                    if (accountInfo.key === 'main') {
-                      player.rank = freshRank;
-                      player.puuid = freshRank.puuid || player.puuid;
-                      const todayStr = new Date().toISOString().split('T')[0];
-                      const todaySnapshot = {
-                        date: todayStr,
-                        tier: freshRank.tier,
-                        rank: freshRank.rank,
-                        leaguePoints: freshRank.leaguePoints,
-                        totalLp: freshRank.totalLp,
-                        wins: freshRank.wins,
-                        losses: freshRank.losses
-                      };
-
-                      player.lpHistory = [
-                        ...(player.lpHistory || []).filter(e => e.date !== todayStr),
-                        todaySnapshot
-                      ].sort((a, b) => a.date.localeCompare(b.date));
-                    } else {
-                      const altIndex = Number(accountInfo.key.replace('alt-', ''));
-                      const altAccount = (player.alternateRiotIds || [])[altIndex] || {};
-                      altAccount.rank = freshRank;
-                      altAccount.lpHistory = [
-                        ...((altAccount.lpHistory || []).filter(e => e.date !== new Date().toISOString().split('T')[0])),
-                        {
-                          date: new Date().toISOString().split('T')[0],
-                          tier: freshRank.tier,
-                          rank: freshRank.rank,
-                          leaguePoints: freshRank.leaguePoints,
-                          totalLp: freshRank.totalLp,
-                          wins: freshRank.wins,
-                          losses: freshRank.losses
-                        }
-                      ].sort((a, b) => a.date.localeCompare(b.date));
-                    }
-
-                    liveUpdated = true;
-                  }
+                  player.lpHistory = [
+                    ...(player.lpHistory || []).filter(e => e.date !== todayStr),
+                    todaySnapshot
+                  ].sort((a, b) => a.date.localeCompare(b.date));
+                  liveUpdated = true;
                 }
-              } catch (e) {
-                console.warn(`Fehler beim Aktualisieren von ${player.name} (${accountInfo.key}):`, e);
               }
-            }));
+            } catch (e) {
+              console.warn(`Fehler beim Aktualisieren von ${player.name}:`, e);
+            }
           });
 
           await Promise.all(updatePromises);
@@ -510,7 +447,7 @@ function renderMultiPlayerChartAndLegend(players) {
       const isActive = activeLeaderboardSlugs.has(player.slug);
       const tierDisplay = player.rank?.tierDisplay || 'Unranked';
       const lpDisplay = player.rank?.lpDisplay || '0 LP';
-      const legendName = player.isSmurfAccount ? `${player.name} • ${player.smurfLabel}` : player.name;
+      const legendName = player.name;
 
       return `
         <button type="button" class="legend-pill${isActive ? ' is-active' : ''}" data-toggle-slug="${player.slug}" aria-pressed="${isActive}">

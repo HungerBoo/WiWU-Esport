@@ -9,18 +9,19 @@ async function readJson(filePath) {
   return JSON.parse(await readFile(new URL(filePath, root), 'utf8'));
 }
 
-test('Falafl includes the secondary Riot account Juli006#EUW in player data', async () => {
+test('Falafl profile keeps the primary OP.GG link without exposing a second account', async () => {
   const players = await readJson('public/data/players.json');
   const falafl = players.league.find((player) => player.slug === 'falafl');
 
   assert.ok(falafl, 'Falafl should be present in league data');
-  assert.ok(Array.isArray(falafl.alternateRiotIds), 'Falafl should expose alternate Riot IDs');
-  assert.deepEqual(falafl.alternateRiotIds, [{ gameName: 'Juli006', tagLine: 'EUW' }]);
+  assert.equal(falafl.alternateRiotIds, undefined);
+  assert.match(falafl.opgg, /Twisted%20Falafl-CRIT/);
 });
 
-test('Falafl profile metadata exposes the secondary account', async () => {
+test('Falafl profile metadata keeps only its primary OP.GG link', async () => {
   const { profile } = await import(new URL('../src/content/players/falafl.js', import.meta.url));
 
-  assert.ok(Array.isArray(profile.alternateRiotIds));
-  assert.deepEqual(profile.alternateRiotIds, [{ gameName: 'Juli006', tagLine: 'EUW' }]);
+  assert.equal(profile.alternateRiotIds, undefined);
+  assert.equal(profile.links.filter((link) => link.label === 'OP.GG').length, 1);
+  assert.ok(profile.links.some((link) => link.label === 'OP.GG' && link.url.includes('Twisted%20Falafl-CRIT')));
 });

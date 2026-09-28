@@ -11,94 +11,6 @@ import { getWiwuPuuidMap } from '../utils/roster.js';
 
 let activeTimeframe = 90; // Default: 3 Monate
 let cachedPlayerData = null;
-let activeRiotAccountKey = 'main';
-const accountStateMap = new Map();
-
-function getPlayerRiotAccounts(player) {
-  const accounts = [];
-  const mainRiotId = player?.mainRiotId || player?.riotId;
-
-  if (mainRiotId?.gameName) {
-    accounts.push({ key: 'main', label: 'Hauptaccount', gameName: mainRiotId.gameName, tagLine: mainRiotId.tagLine || 'EUW' });
-  }
-
-  (player?.alternateRiotIds || []).forEach((account, index) => {
-    if (!account?.gameName) return;
-    accounts.push({
-      key: `alt-${index}`,
-      label: `Smurf ${index + 1}`,
-      gameName: account.gameName,
-      tagLine: account.tagLine || 'EUW'
-    });
-  });
-
-  return accounts;
-}
-
-function getSelectedRiotAccount(player) {
-  const accounts = getPlayerRiotAccounts(player);
-  return accounts.find(account => account.key === activeRiotAccountKey) || accounts[0] || null;
-}
-
-function getAccountState(player, key) {
-  if (!player) return null;
-
-  const accounts = getPlayerRiotAccounts(player);
-  const account = accounts.find(item => item.key === key) || accounts[0];
-  if (!account) return null;
-
-  const existing = accountStateMap.get(`${player.slug || 'player'}:${key}`);
-  if (existing) return existing;
-
-  const source = key === 'main' ? (player.mainAccountState || player) : account;
-  const freshState = {
-    ...player,
-    riotId: { gameName: account.gameName, tagLine: account.tagLine || 'EUW' },
-    rank: source.rank || null,
-    lpHistory: source.lpHistory || [],
-    summonerLevel: source.summonerLevel,
-    profileIconId: source.profileIconId,
-    topMasteries: source.topMasteries || [],
-    liveGame: source.liveGame,
-    recentMatches: source.recentMatches,
-    puuid: source.puuid
-  };
-
-  accountStateMap.set(`${player.slug || 'player'}:${key}`, freshState);
-  return freshState;
-}
-
-function applyAccountState(player, key) {
-  const accountState = getAccountState(player, key);
-  if (!accountState) return player;
-
-  Object.assign(player, accountState);
-  return player;
-}
-
-function saveAccountState(player, key, state) {
-  if (key === 'main') {
-    player.mainAccountState = { ...state };
-    return;
-  }
-
-  if (!key.startsWith('alt-')) return;
-
-  const index = Number(key.slice(4));
-  const account = player.alternateRiotIds?.[index];
-  if (!account) return;
-
-  Object.assign(account, {
-    puuid: state.puuid || account.puuid,
-    rank: state.rank,
-    lpHistory: state.lpHistory || [],
-    summonerLevel: state.summonerLevel,
-    profileIconId: state.profileIconId,
-    topMasteries: state.topMasteries || [],
-    liveGame: state.liveGame,
-    recentMatches: state.recentMatches
-  });
-}
 
 export async function renderPlayerPage(playerSlug) {
   const profileStatic = getProfile(playerSlug);
@@ -189,11 +101,6 @@ export async function renderPlayerPage(playerSlug) {
             </div>
           </div>
           ${livePlayer.alias ? `<p class="player-profile-alias">auch bekannt als: <strong>${livePlayer.alias}</strong></p>` : ''}
-          ${Array.isArray(livePlayer.alternateRiotIds) && livePlayer.alternateRiotIds.length ? `
-            <p class="player-profile-alias">
-              weitere Riot IDs: ${livePlayer.alternateRiotIds.map(account => `<strong>${account.gameName}#${account.tagLine}</strong>`).join(' • ')}
-            </p>
-          ` : ''}
           <div class="player-profile-badges">
             <span class="player-profile-role-badge">${livePlayer.role}</span>
             ${livePlayer.rank?.tierDisplay ? `<span class="player-profile-rank-badge">★ ${livePlayer.rank.tierDisplay} (${livePlayer.rank.lpDisplay})</span>` : ''}
@@ -354,9 +261,6 @@ function renderRankAndLpSection(player, sectionNumber = '02') {
     minute: '2-digit'
   }) : 'Heute';
 
-  const riotAccounts = getPlayerRiotAccounts(player);
-  const selectedAccount = getSelectedRiotAccount(player);
-
   return `
     <section class="player-rank-section" aria-labelledby="rank-section-heading">
       <div class="section-heading rank-section-header">
@@ -371,20 +275,6 @@ function renderRankAndLpSection(player, sectionNumber = '02') {
           </button>
         </div>
       </div>
-
-      ${riotAccounts.length > 1 ? `
-        <div class="riot-account-switcher" aria-label="Riot Account auswählen">
-          ${riotAccounts.map(account => `
-            <button
-              type="button"
-              class="riot-account-switch-btn${selectedAccount?.key === account.key ? ' is-active' : ''}"
-              data-riot-account-btn="${account.key}"
-              aria-pressed="${selectedAccount?.key === account.key}">
-              ${account.label}
-            </button>
-          `).join('')}
-        </div>
-      ` : ''}
 
       <!-- Rank Cards -->
       <div class="rank-metrics-grid">
@@ -537,70 +427,7 @@ function renderSmashStatsSection(player, smashData, sectionNumber = '01') {
 function setupPlayerInteractions(player) {
   const chartContainer = document.querySelector('[data-lp-chart-container]');
   const refreshBtn = document.querySelector('[data-rank-refresh-btn]');
-  const accountSwitchButtons = document.querySelectorAll('[data-riot-account-btn]');
   setupLiveGameInteractions(document.querySelector('[data-live-game-section]'));
-
-  accountSwitchButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-      const nextKey = button.dataset.riotAccountBtn;
-      if (!nextKey) return;
-
-      activeRiotAccountKey = nextKey;
-      document.querySelectorAll('[data-riot-account-btn]').forEach(toggleButton => {
-        const isActive = toggleButton.dataset.riotAccountBtn === nextKey;
-        toggleButton.classList.toggle('is-active', isActive);
-        toggleButton.setAttribute('aria-pressed', String(isActive));
-      });
-
-      const selectedAccount = getSelectedRiotAccount(player);
-      if (!selectedAccount) return;
-
-      const accountState = getAccountState(player, nextKey) || player;
-      const selectedPlayer = { ...player, ...accountState };
-      Object.assign(player, selectedPlayer);
-
-      if (site.riotProxyUrl) {
-        const params = `gameName=${encodeURIComponent(selectedAccount.gameName)}&tagLine=${encodeURIComponent(selectedAccount.tagLine)}`;
-        const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`);
-        if (proxyRes.ok) {
-          const freshRank = await proxyRes.json();
-          if (freshRank?.tier) {
-            const state = getAccountState(player, nextKey) || {};
-            const nextState = {
-              ...state,
-              rank: freshRank,
-              summonerLevel: freshRank.summonerLevel,
-              profileIconId: freshRank.profileIconId,
-              topMasteries: freshRank.topMasteries,
-              liveGame: freshRank.liveGame,
-              recentMatches: freshRank.recentMatchesOk ? freshRank.recentMatches : (state.recentMatches || player.recentMatches),
-              puuid: freshRank.puuid || state.puuid || player.puuid,
-              lpHistory: [
-                ...(state.lpHistory || player.lpHistory || []).filter(e => e.date !== new Date().toISOString().split('T')[0]),
-                {
-                  date: new Date().toISOString().split('T')[0],
-                  tier: freshRank.tier,
-                  rank: freshRank.rank,
-                  leaguePoints: freshRank.leaguePoints,
-                  totalLp: freshRank.totalLp,
-                  wins: freshRank.wins,
-                  losses: freshRank.losses
-                }
-              ].sort((a, b) => a.date.localeCompare(b.date))
-            };
-
-            accountStateMap.set(`${player.slug || 'player'}:${nextKey}`, nextState);
-            saveAccountState(player, nextKey, nextState);
-            Object.assign(player, nextState);
-            updateLiveStatsUI(player);
-            return;
-          }
-        }
-      }
-
-      showToast('⚠ Für diesen Account konnten keine Live-Statistiken geladen werden.');
-    });
-  });
 
   // Initialize LP Graph if history exists
   if (chartContainer && player.lpHistory?.length) {
@@ -635,18 +462,15 @@ function setupPlayerInteractions(player) {
 
       try {
         let liveUpdated = false;
-        const selectedAccount = getSelectedRiotAccount(player);
-        const selectedKey = activeRiotAccountKey || 'main';
-
         // If a Riot Proxy Worker URL is configured and this is a League player
-        if (site.riotProxyUrl && selectedAccount) {
-          const params = `gameName=${encodeURIComponent(selectedAccount.gameName)}&tagLine=${encodeURIComponent(selectedAccount.tagLine)}`;
+        if (site.riotProxyUrl && player.riotId?.gameName) {
+          const params = `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine || 'EUW')}`;
 
           const proxyRes = await fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`);
           if (proxyRes.ok) {
             const freshRank = await proxyRes.json();
             if (freshRank && freshRank.tier) {
-              const state = getAccountState(player, selectedKey) || { ...player };
+              const state = { ...player };
               const nextState = {
                 ...state,
                 rank: freshRank,
@@ -670,8 +494,6 @@ function setupPlayerInteractions(player) {
                 ].sort((a, b) => a.date.localeCompare(b.date))
               };
 
-              accountStateMap.set(`${player.slug || 'player'}:${selectedKey}`, nextState);
-              saveAccountState(player, selectedKey, nextState);
               Object.assign(player, nextState);
               updateLiveStatsUI(player);
               liveUpdated = true;
@@ -712,9 +534,8 @@ function setupPlayerInteractions(player) {
 
   // Quietly fetch profile icon / level / top champions / live game / recent matches in the
   // background on page load, without touching the rank card or blocking the refresh button
-  const initialAccount = getSelectedRiotAccount(player);
-  if (site.riotProxyUrl && !player.topMasteries?.length && initialAccount) {
-    const params = `gameName=${encodeURIComponent(initialAccount.gameName)}&tagLine=${encodeURIComponent(initialAccount.tagLine)}`;
+  if (site.riotProxyUrl && !player.topMasteries?.length && player.riotId?.gameName) {
+    const params = `gameName=${encodeURIComponent(player.riotId.gameName)}&tagLine=${encodeURIComponent(player.riotId.tagLine || 'EUW')}`;
 
     fetch(`${site.riotProxyUrl.replace(/\/$/, '')}?${params}&profile=1&live=1&matches=5`)
       .then(res => (res.ok ? res.json() : null))
