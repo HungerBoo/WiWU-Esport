@@ -1,10 +1,22 @@
 [
   {
+    "id": "lol-rank-zwuck-2026-10-07",
+    "category": "lol",
+    "badge": "Rank Up",
+    "date": "07.10.2026",
+    "timestamp": 1791331200000,
+    "tag": "Riot Games // Platinum I",
+    "title": "Aufstieg: Zwuck erreicht Platinum I!",
+    "description": "Glückwunsch! Zwuck steigt von Platinum II auf Platinum I (11 LP) und hält dabei 50% Winrate.",
+    "meta": "Platinum I • 50% WR",
+    "link": "spielerprofil.html?player=zwuck"
+  },
+  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "06.10.2026",
-    "timestamp": 1791242272403,
+    "date": "07.10.2026",
+    "timestamp": 1791327993452,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
