@@ -415,6 +415,15 @@
         "totalLp": 2120,
         "wins": 37,
         "losses": 21
+      },
+      {
+        "date": "2026-10-08",
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 20,
+        "totalLp": 2120,
+        "wins": 37,
+        "losses": 21
       }
     ]
   },
@@ -861,6 +870,15 @@
         "totalLp": 1911,
         "wins": 174,
         "losses": 174
+      },
+      {
+        "date": "2026-10-08",
+        "tier": "PLATINUM",
+        "rank": "I",
+        "leaguePoints": 19,
+        "totalLp": 1919,
+        "wins": 177,
+        "losses": 177
       }
     ]
   },
@@ -1226,6 +1244,15 @@
         "totalLp": 1355,
         "wins": 12,
         "losses": 9
+      },
+      {
+        "date": "2026-10-08",
+        "tier": "GOLD",
+        "rank": "III",
+        "leaguePoints": 65,
+        "totalLp": 1365,
+        "wins": 13,
+        "losses": 11
       }
     ]
   },
@@ -1654,6 +1681,15 @@
         "totalLp": 1200,
         "wins": 149,
         "losses": 152
+      },
+      {
+        "date": "2026-10-08",
+        "tier": "GOLD",
+        "rank": "IV",
+        "leaguePoints": 0,
+        "totalLp": 1200,
+        "wins": 149,
+        "losses": 152
       }
     ]
   },
@@ -2073,6 +2109,15 @@
         "totalLp": 1880,
         "wins": 195,
         "losses": 189
+      },
+      {
+        "date": "2026-10-08",
+        "tier": "PLATINUM",
+        "rank": "I",
+        "leaguePoints": 1,
+        "totalLp": 1901,
+        "wins": 196,
+        "losses": 189
       }
     ]
   },
@@ -2414,6 +2459,15 @@
       },
       {
         "date": "2026-10-07",
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 0,
+        "totalLp": 2000,
+        "wins": 57,
+        "losses": 47
+      },
+      {
+        "date": "2026-10-08",
         "tier": "EMERALD",
         "rank": "IV",
         "leaguePoints": 0,
@@ -2806,6 +2860,15 @@
       },
       {
         "date": "2026-10-07",
+        "tier": "PLATINUM",
+        "rank": "I",
+        "leaguePoints": 71,
+        "totalLp": 1971,
+        "wins": 81,
+        "losses": 76
+      },
+      {
+        "date": "2026-10-08",
         "tier": "PLATINUM",
         "rank": "I",
         "leaguePoints": 71,
@@ -3225,6 +3288,15 @@
       },
       {
         "date": "2026-10-07",
+        "tier": "EMERALD",
+        "rank": "III",
+        "leaguePoints": 45,
+        "totalLp": 2145,
+        "wins": 132,
+        "losses": 127
+      },
+      {
+        "date": "2026-10-08",
         "tier": "EMERALD",
         "rank": "III",
         "leaguePoints": 45,
