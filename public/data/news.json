@@ -1,34 +1,10 @@
 [
   {
-    "id": "lol-rank-falafl-2026-10-18",
-    "category": "lol",
-    "badge": "Derank",
-    "date": "18.10.2026",
-    "timestamp": 1792281600000,
-    "tag": "Riot Games // Emerald IV",
-    "title": "Absturz: Falafl in Emerald IV",
-    "description": "Nach einer harten Serie fällt Falafl von Emerald III auf Emerald IV (95 LP) zurück. Stabilität ist jetzt der Schlüssel.",
-    "meta": "Emerald IV • 59% WR",
-    "link": "spielerprofil.html?player=falafl"
-  },
-  {
-    "id": "lol-rank-1overninja1-2026-10-18",
-    "category": "lol",
-    "badge": "Derank",
-    "date": "18.10.2026",
-    "timestamp": 1792281600000,
-    "tag": "Riot Games // Gold II",
-    "title": "Absturz: 1Overninja1 in Gold II",
-    "description": "Nach einer harten Serie fällt 1Overninja1 von Gold I auf Gold II (89 LP) zurück. Stabilität ist jetzt der Schlüssel.",
-    "meta": "Gold II • 50% WR",
-    "link": "spielerprofil.html?player=1overninja1"
-  },
-  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "18.10.2026",
-    "timestamp": 1792270554656,
+    "date": "19.10.2026",
+    "timestamp": 1792360486496,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
