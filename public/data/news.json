@@ -1,10 +1,22 @@
 [
   {
+    "id": "lol-rank-falafl-2026-10-21",
+    "category": "lol",
+    "badge": "Rank Up",
+    "date": "21.10.2026",
+    "timestamp": 1792540800000,
+    "tag": "Riot Games // Emerald III",
+    "title": "Aufstieg: Falafl erreicht Emerald III!",
+    "description": "Glückwunsch! Falafl steigt von Emerald IV auf Emerald III (17 LP) und hält dabei 58% Winrate.",
+    "meta": "Emerald III • 58% WR",
+    "link": "spielerprofil.html?player=falafl"
+  },
+  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "20.10.2026",
-    "timestamp": 1792445259822,
+    "date": "21.10.2026",
+    "timestamp": 1792531436324,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
