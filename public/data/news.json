@@ -1,34 +1,10 @@
 [
   {
-    "id": "lol-rank-zwuck-2026-10-23",
-    "category": "lol",
-    "badge": "Derank",
-    "date": "23.10.2026",
-    "timestamp": 1792713600000,
-    "tag": "Riot Games // Platinum I",
-    "title": "Absturz: Zwuck in Platinum I",
-    "description": "Nach einer harten Serie fällt Zwuck von Emerald IV auf Platinum I (75 LP) zurück. Stabilität ist jetzt der Schlüssel.",
-    "meta": "Platinum I • 50% WR",
-    "link": "spielerprofil.html?player=zwuck"
-  },
-  {
-    "id": "lol-rank-hungerboo-2026-10-23",
-    "category": "lol",
-    "badge": "Derank",
-    "date": "23.10.2026",
-    "timestamp": 1792713600000,
-    "tag": "Riot Games // Silver II",
-    "title": "Absturz: HungerBoo in Silver II",
-    "description": "Nach einer harten Serie fällt HungerBoo von Silver I auf Silver II (81 LP) zurück. Stabilität ist jetzt der Schlüssel.",
-    "meta": "Silver II • 49% WR",
-    "link": "spielerprofil.html?player=hungerboo"
-  },
-  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "23.10.2026",
-    "timestamp": 1792704160193,
+    "date": "24.10.2026",
+    "timestamp": 1792788856410,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
