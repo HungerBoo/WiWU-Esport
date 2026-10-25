@@ -3,13 +3,25 @@
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "24.10.2026",
-    "timestamp": 1792788856410,
+    "date": "25.10.2026",
+    "timestamp": 1792876251081,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
     "meta": "Spring Split 2025/26",
     "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
+  },
+  {
+    "id": "smash-martin-tgm-mini-2026-2-ultimate-singles-2026-10-24",
+    "category": "smash",
+    "badge": "Tournament",
+    "date": "24.10.2026",
+    "timestamp": 1792800000000,
+    "tag": "start.gg // Offline Event",
+    "title": "Martin bei TGM Mini 2026 #2",
+    "description": "Martin vertritt die Wieländer Wühlmäuse offline im Ultimate Singles Bracket und erzielt den 9. Platz / 52.",
+    "meta": "9. Platz / 52",
+    "link": "https://www.start.gg/tournament/tgm-mini-2026-2"
   },
   {
     "id": "smash-martin-downtown-smash-9-singles-1v1-main-2026-09-19",
