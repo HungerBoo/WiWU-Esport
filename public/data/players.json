@@ -24,7 +24,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "59 LP",
         "totalLp": 2059,
-        "lastUpdated": "2026-10-26T10:07:34.582Z"
+        "lastUpdated": "2026-10-27T09:50:12.182Z"
       },
       "lpHistory": [
         {
@@ -611,6 +611,15 @@
           "totalLp": 2059,
           "wins": 44,
           "losses": 35
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 59,
+          "totalLp": 2059,
+          "wins": 44,
+          "losses": 35
         }
       ]
     },
@@ -630,15 +639,15 @@
       "rank": {
         "tier": "PLATINUM",
         "rank": "I",
-        "leaguePoints": 53,
-        "wins": 191,
+        "leaguePoints": 72,
+        "wins": 192,
         "losses": 192,
         "winrate": 50,
         "hotStreak": false,
         "tierDisplay": "Platinum I",
-        "lpDisplay": "53 LP",
-        "totalLp": 1953,
-        "lastUpdated": "2026-10-26T10:07:35.028Z"
+        "lpDisplay": "72 LP",
+        "totalLp": 1972,
+        "lastUpdated": "2026-10-27T09:50:12.599Z"
       },
       "lpHistory": [
         {
@@ -1252,6 +1261,15 @@
           "totalLp": 1953,
           "wins": 191,
           "losses": 192
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "PLATINUM",
+          "rank": "I",
+          "leaguePoints": 72,
+          "totalLp": 1972,
+          "wins": 192,
+          "losses": 192
         }
       ]
     },
@@ -1279,7 +1297,7 @@
         "tierDisplay": "Gold II",
         "lpDisplay": "46 LP",
         "totalLp": 1446,
-        "lastUpdated": "2026-10-26T10:07:35.485Z"
+        "lastUpdated": "2026-10-27T09:50:13.002Z"
       },
       "lpHistory": [
         {
@@ -1812,6 +1830,15 @@
           "totalLp": 1446,
           "wins": 18,
           "losses": 21
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "GOLD",
+          "rank": "II",
+          "leaguePoints": 46,
+          "totalLp": 1446,
+          "wins": 18,
+          "losses": 21
         }
       ]
     },
@@ -1839,7 +1866,7 @@
         "tierDisplay": "Silver II",
         "lpDisplay": "77 LP",
         "totalLp": 1077,
-        "lastUpdated": "2026-10-26T10:07:35.924Z"
+        "lastUpdated": "2026-10-27T09:50:13.406Z"
       },
       "lpHistory": [
         {
@@ -2435,6 +2462,15 @@
           "totalLp": 1077,
           "wins": 153,
           "losses": 159
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "SILVER",
+          "rank": "II",
+          "leaguePoints": 77,
+          "totalLp": 1077,
+          "wins": 153,
+          "losses": 159
         }
       ]
     },
@@ -2454,15 +2490,15 @@
       "rank": {
         "tier": "EMERALD",
         "rank": "IV",
-        "leaguePoints": 6,
-        "wins": 205,
+        "leaguePoints": 27,
+        "wins": 206,
         "losses": 193,
         "winrate": 52,
         "hotStreak": false,
         "tierDisplay": "Emerald IV",
-        "lpDisplay": "6 LP",
-        "totalLp": 2006,
-        "lastUpdated": "2026-10-26T10:07:36.358Z"
+        "lpDisplay": "27 LP",
+        "totalLp": 2027,
+        "lastUpdated": "2026-10-27T09:50:13.811Z"
       },
       "lpHistory": [
         {
@@ -3049,6 +3085,15 @@
           "totalLp": 2006,
           "wins": 205,
           "losses": 193
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 27,
+          "totalLp": 2027,
+          "wins": 206,
+          "losses": 193
         }
       ]
     },
@@ -3076,7 +3121,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-10-26T10:07:36.817Z"
+        "lastUpdated": "2026-10-27T09:50:14.220Z"
       },
       "lpHistory": [
         {
@@ -3591,6 +3636,15 @@
           "totalLp": 2000,
           "wins": 57,
           "losses": 47
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 2000,
+          "wins": 57,
+          "losses": 47
         }
       ]
     },
@@ -3608,17 +3662,17 @@
       },
       "puuid": "jy0m9r0-1MEhFa7fduvQ8owzBraPien4ku53W_8kORbs4ZJNzSTAHtzAEc_7Zd2JwFuCDomjEQYbKA",
       "rank": {
-        "tier": "PLATINUM",
-        "rank": "I",
-        "leaguePoints": 89,
-        "wins": 82,
+        "tier": "EMERALD",
+        "rank": "IV",
+        "leaguePoints": 84,
+        "wins": 87,
         "losses": 76,
-        "winrate": 52,
-        "hotStreak": false,
-        "tierDisplay": "Platinum I",
-        "lpDisplay": "89 LP",
-        "totalLp": 1989,
-        "lastUpdated": "2026-10-26T10:07:37.245Z"
+        "winrate": 53,
+        "hotStreak": true,
+        "tierDisplay": "Emerald IV",
+        "lpDisplay": "84 LP",
+        "totalLp": 2084,
+        "lastUpdated": "2026-10-27T09:50:14.635Z"
       },
       "lpHistory": [
         {
@@ -4178,6 +4232,15 @@
           "totalLp": 1989,
           "wins": 82,
           "losses": 76
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 84,
+          "totalLp": 2084,
+          "wins": 87,
+          "losses": 76
         }
       ]
     },
@@ -4197,15 +4260,15 @@
       "rank": {
         "tier": "EMERALD",
         "rank": "III",
-        "leaguePoints": 24,
-        "wins": 132,
+        "leaguePoints": 44,
+        "wins": 133,
         "losses": 128,
         "winrate": 51,
         "hotStreak": false,
         "tierDisplay": "Emerald III",
-        "lpDisplay": "24 LP",
-        "totalLp": 2124,
-        "lastUpdated": "2026-10-26T10:07:37.702Z"
+        "lpDisplay": "44 LP",
+        "totalLp": 2144,
+        "lastUpdated": "2026-10-27T09:50:15.042Z"
       },
       "lpHistory": [
         {
@@ -4791,6 +4854,15 @@
           "leaguePoints": 24,
           "totalLp": 2124,
           "wins": 132,
+          "losses": 128
+        },
+        {
+          "date": "2026-10-27",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 44,
+          "totalLp": 2144,
+          "wins": 133,
           "losses": 128
         }
       ]

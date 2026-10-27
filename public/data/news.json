@@ -1,10 +1,22 @@
 [
   {
+    "id": "lol-rank-beltrin-2026-10-27",
+    "category": "lol",
+    "badge": "Rank Up",
+    "date": "27.10.2026",
+    "timestamp": 1793059200000,
+    "tag": "Riot Games // Emerald IV",
+    "title": "Aufstieg: Beltrin erreicht Emerald IV!",
+    "description": "Glückwunsch! Beltrin steigt von Platinum I auf Emerald IV (84 LP) und hält dabei 53% Winrate.",
+    "meta": "Emerald IV • 53% WR",
+    "link": "spielerprofil.html?player=beltrin"
+  },
+  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "26.10.2026",
-    "timestamp": 1792966057751,
+    "date": "27.10.2026",
+    "timestamp": 1793051415078,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
