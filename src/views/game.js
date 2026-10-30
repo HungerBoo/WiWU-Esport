@@ -1,5 +1,6 @@
 import { renderPlayerCard } from '../components/cards.js';
 import { renderLayout } from '../components/layout.js';
+import { renderScenarioSection, setupScenarioCalculator } from '../components/scenario-calculator.js';
 import { games, site } from '../content/site-data.js';
 import { formatDate } from '../utils/dates.js';
 import { showToast } from '../utils/dom.js';
@@ -119,11 +120,13 @@ export async function renderGame(gameKey) {
           </div>
         </div>
       </section>
+      ${renderScenarioSection()}
     ` : ''}
   `, gameKey);
 
   setupStatementsCarousel();
   setupGameImageGallery();
+  if (isLeague) setupScenarioCalculator();
 
   try {
     const response = await fetch('/data/players.json');
