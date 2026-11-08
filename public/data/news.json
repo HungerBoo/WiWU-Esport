@@ -1,27 +1,27 @@
 [
   {
-    "id": "lol-rank-beltrin-2026-11-07",
-    "category": "lol",
-    "badge": "Derank",
-    "date": "07.11.2026",
-    "timestamp": 1794009600000,
-    "tag": "Riot Games // Emerald IV",
-    "title": "Absturz: Beltrin in Emerald IV",
-    "description": "Nach einer harten Serie fällt Beltrin von Emerald III auf Emerald IV (54 LP) zurück. Stabilität ist jetzt der Schlüssel.",
-    "meta": "Emerald IV • 53% WR",
-    "link": "spielerprofil.html?player=beltrin"
-  },
-  {
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "07.11.2026",
-    "timestamp": 1794006270792,
+    "date": "08.11.2026",
+    "timestamp": 1794093490275,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
     "meta": "Spring Split 2025/26",
     "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
+  },
+  {
+    "id": "smash-martin-high-voltage-overload-4-ssbu-singles-1v1-2026-11-07",
+    "category": "smash",
+    "badge": "Tournament",
+    "date": "07.11.2026",
+    "timestamp": 1794009600000,
+    "tag": "start.gg // Offline Event",
+    "title": "Martin bei High Voltage Overload #4",
+    "description": "Martin vertritt die Wieländer Wühlmäuse offline im SSBU Singles 1v1 Bracket und erzielt den 33. Platz / 128.",
+    "meta": "33. Platz / 128",
+    "link": "https://www.start.gg/tournament/high-voltage-overload-4"
   },
   {
     "id": "smash-martin-tgm-mini-2026-2-ultimate-singles-2026-10-24",
@@ -46,17 +46,5 @@
     "description": "Martin vertritt die Wieländer Wühlmäuse offline im SINGLES 1v1 - Main Bracket und erzielt den 25. Platz / 96.",
     "meta": "25. Platz / 96",
     "link": "https://www.start.gg/tournament/downtown-smash-9"
-  },
-  {
-    "id": "smash-martin-homie-stock-1-ssbu-singles-1v1-2026-08-29",
-    "category": "smash",
-    "badge": "Tournament",
-    "date": "29.08.2026",
-    "timestamp": 1787961600000,
-    "tag": "start.gg // Offline Event",
-    "title": "Martin bei Homie Stock #1",
-    "description": "Martin vertritt die Wieländer Wühlmäuse offline im SSBU Singles 1v1 Bracket und erzielt den 21. Platz / 32.",
-    "meta": "21. Platz / 32",
-    "link": "https://www.start.gg/tournament/homie-stock-1-7"
   }
 ]

@@ -16,15 +16,15 @@
       "rank": {
         "tier": "EMERALD",
         "rank": "I",
-        "leaguePoints": 94,
+        "leaguePoints": 34,
         "wins": 68,
-        "losses": 44,
-        "winrate": 61,
+        "losses": 47,
+        "winrate": 59,
         "hotStreak": false,
         "tierDisplay": "Emerald I",
-        "lpDisplay": "94 LP",
-        "totalLp": 2394,
-        "lastUpdated": "2026-11-07T11:04:27.813Z"
+        "lpDisplay": "34 LP",
+        "totalLp": 2334,
+        "lastUpdated": "2026-11-08T11:18:07.091Z"
       },
       "lpHistory": [
         {
@@ -719,6 +719,15 @@
           "totalLp": 2394,
           "wins": 68,
           "losses": 44
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "EMERALD",
+          "rank": "I",
+          "leaguePoints": 34,
+          "totalLp": 2334,
+          "wins": 68,
+          "losses": 47
         }
       ]
     },
@@ -746,7 +755,7 @@
         "tierDisplay": "Platinum II",
         "lpDisplay": "32 LP",
         "totalLp": 1832,
-        "lastUpdated": "2026-11-07T11:04:28.239Z"
+        "lastUpdated": "2026-11-08T11:18:07.577Z"
       },
       "lpHistory": [
         {
@@ -1468,6 +1477,15 @@
           "totalLp": 1832,
           "wins": 200,
           "losses": 205
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "PLATINUM",
+          "rank": "II",
+          "leaguePoints": 32,
+          "totalLp": 1832,
+          "wins": 200,
+          "losses": 205
         }
       ]
     },
@@ -1495,7 +1513,7 @@
         "tierDisplay": "Platinum IV",
         "lpDisplay": "50 LP",
         "totalLp": 1650,
-        "lastUpdated": "2026-11-07T11:04:28.661Z"
+        "lastUpdated": "2026-11-08T11:18:08.017Z"
       },
       "lpHistory": [
         {
@@ -2136,6 +2154,15 @@
           "totalLp": 1650,
           "wins": 27,
           "losses": 23
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "PLATINUM",
+          "rank": "IV",
+          "leaguePoints": 50,
+          "totalLp": 1650,
+          "wins": 27,
+          "losses": 23
         }
       ]
     },
@@ -2163,7 +2190,7 @@
         "tierDisplay": "Silver I",
         "lpDisplay": "24 LP",
         "totalLp": 1124,
-        "lastUpdated": "2026-11-07T11:04:29.073Z"
+        "lastUpdated": "2026-11-08T11:18:08.457Z"
       },
       "lpHistory": [
         {
@@ -2867,6 +2894,15 @@
           "totalLp": 1124,
           "wins": 162,
           "losses": 167
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "SILVER",
+          "rank": "I",
+          "leaguePoints": 24,
+          "totalLp": 1124,
+          "wins": 162,
+          "losses": 167
         }
       ]
     },
@@ -2894,7 +2930,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "40 LP",
         "totalLp": 2040,
-        "lastUpdated": "2026-11-07T11:04:29.489Z"
+        "lastUpdated": "2026-11-08T11:18:08.904Z"
       },
       "lpHistory": [
         {
@@ -3589,6 +3625,15 @@
           "totalLp": 2040,
           "wins": 212,
           "losses": 200
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 40,
+          "totalLp": 2040,
+          "wins": 212,
+          "losses": 200
         }
       ]
     },
@@ -3616,7 +3661,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "0 LP",
         "totalLp": 2000,
-        "lastUpdated": "2026-11-07T11:04:29.901Z"
+        "lastUpdated": "2026-11-08T11:18:09.351Z"
       },
       "lpHistory": [
         {
@@ -4239,6 +4284,15 @@
           "totalLp": 2000,
           "wins": 57,
           "losses": 47
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 0,
+          "totalLp": 2000,
+          "wins": 57,
+          "losses": 47
         }
       ]
     },
@@ -4266,7 +4320,7 @@
         "tierDisplay": "Emerald IV",
         "lpDisplay": "54 LP",
         "totalLp": 2054,
-        "lastUpdated": "2026-11-07T11:04:30.329Z"
+        "lastUpdated": "2026-11-08T11:18:09.792Z"
       },
       "lpHistory": [
         {
@@ -4934,6 +4988,15 @@
           "totalLp": 2054,
           "wins": 92,
           "losses": 82
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "EMERALD",
+          "rank": "IV",
+          "leaguePoints": 54,
+          "totalLp": 2054,
+          "wins": 92,
+          "losses": 82
         }
       ]
     },
@@ -4961,7 +5024,7 @@
         "tierDisplay": "Emerald III",
         "lpDisplay": "60 LP",
         "totalLp": 2160,
-        "lastUpdated": "2026-11-07T11:04:30.745Z"
+        "lastUpdated": "2026-11-08T11:18:10.240Z"
       },
       "lpHistory": [
         {
@@ -5656,6 +5719,15 @@
           "totalLp": 2160,
           "wins": 137,
           "losses": 131
+        },
+        {
+          "date": "2026-11-08",
+          "tier": "EMERALD",
+          "rank": "III",
+          "leaguePoints": 60,
+          "totalLp": 2160,
+          "wins": 137,
+          "losses": 131
         }
       ]
     }
@@ -5670,12 +5742,22 @@
       "profile": "https://www.supermajor.gg/ultimate/player/Martin?id=S3678798",
       "startggPlayerId": 3678798,
       "stats": {
-        "All Time": "394-311 (56%)",
-        "Letzte 6 Monate": "67-39 (63%)",
+        "All Time": "399-315 (56%)",
+        "Letzte 6 Monate": "70-41 (63%)",
         "Offline": "55%",
         "Online": "56%"
       },
       "recentTournaments": [
+        {
+          "tournamentName": "High Voltage Overload #4",
+          "eventName": "SSBU Singles 1v1",
+          "isOnline": false,
+          "placement": 33,
+          "totalEntrants": 128,
+          "date": "2026-11-07",
+          "url": "https://www.start.gg/tournament/high-voltage-overload-4",
+          "resultDisplay": "33. Platz / 128"
+        },
         {
           "tournamentName": "TGM Mini 2026 #2",
           "eventName": "Ultimate Singles",
@@ -5695,16 +5777,6 @@
           "date": "2026-09-19",
           "url": "https://www.start.gg/tournament/downtown-smash-9",
           "resultDisplay": "25. Platz / 96"
-        },
-        {
-          "tournamentName": "Homie Stock #1",
-          "eventName": "SSBU Singles 1v1",
-          "isOnline": false,
-          "placement": 21,
-          "totalEntrants": 32,
-          "date": "2026-08-29",
-          "url": "https://www.start.gg/tournament/homie-stock-1-7",
-          "resultDisplay": "21. Platz / 32"
         }
       ],
       "userId": 2366873
