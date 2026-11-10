@@ -3,13 +3,25 @@
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "09.11.2026",
-    "timestamp": 1794185515079,
+    "date": "10.11.2026",
+    "timestamp": 1794271124835,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
     "meta": "Spring Split 2025/26",
     "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
+  },
+  {
+    "id": "lol-rank-zwuck-2026-11-10",
+    "category": "lol",
+    "badge": "Rank Up",
+    "date": "10.11.2026",
+    "timestamp": 1794268800000,
+    "tag": "Riot Games // Platinum I",
+    "title": "Aufstieg: Zwuck erreicht Platinum I!",
+    "description": "Glückwunsch! Zwuck steigt von Platinum II auf Platinum I (6 LP) und hält dabei 50% Winrate.",
+    "meta": "Platinum I • 50% WR",
+    "link": "spielerprofil.html?player=zwuck"
   },
   {
     "id": "smash-martin-high-voltage-overload-4-ssbu-singles-1v1-2026-11-07",
