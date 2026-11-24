@@ -3,13 +3,25 @@
     "id": "prime-league-results",
     "category": "prime",
     "badge": "Matchday",
-    "date": "23.11.2026",
-    "timestamp": 1795401371840,
+    "date": "24.11.2026",
+    "timestamp": 1795488771489,
     "tag": "Prime League // Division 7.5",
     "title": "Prime League Match-Ergebnisse",
     "description": "Die jüngsten Begegnungen der Gruppenphase: PTC 2:0 WIWU, FAKE 2:1 WIWU, WIWU 1:2 4B1F, Zer 1:2 WIWU. Vorbereitung auf die nächste Saison läuft!",
     "meta": "Spring Split 2025/26",
     "link": "https://www.primeleague.gg/de/leagues/teams/204805-wielaender-wuehlmaeuse"
+  },
+  {
+    "id": "lol-rank-hungerboo-2026-11-24",
+    "category": "lol",
+    "badge": "Derank",
+    "date": "24.11.2026",
+    "timestamp": 1795478400000,
+    "tag": "Riot Games // Silver I",
+    "title": "Absturz: HungerBoo in Silver I",
+    "description": "Nach einer harten Serie fällt HungerBoo von Gold IV auf Silver I (75 LP) zurück. Stabilität ist jetzt der Schlüssel.",
+    "meta": "Silver I • 49% WR",
+    "link": "spielerprofil.html?player=hungerboo"
   },
   {
     "id": "smash-martin-high-voltage-overload-4-ssbu-singles-1v1-2026-11-07",
